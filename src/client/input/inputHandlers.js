@@ -219,10 +219,24 @@ export function setupStartWaveButtonHandler(startWaveButton, scene, spawnWave) {
  * @param {Function} spawnWave - Function to spawn wave
  */
 function handleStartWaveClick(scene, spawnWave) {
-  if (!scene.gameStateMachine.isInPhase(GAME_PHASES.BUYING) || !scene.startWaveButton.input.enabled) return;
+  console.log('Start Wave clicked. Checking state...', {
+    gamePhase: scene.gameStateMachine?.currentPhase,
+    isInBuyingPhase: scene.gameStateMachine?.isInPhase?.(GAME_PHASES.BUYING),
+    buttonEnabled: scene.startWaveButton.input?.enabled,
+    window_wavesConfig: !!window.wavesConfig,
+    window_wavesConfig_waves: !!window.wavesConfig?.waves
+  });
+  
+  if (!scene.gameStateMachine.isInPhase(GAME_PHASES.BUYING) || !scene.startWaveButton.input.enabled) {
+    console.warn('Start Wave button not active or not in BUYING phase');
+    return;
+  }
+  
   scene.gameStateMachine.transition(GAME_PHASES.SPAWNING);
   scene.startWaveButton.setStyle({ fill: "#888" });
   scene.startWaveButton.disableInteractive();
+  
+  console.log('Calling spawnWave with waveIndex:', scene.currentWaveIndex);
   // Use modular wave spawning
   spawnWave(scene, scene.gameLogic, scene.currentWaveIndex);
   scene.currentWaveIndex++;

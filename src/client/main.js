@@ -32,10 +32,28 @@ window.CoconutBloon = CoconutBloon;
 // Load config files via fetch (compatible with static deployment)
 async function initializeGame() {
   try {
-    const wavesResponse = await fetch('./waves.json');
-    const towerResponse = await fetch('./src/game/towers/tower.json');
-    const bloonsResponse = await fetch('./src/game/enemies/bloons.json');
-    const projectilesResponse = await fetch('./src/game/projectiles.json');
+    console.log('=== Starting game initialization ===');
+    
+    const paths = {
+      waves: './waves.json',
+      tower: './src/game/towers/tower.json',
+      bloons: './src/game/enemies/bloons.json',
+      projectiles: './src/game/projectiles.json'
+    };
+    
+    console.log('Fetching from paths:', paths);
+    
+    const wavesResponse = await fetch(paths.waves);
+    const towerResponse = await fetch(paths.tower);
+    const bloonsResponse = await fetch(paths.bloons);
+    const projectilesResponse = await fetch(paths.projectiles);
+    
+    console.log('Config fetch responses:', {
+      waves: wavesResponse.status + ' ' + wavesResponse.statusText,
+      tower: towerResponse.status + ' ' + towerResponse.statusText,
+      bloons: bloonsResponse.status + ' ' + bloonsResponse.statusText,
+      projectiles: projectilesResponse.status + ' ' + projectilesResponse.statusText
+    });
     
     if (!wavesResponse.ok || !towerResponse.ok || !bloonsResponse.ok || !projectilesResponse.ok) {
       throw new Error(`Failed to load config files: waves=${wavesResponse.statusText}, tower=${towerResponse.statusText}, bloons=${bloonsResponse.statusText}, projectiles=${projectilesResponse.statusText}`);
@@ -46,13 +64,29 @@ async function initializeGame() {
     const bloonsConfig = await bloonsResponse.json();
     const projectilesConfig = await projectilesResponse.json();
     
+    console.log('Configs loaded successfully:', {
+      wavesCount: wavesConfig.waves?.length,
+      towerKeys: Object.keys(towerConfig).slice(0, 5) + '...',
+      bloonsCount: Object.keys(bloonsConfig).length,
+      projectilesCount: Object.keys(projectilesConfig).length
+    });
+    
     // Store configs globally for scenes and modules to access
     window.wavesConfig = wavesConfig;
     window.towerConfig = towerConfig;
     window.bloonsConfig = bloonsConfig;
     window.projectilesConfig = projectilesConfig;
     
-    // Now create the game
+    console.log('Global configs set:', {
+      window_wavesConfig: !!window.wavesConfig,
+      window_towerConfig: !!window.towerConfig,
+      window_bloonsConfig: !!window.bloonsConfig,
+      window_projectilesConfig: !!window.projectilesConfig
+    });
+    
+    console.log('Creating Phaser game...');
+    
+    // Now create the game AFTER configs are loaded
     var config = {
       type: Phaser.AUTO,
       width: 1600,
@@ -62,10 +96,12 @@ async function initializeGame() {
     };
 
     new Phaser.Game(config);
+    console.log('=== Phaser game created successfully ===');
   } catch (error) {
-    console.error('Failed to initialize game:', error);
-    document.body.innerHTML = '<h1>Error loading game config files. Check console for details.</h1>';
+    console.error('=== FAILED TO INITIALIZE GAME ===', error);
+    document.body.innerHTML = '<h1>Error loading game config files. Check console for details.</h1><pre>' + error.message + '</pre>';
   }
 }
 
+// Start the initialization
 initializeGame();

@@ -1,6 +1,7 @@
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import fs from 'fs';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -12,6 +13,16 @@ const __dirname = path.dirname(__filename);
 // Serve all static files from root and public directories
 app.use(express.static(path.join(__dirname)));
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Debug endpoint to check if files are being served
+app.get('/debug', (req, res) => {
+  res.json({
+    message: 'Server is running',
+    __dirname: __dirname,
+    wavesJsonExists: fs.existsSync(path.join(__dirname, 'waves.json')),
+    towerJsonExists: fs.existsSync(path.join(__dirname, 'src/game/towers/tower.json')),
+  });
+});
 
 // Serve index.html for root path
 app.get('/', (req, res) => {
