@@ -1,7 +1,7 @@
 
 import wavesConfig from '../../waves.json';
 import towerConfig from '../game/towers/tower.json';
-import Phaser from "phaser";
+// Phaser is loaded from CDN in index.html, available globally
 import { Baloune } from "../game/Baloune.js";
 // Import the BananaBloon and CherryBloon classes so spawnWave("banana") and spawnWave("cherry") work
 import { BananaBloon } from "../game/enemies/BananaBloon.js";
