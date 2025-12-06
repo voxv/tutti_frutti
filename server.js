@@ -3,20 +3,41 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // Get __dirname in ES modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Serve static files from the dist and public folders
-app.use(express.static(path.join(__dirname, 'dist')));
+// Serve static files with proper MIME types for ES modules
+app.use((req, res, next) => {
+  if (req.path.endsWith('.js')) {
+    res.setHeader('Content-Type', 'application/javascript; charset=utf-8');
+  } else if (req.path.endsWith('.json')) {
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+  }
+  next();
+});
+
+// Serve all static files from root, public, and dist directories
+app.use(express.static(path.join(__dirname)));
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Serve index.html for root path
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+// Fallback to index.html for any unmatched routes (for client-side routing)
+app.get('*', (req, res) => {
+  // Don't redirect API calls or file requests
+  if (!req.path.includes('.')) {
+    res.sendFile(path.join(__dirname, 'index.html'));
+  } else {
+    res.status(404).send('Not Found');
+  }
 });
 
 app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
+  console.log(`Game server running at http://localhost:${PORT}`);
 });

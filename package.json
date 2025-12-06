@@ -3,9 +3,8 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "start": "npm run start-server",
+    "start": "node server.js",
     "build": "vite build",
-    "start-server": "node src/server/main.js",
     "start-client": "vite"
   },
   "description": "",
@@ -14,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "express": "^4.18.2",
     "phaser": "^3.90.0",
     "vite": "^7.1.12"
   }
