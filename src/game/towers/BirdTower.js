@@ -1,15 +1,14 @@
 
 import { ProjectileTower } from "./ProjectileTower.js";
-import towerDefaults from "./tower.json";
-import projectileDefaults from "../projectiles.json";
+// Use global towerDefaults and projectileDefaults loaded in main.js instead of importing JSON
 import { BoulderProjectile } from "../projectiles/BoulderProjectile.js";
 import { ExplosionProjectile } from "../projectiles/ExplosionProjectile.js";
 
 export class BirdTower extends ProjectileTower {
   constructor(config = {}) {
     let defaults = { range: 120, fireRate: 1.0, damage: 1, cost: 600, type: "bird" };
-    if (towerDefaults && towerDefaults.bird) {
-      defaults = { ...defaults, ...towerDefaults.bird };
+    if (typeof window !== 'undefined' && window.towerDefaults && window.towerDefaults.bird) {
+      defaults = { ...defaults, ...window.towerDefaults.bird };
     }
     super({
       ...defaults,
@@ -48,9 +47,9 @@ export class BirdTower extends ProjectileTower {
       } else {
         this._pendingInfinityBIncrease = (this._pendingInfinityBIncrease || 0) + 20;
       }
-      this.fireRate += 0.35;
+      this.fireRate += 0.25;
     } else if (upgradeKey === 'faster_bird_1' || upgradeKey === 'faster_bird_2' || upgradeKey === 'faster_bird_3') {
-      this.fireRate += 0.35;
+      this.fireRate += 0.25;
     } else if (upgradeKey === 'double_shot') {
       this._doubleShot = true;
     } else if (upgradeKey === 'triple_shot') {

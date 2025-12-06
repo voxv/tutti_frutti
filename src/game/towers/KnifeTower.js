@@ -1,12 +1,12 @@
 import { AOETower } from "./AOETower.js";
-import towerDefaults from "./tower.json";
+// Use global towerDefaults loaded in main.js instead of importing JSON
 
 export class KnifeTower extends AOETower {
   constructor(config = {}) {
-    // Load defaults from tower.json if available
+    // Load defaults from window.towerDefaults if available
     let defaults = { range: 120, fireRate: 1, damage: 1, cost: 200, type: "knife" };
-    if (towerDefaults && towerDefaults.knife) {
-      defaults = { ...defaults, ...towerDefaults.knife };
+    if (typeof window !== 'undefined' && window.towerDefaults && window.towerDefaults.knife) {
+      defaults = { ...defaults, ...window.towerDefaults.knife };
     }
     super({
       ...defaults,

@@ -1,13 +1,10 @@
 import { ProjectileTower } from "./ProjectileTower.js";
-import towerDefaults from "./tower.json";
-
-import projectileDefaults from "../projectiles.json";
 import { GlueProjectile } from "../projectiles/GlueProjectile.js";
 
 export class GlueTower extends ProjectileTower {
   constructor(config = {}) {
     let defaults = { range: 130, fireRate: 1.2, damage: 0, cost: 280, type: "glue", homing: false };
-    if (towerDefaults && towerDefaults.glue) {
+    if (typeof window !== 'undefined' && window.towerDefaults && window.towerDefaults.glue) {
       defaults = { ...defaults, ...towerDefaults.glue };
     }
     super({

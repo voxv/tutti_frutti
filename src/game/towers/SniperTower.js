@@ -1,13 +1,11 @@
 import { ProjectileTower } from "./ProjectileTower.js";
-import towerDefaults from "./tower.json";
-import projectileDefaults from "../projectiles.json";
 import { BoulderProjectile } from "../projectiles/BoulderProjectile.js";
 
 export class SniperTower extends ProjectileTower {
   constructor(config = {}) {
     let defaults = { range: 180, fireRate: 1.2, damage: 2, cost: 280, type: "projectile", homing: true };
-    if (towerDefaults && towerDefaults.sniper) {
-      defaults = { ...defaults, ...towerDefaults.sniper };
+    if (typeof window !== 'undefined' && window.towerDefaults && window.towerDefaults.sniper) {
+      defaults = { ...defaults, ...window.towerDefaults.sniper };
     }
     super({
       ...defaults,

@@ -1,5 +1,4 @@
 import { AOETower } from "./AOETower.js";
-import towerDefaults from "./tower.json";
 
 export class GlacialTower extends AOETower {
     // Handle upgrades by key

@@ -7,7 +7,7 @@ import { MelonBloon } from "./enemies/MelonBloon.js";
 import { KiwiBloon } from "./enemies/KiwiBloon.js";
 import { BlackBloon } from "./enemies/BlackBloon.js";
 import { level1Paths } from "./levels/level1.js";
-import bloonsConfig from "./enemies/bloons.json" assert { type: "json" };
+// Use global bloonsConfig loaded in main.js instead of importing JSON
 import { createBloonInstance } from "../client/factories/bloonFactory.js";
 //import { KnifeTower } from "./towers/KnifeTower.js";
 //import { DartProjectile } from "./projectiles/DartProjectile.js";
@@ -72,7 +72,7 @@ export class Baloune extends Game {
             const tid = setTimeout(async () => {
               const pathObj = this.map.paths[0];
               try {
-                const enemy = await createBloonInstance(pathObj, type, bloonsConfig);
+                const enemy = await createBloonInstance(pathObj, type, window.bloonsConfig);
                 if (enemy) {
                   this.enemies.push(enemy);
                   this.currentWaveEnemies.push(enemy);
@@ -104,7 +104,7 @@ export class Baloune extends Game {
         // Pass the full path object (with spline)
         const pathObj = this.map.paths[0];
         try {
-          const enemy = await createBloonInstance(pathObj, enemyType, bloonsConfig);
+          const enemy = await createBloonInstance(pathObj, enemyType, window.bloonsConfig);
           if (enemy) {
             this.enemies.push(enemy);
             this.currentWaveEnemies.push(enemy);

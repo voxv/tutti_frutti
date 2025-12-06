@@ -1,7 +1,6 @@
 // Phaser loaded from CDN in index.html
 import { Baloune } from "../../game/Baloune.js";
-import towerConfig from "../../game/towers/tower.json";
-import bloonsConfig from "../../game/enemies/bloons.json";
+// Use global window.towerConfig and window.bloonsConfig loaded in main.js
 import { showUpgradeUI, refreshUpgradeUIIfVisible } from "../ui/upgradeUI.js";
 import { spawnWave, parseWaveString } from "../logic/waveLogic.js";
 import { drawShopUI, refreshShopAvailability } from "../ui/shopUI.js";
@@ -647,10 +646,10 @@ class BalouneScene extends Phaser.Scene {
     this.dragRangeCircle = null;
     
     window.sceneRef = this;
-    window.bloonsConfig = bloonsConfig;
-    // Make imported towerConfig available on the scene for tower placement
+    window.bloonsConfig = window.bloonsConfig;
+    // Make global towerConfig available on the scene for tower placement
     this.addSpikeProjectile = (x, y, damage) => addSpikeProjectile(this, x, y, damage);
-    this.towerConfig = towerConfig;
+    this.towerConfig = window.towerConfig;
     // Always reset gamePhase and wave state
     this.gamePhase = GAME_PHASES.BUYING;
     this.waveNumber = DEV_START_WAVE;
@@ -672,7 +671,7 @@ class BalouneScene extends Phaser.Scene {
     setupGameStateMachine(this, GAME_PHASES.BUYING);
     
     // Setup all game animations (pass bloonsConfig for dynamic bloon animations)
-    setupAnimations(this, towerConfig, bloonsConfig);
+    setupAnimations(this, window.towerConfig, window.bloonsConfig);
     
     // const gameWidth = 1600;
     // const gameHeight = 900;
