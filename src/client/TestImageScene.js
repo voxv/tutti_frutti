@@ -1,4 +1,4 @@
-import Phaser from "phaser";
+// Phaser loaded from CDN in index.html
 
 export class TestImageScene extends Phaser.Scene {
   preload() {

@@ -1,4 +1,4 @@
-import Phaser from "phaser";
+// Phaser loaded from CDN in index.html
 import { Baloune } from "../../game/Baloune.js";
 import towerConfig from "../../game/towers/tower.json";
 import bloonsConfig from "../../game/enemies/bloons.json";
