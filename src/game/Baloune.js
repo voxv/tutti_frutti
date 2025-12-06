@@ -7,7 +7,8 @@ import { MelonBloon } from "./enemies/MelonBloon.js";
 import { KiwiBloon } from "./enemies/KiwiBloon.js";
 import { BlackBloon } from "./enemies/BlackBloon.js";
 import { level1Paths } from "./levels/level1.js";
-import bloonsConfig from "./enemies/bloons.json" assert { type: "json" };
+// Use global bloonsConfig from main.js, or fallback to imported version for development
+const bloonsConfig = window.bloonsConfig || (await import("./enemies/bloons.json")).default;
 import { createBloonInstance } from "../client/factories/bloonFactory.js";
 //import { KnifeTower } from "./towers/KnifeTower.js";
 //import { DartProjectile } from "./projectiles/DartProjectile.js";

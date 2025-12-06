@@ -1,7 +1,8 @@
 // src/client/logic/waveLogic.js
 // Handles wave parsing and spawning logic for Bloons game
 
-import wavesConfig from "../../../waves.json";
+// Use global wavesConfig from main.js, or fallback to imported version for development
+const wavesConfig = window.wavesConfig || (await import("../../../waves.json")).default;
 
 /**
  * Parses a wave string into an array of bloon spawn instructions.

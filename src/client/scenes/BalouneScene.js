@@ -1,13 +1,14 @@
 import Phaser from "phaser";
 import { Baloune } from "../../game/Baloune.js";
-import towerConfig from "../../game/towers/tower.json";
-import bloonsConfig from "../../game/enemies/bloons.json";
 import { showUpgradeUI, refreshUpgradeUIIfVisible } from "../ui/upgradeUI.js";
 import { spawnWave, parseWaveString } from "../logic/waveLogic.js";
 import { drawShopUI, refreshShopAvailability } from "../ui/shopUI.js";
 import { drawInfoBarUI, updateLifeBar } from "../ui/infoBarUI.js";
 import { createTargetingButtons, updateTargetingButtons } from "../ui/targetingUI.js";
 import { AOETower } from "../../game/towers/AOETower.js";
+// Use global configs from main.js, or fallback to imported versions for development
+const towerConfig = window.towerConfig || (await import("../../game/towers/tower.json")).default;
+const bloonsConfig = window.bloonsConfig || (await import("../../game/enemies/bloons.json")).default;
 import { SniperTower } from "../../game/towers/SniperTower.js";
 import { addSpikeProjectile } from "../../game/towers/spikeProjectile.js";
 import * as towerPlacement from "../logic/towerPlacement.js";
