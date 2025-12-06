@@ -1,0 +1,311 @@
+{
+  "knife": {
+    "displayName": "Knife",
+    "description": "Quick melee tower that slashes nearby fruits.",
+    "type": "melee",
+    "class": "KnifeTower",
+    "towerType": "knife_tower",
+    "cost": 250,
+    "range": 80,
+    "fireRate": 1.8,
+    "damage": 1,
+    "homing": true,
+    "assets": {
+      "shopImage": "/towers/knife_tower.png",
+      "placedImage": "/towers/knife_tower_anim.png",
+      "animation": {
+        "key": "knife_tower_idle",
+        "frameWidth": 200,
+        "frameHeight": 200,
+        "frames": { "start": 0, "end": 5 },
+        "frameRate": 22,
+        "repeat": -1
+      }
+    },
+    "upgrades": {
+      "lower": [
+        { "name": "Range Boost 1", "key": "bigger_range", "cost": 120, "description": "Increases the attack range." },
+        { "name": "Sharper Blade", "key": "sharper_blade", "cost": 460, "description": "Increases the damage dealt." }
+      ],
+      "medium": [
+        { "name": "Range Boost 2", "key": "even_bigger_range", "cost": 220, "description": "Further increases the attack range." },
+        { "name": "Fast Blades", "key": "faster_blades", "cost": 600, "description": "Increases the attack speed." }
+      ],
+      "high": [
+        { "name": "Storm Spin", "key": "storm_spin", "cost": 670, "description": "Enables a spinning attack, hitting all nearby fruits." },
+        { "name": "Blade Master", "key": "blade_master", "cost": 780, "description": "Greatly increases damage and attack speed." }
+      ]
+    }
+  },
+  "cannon": {
+    "displayName": "Guinea Pig",
+    "description": "Fires powerful nuts at fruits from long range.",
+    "type": "projectile",
+    "class": "CannonTower",
+    "towerType": "cannon",
+    "cost": 390,
+    "range": 120,
+    "fireRate": 1.5,
+    "damage": 1,
+    "homing": false,
+    "assets": {
+      "shopImage": "/towers/guiney_pig_shop.png",
+      "placedImage": "/towers/guiney_pig_anim.png",
+      "animation": {
+        "key": "cannon_placed_anim",
+        "frameWidth": 330,
+        "frameHeight": 396,
+        "frames": { "start": 0, "end": 3 },
+        "frameRate": 8,
+        "repeat": -1
+      },
+      "projectile": "/towers/boulder.png"
+    },
+    "upgrades": {
+      "lower": [
+        { "name": "Range Boost 1", "key": "bigger_range", "cost": 210, "description": "Increases the attack range." },
+        { "name": "Destroy 2 fruits", "key": "pop_two_fruits", "cost": 395, "description": "Allows nuts to pop up to 2 fruits per shot." }
+      ],
+      "medium": [
+        { "name": "Range Boost 2", "key": "even_bigger_range", "cost": 350, "description": "Further increases the attack range." },
+        { "name": "Destroy 3 fruits", "key": "pop_three_fruits", "cost": 470, "description": "Allows nuts to pop up to 3 fruits per shot." }
+      ],
+      "high": [
+        { "name": "WorldWide Range", "key": "world_wide_range", "cost": 430, "description": "Massively increases the attack range." },
+        { "name": "Rapid Barrage", "key": "rapid_barrage", "cost": 1025, "description": "Greatly increases the fire rate." }
+      ]
+    }
+  },
+  "glacial": {
+    "displayName": "Penguin",
+    "description": "Freezes and slows groups of fruits in an area.",
+    "type": "aoe",
+    "class": "GlacialTower",
+    "towerType": "glacial",
+    "cost": 350,
+    "range": 100,
+    "fireRate": 1.8,
+    "damage": 1,
+    "assets": {
+      "shopImage": "/towers/glacial_shop.png",
+      "placedImage": "/towers/glacial_shop.png",
+      "shopImageScale": 1.15
+    },
+    "upgrades": {
+      "lower": [
+        { "name": "Range Boost 1", "key": "bigger_range", "cost": 225, "description": "Increases the attack range ." },
+        { "name": "Deep freeze 1", "key": "deep_freeze_1", "cost": 390, "description": "Freezes fruits for a longer duration." }
+      ],
+      "medium": [
+        { "name": "Range Boost 2", "key": "even_bigger_range", "cost": 320, "description": "Further increases the attack range." },
+        { "name": "Deep freeze 2", "key": "deep_freeze_2", "cost": 660, "description": "Freezes fruits for an even longer duration." }
+      ],
+      "high": [
+        { "name": "Attack Speed +", "key": "attack_speed", "cost": 680, "description": "Increases the attack speed." },
+        { "name": "Attack Speed +", "key": "attack_speed_2", "cost": 710, "description": "Greatly increases the attack speed." }
+      ]
+    }
+  },
+  "laser": {
+    "displayName": "Electric Eel",
+    "description": "Unleashes powerful electric beams that zap through multiple fruits",
+    "type": "projectile",
+    "class": "LaserTower",
+    "towerType": "laser",
+    "cost": 570,
+    "range": 100,
+    "fireRate": 0.3,
+    "damage": 0.6,
+    "assets": {
+      "shopImage": "/towers/laser_shop.png",
+      "placedImage": "/towers/laser_anim.png",
+      "animation": {
+        "key": "laser_tower_idle",
+        "frameWidth": 351,
+        "frameHeight": 248,
+        "frames": { "start": 0, "end": 3 },
+        "frameRate": 18,
+        "repeat": -1
+      }
+    },
+    "upgrades": {
+      "lower": [
+        { "name": "Range Boost 1", "key": "bigger_range", "cost": 290, "description": "Increases the attack range." },
+        { "name": "More Power 1", "key": "attack_speed_1", "cost": 665, "description": "Increases the damage and penetration." }
+      ],
+      "medium": [
+        { "name": "Range Boost 2", "key": "even_bigger_range", "cost": 320, "description": "Further increases the attack range." },
+        { "name": "More Power 2", "key": "penetration", "cost": 870, "description": "Further increases the damage and penetration." }
+      ],
+      "high": [
+        { "name": "Range Boost 3", "key": "world_wide_range", "cost": 390, "description": "Massively increases the attack range." },
+        { "name": "More Power 3", "key": "penetration_2", "cost": 1150, "description": "Greatly increases the damage and penetration." }
+      ]
+    }
+  },
+  "spike": {
+    "displayName": "Porcupine",
+    "description": "Throws spikes onto the path to pop passing fruits.",
+    "type": "projectile",
+    "class": "SpikeTower",
+    "towerType": "spike",
+    "cost": 595,
+    "range": 110,
+    "fireRate": 0.2,
+    "damage": 1,
+    "assets": {
+      "shopImage": "/towers/spike_shop.png",
+      "placedImage": "/towers/porcupine_anim.png",
+      "projectile": "/towers/projectiles/spike.png",
+      "animation": {
+        "key": "spike_tower_idle",
+        "frameWidth": 353,
+        "frameHeight": 362,
+        "frames": { "start": 0, "end": 2 },
+        "frameRate": 8,
+        "repeat": -1
+      }
+    },
+    "upgrades": {
+      "lower": [
+        { "name": "Range Boost 1", "key": "bigger_range", "cost": 210, "description": "Increases the attack range." },
+        { "name": "More Spikes", "key": "more_spikes", "cost": 360, "description": "Throws more spikes per attack." }
+      ],
+      "medium": [
+        { "name": "Range Boost 2", "key": "even_bigger_range", "cost": 280, "description": "Further increases the attack range." },
+        { "name": "Fast Spikes 1", "key": "faster_spikes", "cost": 575, "description": "Increases the spike throwing speed." }
+      ],
+      "high": [
+        { "name": "Fat Spikes", "key": "fat_spikes", "cost": 720, "description": "Spikes can pop more fruits per hit." },
+        { "name": "Fast Spikes 2", "key": "super_fast_spikes", "cost": 790, "description": "Greatly increases the spike throwing speed." }
+      ]
+    }
+  },
+  "glue": {
+    "displayName": "Snail",
+    "description": "Fires glue to slow down and weaken fruits.",
+    "type": "projectile",
+    "class": "GlueTower",
+    "towerType": "glue",
+    "cost": 320,
+    "range": 130,
+    "fireRate": 2.0,
+    "damage": 0,
+    "homing": true,
+    "assets": {
+      "shopImage": "/towers/snail_shop.png",
+      "placedImage": "/towers/snail_anim.png",
+      "animation": {
+        "key": "glue_tower_anim",
+        "frameWidth": 452,
+        "frameHeight": 326,
+        "frames": { "start": 0, "end": 3 },
+        "frameRate": 8,
+        "repeat": -1
+      },
+      "projectile": "/towers/projectiles/glue_projectile.png"
+    },
+    "upgrades": {
+      "lower": [
+        { "name": "Range Boost 1", "key": "bigger_range", "cost": 210, "description": "Increases the attack range." },
+        { "name": "Splash  1", "key": "more_stickiness_1", "cost": 570, "description": "Glue can spread to more nearby fruits." }
+      ],
+      "medium": [
+        { "name": "Range Boost 2", "key": "even_bigger_range", "cost": 280, "description": "Further increases the attack range." },
+        { "name": "Splash 2", "key": "more_stickiness_2", "cost": 620, "description": "Glue can spread to even more nearby fruits." }
+      ],
+      "high": [
+        { "name": "Range Boost 3", "key": "super_glue", "cost": 320, "description": "Massively increases glue range and slow effect." },
+        { "name": "Splash 3", "key": "more_stickiness_3", "cost": 810, "description": "Glue can spread to the maximum number of nearby fruits." }
+      ]
+    }
+  }
+  ,
+  "bird": {
+    "displayName": "Falcon",
+    "description": "A bird that throws explosive projectiles at fruits.",
+    "type": "projectile",
+    "class": "BirdTower",
+    "towerType": "bird",
+    "cost": 695,
+    "range": 320,
+    "fireRate": 0.9,
+    "damage": 1,
+    "assets": {
+      "shopImage": "/towers/bird_shop.png",
+      "placedImage": "/towers/bird_anim.png",
+        "animation": {
+          "key": "bird_tower_idle",
+          "frameWidth": 320,
+          "frameHeight": 328,
+          "frames": { "start": 0, "end": 4 },
+          "frameRate": 11,
+          "repeat": -1
+        },
+      "projectile": "/towers/projectiles/spike.png",
+      "explode_anim": {
+        "key": "explode_anim",
+        "frameWidth": 243,
+        "frameHeight": 354,
+        "frames": { "start": 0, "end": 1 },
+        "frameRate": 1,
+        "repeat": 0,
+        "imageWidth": 1701,
+        "imageHeight": 354,
+        "frameCount": 2
+      }
+    },
+    "upgrades": {
+      "lower": [
+        { "name": "Devastation 1", "key": "devastation_1", "cost": 820, "description": "Explosions also destroy 1 nearby fruit." },
+        { "name": "Wide Patrol 1", "key": "wide_patrol_1", "cost": 520, "description": "Falcon flies a wider path and fires faster." }
+      ],
+      "medium": [
+        { "name": "Devastation 2", "key": "devastation_2", "cost": 980, "description": "Explosions also destroy 2 nearby fruits." },
+        { "name": "Wide Patrol 2", "key": "wide_patrol_2", "cost": 600, "description": "Falcon flies an even wider path and fires even faster." }
+      ],
+      "high": [
+        { "name": "Devastation 3", "key": "devastation_3", "cost": 1250, "description": "Explosions also destroy 3 nearby fruits." },
+        { "name": "Wide Patrol 3", "key": "wide_patrol_3", "cost": 680, "description": "Falcon flies the widest path and fires the fastest." }
+      ]
+    }
+  },
+  "sniper": {
+    "displayName": "Rocket Launcher",
+    "description": "Long-range precision tower with high damage output.",
+    "type": "projectile",
+    "class": "SniperTower",
+    "towerType": "sniper",
+    "cost": 680,
+    "range": 180,
+    "fireRate": 0.4,
+    "damage": 1,
+    "homing": true,
+    "assets": {
+      "shopImage": "/towers/sniper_shop.png",
+      "placedImage": "/towers/sniper_anim.png",
+      "animation": {
+        "key": "sniper_placed",
+        "frameWidth": 280,
+        "frameHeight": 465,
+        "frames": { "start": 0, "end": 2 },
+        "frameRate": 12,
+        "repeat": -1
+      }
+    },
+    "upgrades": {
+      "lower": [
+        { "name": "Range Boost 1", "key": "bigger_range", "cost": 180, "description": "Increases the attack range." },
+        { "name": "Spread Shot", "key": "piercing_shot", "cost": 640, "description": "Shoots multiple fruits at once." }
+      ],
+      "medium": [
+        { "name": "Range Boost 2", "key": "even_bigger_range", "cost": 270, "description": "Further increases the attack range." },
+        { "name": "Rapid Fire 1", "key": "rapid_fire", "cost": 740, "description": "Greatly increases the fire rate." }
+      ],
+      "high": [
+        { "name": "WorldWide Range", "key": "extreme_range", "cost": 325, "description": "Massively increases the attack range." },
+        { "name": "Rapid Fire 2", "key": "headshot", "cost": 880, "description": "Massively increases the fire rate." }
+      ]
+    }
+  }
+}

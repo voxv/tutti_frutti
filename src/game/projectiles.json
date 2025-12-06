@@ -1,0 +1,7 @@
+{
+  "boulder": {
+    "speed": 1054,
+    "hitRadius": 36,
+    "sprite": "boulder"
+  }
+}

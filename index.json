@@ -1,0 +1,16 @@
+{
+  "name": "tower-defense",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server/main.js"
+  },
+  "description": "",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "phaser": "^3.90.0"
+  }
+}
