@@ -1,3 +1,9 @@
+// Set up dummy globals BEFORE importing modules that depend on them
+window.towerConfig = {};
+window.bloonsConfig = {};
+window.wavesConfig = {};
+window.projectilesConfig = {};
+
 // Import Phaser from global (loaded via CDN in index.html)
 const Phaser = window.Phaser;
 
