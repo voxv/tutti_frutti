@@ -1,5 +1,8 @@
 
 import { AOETower } from "./AOETower.js";
+import towerDefaults from "./tower.json";
+import projectileDefaults from "../projectiles.json";
+
 
 export class LaserTower extends AOETower {
   // Utility to wrap setFrame (no debug)

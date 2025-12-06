@@ -1,4 +1,4 @@
-// Phaser loaded from CDN in index.html
+import Phaser from "phaser";
 
 class MapSelectScene extends Phaser.Scene {
   constructor() {
