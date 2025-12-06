@@ -1,6 +1,7 @@
 import { ProjectileTower } from "./ProjectileTower.js";
-import towerDefaults from "./tower.json";
-import projectileDefaults from "../projectiles.json";
+// JSON files loaded globally from main.js
+const towerDefaults = window.towerConfig || {};
+const projectileDefaults = window.projectilesConfig || {};
 import { BoulderProjectile } from "../projectiles/BoulderProjectile.js";
 
 export class SniperTower extends ProjectileTower {
