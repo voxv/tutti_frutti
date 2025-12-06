@@ -1,4 +1,5 @@
-import Phaser from "phaser";
+// Phaser is loaded globally from CDN in index.html
+const Phaser = window.Phaser;
 import { Baloune } from "../../game/Baloune.js";
 import { showUpgradeUI, refreshUpgradeUIIfVisible } from "../ui/upgradeUI.js";
 import { spawnWave, parseWaveString } from "../logic/waveLogic.js";

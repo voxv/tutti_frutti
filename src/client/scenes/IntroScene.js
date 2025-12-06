@@ -1,4 +1,5 @@
-import Phaser from "phaser";
+// Phaser is loaded globally from CDN in index.html
+const Phaser = window.Phaser;
 
 class IntroScene extends Phaser.Scene {
   constructor() {
