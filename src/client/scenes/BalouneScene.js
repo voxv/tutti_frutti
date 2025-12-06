@@ -6,9 +6,9 @@ import { drawShopUI, refreshShopAvailability } from "../ui/shopUI.js";
 import { drawInfoBarUI, updateLifeBar } from "../ui/infoBarUI.js";
 import { createTargetingButtons, updateTargetingButtons } from "../ui/targetingUI.js";
 import { AOETower } from "../../game/towers/AOETower.js";
-// Use global configs from main.js, or fallback to imported versions for development
-const towerConfig = window.towerConfig || (await import("../../game/towers/tower.json")).default;
-const bloonsConfig = window.bloonsConfig || (await import("../../game/enemies/bloons.json")).default;
+// Use global configs from main.js
+const towerConfig = window.towerConfig || {};
+const bloonsConfig = window.bloonsConfig || {};
 import { SniperTower } from "../../game/towers/SniperTower.js";
 import { addSpikeProjectile } from "../../game/towers/spikeProjectile.js";
 import * as towerPlacement from "../logic/towerPlacement.js";

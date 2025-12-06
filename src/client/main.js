@@ -1,5 +1,6 @@
-// Import Phaser from global if loaded via CDN, otherwise from module
-const Phaser = window.Phaser || (await import("phaser")).default;
+// Import Phaser from global (loaded via CDN in index.html)
+const Phaser = window.Phaser;
+
 import { Baloune } from "../game/Baloune.js";
 // Import the BananaBloon and CherryBloon classes so spawnWave("banana") and spawnWave("cherry") work
 import { BananaBloon } from "../game/enemies/BananaBloon.js";
