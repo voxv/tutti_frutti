@@ -91,7 +91,11 @@ class BalouneScene extends Phaser.Scene {
       }
       for (const tower of this.gameLogic.towers) {
         if (tower && tower.constructor && tower.constructor.name === 'SpikeTower') {
+          const oldValue = tower._spikeShootingDisabled;
           tower._spikeShootingDisabled = !isSpawning;
+          if (oldValue !== tower._spikeShootingDisabled) {
+            console.log('[DEBUG] SpikeTower flag changed:', { from: oldValue, to: tower._spikeShootingDisabled, isSpawning, phase: this.gameStateMachine?.currentPhase });
+          }
         }
       }
       // Debug: Print all tower types and _placedSprite/anims presence
