@@ -220,6 +220,31 @@ export function setupStartWaveButtonHandler(startWaveButton, scene, spawnWave) {
  */
 function handleStartWaveClick(scene, spawnWave) {
   if (!scene.gameStateMachine.isInPhase(GAME_PHASES.BUYING) || !scene.startWaveButton.input.enabled) return;
+  
+  // If starting wave 50, play boss music
+  if (scene.waveNumber === 50) {
+    console.log('[Wave50 Handler] Starting wave 50 - preparing boss music');
+    // Stop main game music
+    if (scene.sound && scene.sound.getAll) {
+      scene.sound.getAll('main_game_music').forEach(snd => snd.stop());
+    } else if (scene.sound && scene.sound.get('main_game_music')) {
+      scene.sound.get('main_game_music').stop();
+    }
+    // Stop existing boss music if any
+    if (scene.sound && scene.sound.get('boss_music')) {
+      console.log('[Wave50 Handler] Stopping existing boss music');
+      scene.sound.get('boss_music').stop();
+    }
+    console.log('[Wave50 Handler] soundOn:', scene.soundOn, 'boss_music exists:', scene.cache.audio.exists('boss_music'));
+    if (scene.soundOn !== false && scene.cache.audio.exists('boss_music')) {
+      console.log('[Wave50 Handler] Playing boss_music now');
+      const bossSound = scene.sound.play('boss_music', { loop: true, volume: 0.8 });
+      console.log('[Wave50 Handler] Sound played. isPlaying:', bossSound?.isPlaying);
+    } else {
+      console.log('[Wave50 Handler] Cannot play: soundOn=', scene.soundOn, 'exists=', scene.cache.audio.exists('boss_music'));
+    }
+  }
+  
   scene.gameStateMachine.transition(GAME_PHASES.SPAWNING);
   scene.startWaveButton.setStyle({ fill: "#888" });
   scene.startWaveButton.disableInteractive();

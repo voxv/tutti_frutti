@@ -22,7 +22,7 @@ import { setupAnimations, ANIMATION_KEYS, isPlayingAnimation } from "../animatio
 
 
 // DEV: Set this to start from a specific wave for testing
-const DEV_START_WAVE = 1 // Set to 1 for normal, or e.g. 5 to start from wave 5
+const DEV_START_WAVE = 50 // Set to 1 for normal, or e.g. 5 to start from wave 5
 
 // DEV: Set this to control the overall size of all bloons (default 1)
 const BLOON_SIZE_MULTIPLIER = 1.1;
@@ -34,7 +34,7 @@ const PLACED_TOWER_SIZE_MULTIPLIER = 1.2;
 const BLOON_SPEED_MULTIPLIER = 1.2;
 
 // DEV: Set the starting gold amount for the player
-const STARTING_GOLD = 650;
+const STARTING_GOLD = 113650;
 
 // Ensure the global variables are set from here if not already set
 if (typeof window !== 'undefined') {
@@ -172,6 +172,10 @@ class BalouneScene extends Phaser.Scene {
         } else if (this.sound && this.sound.get('main_game_music')) {
           this.sound.get('main_game_music').stop();
         }
+        // Also stop boss music if playing
+        if (this.sound && this.sound.get('boss_music')) {
+          this.sound.get('boss_music').stop();
+        }
         // Show win game popup
         this._gameOverShown = true;
         showWinGamePopup(this, {
@@ -236,6 +240,14 @@ class BalouneScene extends Phaser.Scene {
             this.currentWaveIndex = 0;
             // Reset game state machine to buying phase
             this.gameStateMachine.reset(GAME_PHASES.BUYING);
+            // Stop main game music if entering buying phase of wave 50
+            if (this.waveNumber === 50) {
+              if (this.sound && this.sound.getAll) {
+                this.sound.getAll('main_game_music').forEach(snd => snd.stop());
+              } else if (this.sound && this.sound.get('main_game_music')) {
+                this.sound.get('main_game_music').stop();
+              }
+            }
             // Reset game logic state
             sceneUtils.resetGameLogicState(this.gameLogic);
             // Remove placed tower sprites
@@ -284,7 +296,25 @@ class BalouneScene extends Phaser.Scene {
             
             // Add pointer event tracking
             this.startWaveButton.on('pointerdown', () => {
+              console.log('[StartWave Button Click] Wave:', this.waveNumber, 'InPhase:', this.gameStateMachine.isInPhase(GAME_PHASES.BUYING));
               if (!this.gameStateMachine.isInPhase(GAME_PHASES.BUYING) || !this.startWaveButton.input.enabled) return;
+              // If starting wave 50, play boss music
+              if (this.waveNumber === 50) {
+                console.log('[Wave50] Starting wave 50 - preparing boss music');
+                // Always stop boss music before playing
+                if (this.sound && this.sound.get('boss_music')) {
+                  console.log('[Wave50] Stopping existing boss music');
+                  this.sound.get('boss_music').stop();
+                }
+                console.log('[Wave50] soundOn:', this.soundOn, 'boss_music exists:', this.cache.audio.exists('boss_music'));
+                if (this.soundOn !== false && this.cache.audio.exists('boss_music')) {
+                  console.log('[Wave50] Playing boss_music now');
+                  const bossSound = this.sound.play('boss_music', { loop: true, volume: 0.8 });
+                  console.log('[Wave50] Sound played. isPlaying:', bossSound?.isPlaying);
+                } else {
+                  console.log('[Wave50] Cannot play: soundOn=', this.soundOn, 'exists=', this.cache.audio.exists('boss_music'));
+                }
+              }
               transitionGamePhase(this, GAME_PHASES.SPAWNING);
               this.startWaveButton.setStyle({ fill: "#888" });
               this.startWaveButton.disableInteractive();
@@ -382,6 +412,14 @@ class BalouneScene extends Phaser.Scene {
         if (this.waveText) {
           this.waveText.setText(`Wave: ${this.waveNumber}`);
         }
+        // Stop main game music if entering buying phase of wave 50
+        if (this.waveNumber === 50) {
+          if (this.sound && this.sound.getAll) {
+            this.sound.getAll('main_game_music').forEach(snd => snd.stop());
+          } else if (this.sound && this.sound.get('main_game_music')) {
+            this.sound.get('main_game_music').stop();
+          }
+        }
         if (this.startWaveButton) {
           this.startWaveButton.destroy();
         }
@@ -401,7 +439,24 @@ class BalouneScene extends Phaser.Scene {
         ).setOrigin(0.5).setInteractive({ useHandCursor: true });
         this.startWaveButton.setDepth(5000);
         this.startWaveButton.on("pointerdown", () => {
+          console.log('[StartWave Normal Button] Wave:', this.waveNumber);
           if (!this.gameStateMachine.isInPhase(GAME_PHASES.BUYING) || !this.startWaveButton.input.enabled) return;
+          // If starting wave 50, play boss music
+          if (this.waveNumber === 50) {
+            console.log('[Wave50 Normal] Starting wave 50 - preparing boss music');
+            if (this.sound && this.sound.get('boss_music')) {
+              console.log('[Wave50 Normal] Stopping existing boss music');
+              this.sound.get('boss_music').stop();
+            }
+            console.log('[Wave50 Normal] soundOn:', this.soundOn, 'boss_music exists:', this.cache.audio.exists('boss_music'));
+            if (this.soundOn !== false && this.cache.audio.exists('boss_music')) {
+              console.log('[Wave50 Normal] Playing boss_music now');
+              const bossSound = this.sound.play('boss_music', { loop: true, volume: 0.8 });
+              console.log('[Wave50 Normal] Sound played. isPlaying:', bossSound?.isPlaying);
+            } else {
+              console.log('[Wave50 Normal] Cannot play: soundOn=', this.soundOn, 'exists=', this.cache.audio.exists('boss_music'));
+            }
+          }
           transitionGamePhase(this, GAME_PHASES.SPAWNING);
           this.startWaveButton.setStyle({ fill: "#888" });
           this.startWaveButton.disableInteractive();
@@ -476,6 +531,9 @@ class BalouneScene extends Phaser.Scene {
         this.load.image('sound_off', '/divers/no_sound.png');
         // Load main game music
         this.load.audio('main_game_music', '/sounds/main_game.mp3');
+        // Load boss music
+        console.log('[BalouneScene preload] Loading boss music from /sounds/boss.mp3');
+        this.load.audio('boss_music', '/sounds/boss.mp3');
         // Load game over music
         this.load.audio('game_over_music', '/sounds/game_over.mp3');
         this.load.audio('win', 'sounds/win.mp3');
@@ -597,6 +655,20 @@ class BalouneScene extends Phaser.Scene {
       // Ensure no music is playing if sound is off
       this.sound.getAll('main_game_music').forEach(snd => snd.stop());
     }
+    // Ensure boss music is stopped at game start
+    console.log('[BalouneScene create] Checking boss music at game start');
+    if (this.sound.get('boss_music')) {
+      console.log('[BalouneScene create] Stopping existing boss music');
+      this.sound.get('boss_music').stop();
+    }
+    console.log('[BalouneScene create] Boss music exists in cache:', this.cache.audio.exists('boss_music'));
+            // Stop boss music if wave 50 ends (win or lose)
+            if (this._bossMusicStarted && (!this.waveInProgress || this._gameOverShown)) {
+              if (this.sound && this.sound.get('boss_music')) {
+                this.sound.get('boss_music').stop();
+              }
+              this._bossMusicStarted = false;
+            }
         // Remove lingering BirdTower selection circle if present
         if (this._birdSelectCircle) {
           this._birdSelectCircle.destroy();
@@ -903,12 +975,16 @@ class BalouneScene extends Phaser.Scene {
         this.gameLogic.enemies = [];
       }
       
-      // Stop all instances of main game music if playing
-      if (this.sound && this.sound.getAll) {
-        this.sound.getAll('main_game_music').forEach(snd => snd.stop());
-      } else if (this.sound && this.sound.get('main_game_music')) {
-        this.sound.get('main_game_music').stop();
-      }
+        // Stop boss music if playing
+        if (this.sound && this.sound.get('boss_music')) {
+          this.sound.get('boss_music').stop();
+        }
+        // Stop main game music if playing
+        if (this.sound && this.sound.getAll) {
+          this.sound.getAll('main_game_music').forEach(snd => snd.stop());
+        } else if (this.sound && this.sound.get('main_game_music')) {
+          this.sound.get('main_game_music').stop();
+        }
       // Play game over music
       if (this.cache.audio.exists('game_over_music')) {
         if (!this.sound.get('game_over_music')) {
