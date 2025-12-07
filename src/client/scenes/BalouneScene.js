@@ -91,6 +91,10 @@ class BalouneScene extends Phaser.Scene {
       }
       let spikeCount = 0;
       for (const tower of this.gameLogic.towers) {
+        if (!window._spikePhaseDebug.towerTypes) window._spikePhaseDebug.towerTypes = {};
+        const towerName = tower?.constructor?.name || 'UNKNOWN';
+        window._spikePhaseDebug.towerTypes[towerName] = true;
+        
         if (tower && tower.constructor && tower.constructor.name === 'SpikeTower') {
           spikeCount++;
           const oldValue = tower._spikeShootingDisabled;
@@ -101,7 +105,7 @@ class BalouneScene extends Phaser.Scene {
         }
       }
       if (!window._spikePhaseDebug.reportedCount && isSpawning) {
-        console.log('[DEBUG] Found', spikeCount, 'SpikeTowers total towers:', this.gameLogic.towers.length);
+        console.log('[DEBUG] Found', spikeCount, 'SpikeTowers total towers:', this.gameLogic.towers.length, 'Tower types:', Object.keys(window._spikePhaseDebug.towerTypes));
         window._spikePhaseDebug.reportedCount = true;
       }
     } else {
