@@ -94,6 +94,13 @@ export class SpikeTower extends ProjectileTower {
       }
       return;
     }
+    
+    // If we got here, shooting is enabled!
+    if (!window._spikeDebugLog.enabled) {
+      console.log('[SpikeTower] DEBUG: _spikeShootingDisabled is FALSE - shooting ENABLED!');
+      window._spikeDebugLog.enabled = true;
+    }
+    
     window._spikeDebugLog.disabled = false;
     
     // Get path points from the scene if not provided
