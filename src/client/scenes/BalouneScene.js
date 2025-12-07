@@ -300,6 +300,10 @@ class BalouneScene extends Phaser.Scene {
             this.startWaveButton.setDepth(5000);
             this.startWaveButton.input.enabled = true;
             console.log('[DEBUG] Button created and interactive:', this.startWaveButton.input.enabled, 'depth:', this.startWaveButton.depth);
+            
+            // Add pointer event tracking
+            this.startWaveButton.on('pointerover', () => console.log('[DEBUG] pointerover detected'));
+            this.startWaveButton.on('pointerout', () => console.log('[DEBUG] pointerout detected'));
             this.startWaveButton.on('pointerdown', () => {
               console.log('[DEBUG] Start Wave button clicked, isInPhase BUYING:', this.gameStateMachine.isInPhase(GAME_PHASES.BUYING), 'button enabled:', this.startWaveButton.input.enabled);
               if (!this.gameStateMachine.isInPhase(GAME_PHASES.BUYING) || !this.startWaveButton.input.enabled) return;
@@ -876,6 +880,17 @@ class BalouneScene extends Phaser.Scene {
 
     // Setup game field click handler for tower deselection
     setupGameFieldClickHandler(this, gameWidth, shopWidth, gameHeight, infoBarHeight);
+
+    // DEBUG: Add keyboard shortcut to test wave start (spacebar)
+    this.input.keyboard.on('keydown-SPACE', () => {
+      console.log('[DEBUG] SPACEBAR pressed - forcing wave start for testing');
+      if (this.gameStateMachine.isInPhase(GAME_PHASES.BUYING)) {
+        console.log('[DEBUG] Transitioning from BUYING to SPAWNING via keyboard');
+        transitionGamePhase(this, GAME_PHASES.SPAWNING);
+        spawnWave(this, this.gameLogic, this.currentWaveIndex);
+        this.currentWaveIndex++;
+      }
+    });
 
     // Animations are now set up centrally in setupAnimations() call during create()
 
