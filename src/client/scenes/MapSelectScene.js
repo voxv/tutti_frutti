@@ -60,7 +60,8 @@ class MapSelectScene extends Phaser.Scene {
     const previewBackgrounds = [
       '/maps/map1.png',
       '/maps/map2.png',
-      '/maps/map3.png'
+      '/maps/map3.png',
+      '/maps/map4.png'
     ];
     // Try to load backgrounds from maps.json if available
     (maps.length ? maps.map(m => m.background) : previewBackgrounds).forEach(bg => {

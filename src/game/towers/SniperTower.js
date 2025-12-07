@@ -181,7 +181,10 @@ export class SniperTower extends ProjectileTower {
               position: { x: dropX, y: -100 }, // Start above screen at target's X position or random path
               direction: { x: 0, y: 1 }, // Initial fall downward
               speed: 300,
-              damage: this.damage * (this._headshot ? 999 : 1), // Instant kill if headshot upgrade
+              // Headshot: one-shot normal, but not boss
+              damage: (this._headshot && targetBloon && (targetBloon.type !== 'boss' && targetBloon.constructor.name !== 'BossBloon'))
+                ? this.damage * 999
+                : (this._headshot ? this.damage * 10 : this.damage),
               texture: this.projectileTexture,
               target: targetBloon, // Set target for homing if in range, null otherwise
               hitRadius: 36,

@@ -316,7 +316,7 @@
     "type": "projectile",
     "class": "BoomerangTower",
     "towerType": "boomerang",
-    "cost": 650,
+    "cost": 720,
     "range": 220,
     "fireRate": 0.3,
     "damage": 40,
@@ -336,16 +336,16 @@
     },
     "upgrades": {
       "lower": [
-        { "name": "Attack Speed 1", "key": "attack_speed_1", "cost": 470, "description": "Increases the attack speed." },
-        { "name": "Double Boomerang", "key": "double_boomerang", "cost": 595, "description": "Throws two boomerangs per shot." }
+        { "name": "Attack Speed 1", "key": "attack_speed_1", "cost": 670, "description": "Increases the attack speed." },
+        { "name": "Double Boomerang", "key": "double_boomerang", "cost": 835, "description": "Throws two boomerangs per shot." }
       ],
       "medium": [
-        { "name": "Attack Speed 2", "key": "attack_speed_2", "cost": 650, "description": "Further increases the attack speed." },
-        { "name": "Triple Boomerang", "key": "triple_boomerang", "cost": 770, "description": "Throws three boomerangs per shot." }
+        { "name": "Attack Speed 2", "key": "attack_speed_2", "cost": 850, "description": "Further increases the attack speed." },
+        { "name": "Triple Boomerang", "key": "triple_boomerang", "cost": 1630, "description": "Throws three boomerangs per shot." }
       ],
       "high": [
-        { "name": "Attack Speed 3", "key": "attack_speed_3", "cost": 780, "description": "Massively increases the attack speed." },
-        { "name": "Quad Boomerang", "key": "quadruple_boomerang", "cost": 1000, "description": "Throws four boomerangs per shot." }
+        { "name": "Attack Speed 3", "key": "attack_speed_3", "cost": 1025, "description": "Massively increases the attack speed." },
+        { "name": "Quad Boomerang", "key": "quadruple_boomerang", "cost": 2150, "description": "Throws four boomerangs per shot." }
       ]
     }
   }

@@ -5,7 +5,7 @@ export class BossBloon extends Bloon {
     // Merge defaults with provided config
     const defaults = {
       type: "boss",
-      health: 2000,
+      health: 10000,
       speed: 40,
       reward: 100
     };

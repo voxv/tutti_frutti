@@ -27,7 +27,7 @@ class BoomerangTower extends ProjectileTower {
     } else if (upgradeKey === 'attack_speed_2') {
       this.fireRate += 0.5;
     } else if (upgradeKey === 'attack_speed_3') {
-      this.fireRate += 0.9;
+      this.fireRate += 0.5;
     }
     // Call parent for other upgrades
     if (super.applyUpgrade) super.applyUpgrade(upgradeKey);

@@ -201,7 +201,7 @@
       "description": "The final boss. Extremely tough and slow. Pops into many children.",
       "type": "boss",
       "class": "BossBloon",
-      "health": 500,
+      "health": 2000,
       "speed": 20,
       "reward": 100,
       "damage": 10,
