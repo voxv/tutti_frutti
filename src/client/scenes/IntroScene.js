@@ -1,21 +1,17 @@
-// Phaser is loaded globally from CDN in index.html
-const Phaser = window.Phaser;
+import Phaser from "phaser";
 
 class IntroScene extends Phaser.Scene {
   constructor() {
     super("IntroScene");
-    console.log('[IntroScene] Constructor called');
   }
 
   preload() {
-    console.log('[IntroScene] Preload called');
     this.load.image('splash', '/splash/splash.jpg');
     // Load intro music (WAV file)
     this.load.audio('intro_music', '/sounds/intro.wav');
   }
 
   create() {
-    console.log('[IntroScene] Create called');
     const maps = this.cache.json.get('maps')?.maps || [];
 
     // Add splash background (centered at 600, 300, no stretching)

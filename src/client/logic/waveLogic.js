@@ -1,8 +1,7 @@
 // src/client/logic/waveLogic.js
 // Handles wave parsing and spawning logic for Bloons game
 
-// Use global wavesConfig from main.js
-const wavesConfig = window.wavesConfig || {};
+import wavesConfig from "../../../waves.json";
 
 /**
  * Parses a wave string into an array of bloon spawn instructions.
@@ -78,28 +77,7 @@ export function parseWaveString(waveStr) {
  * @returns {void}
  */
 export function spawnWave(scene, gameLogic, waveIndex) {
-  // Always read from window to get the latest config
-  const currentWavesConfig = window.wavesConfig || {};
-  
-  // Add defensive check - wait for configs to load if needed
-  if (!currentWavesConfig || !currentWavesConfig.waves || currentWavesConfig.waves.length === 0) {
-    console.warn('Wave config not yet loaded. Attempting reload...', { currentWavesConfig, waveIndex });
-    // Try to wait a bit and retry
-    if (!window._waveRetrying) {
-      window._waveRetrying = true;
-      setTimeout(() => {
-        console.log('Retrying wave spawn after delay...', { wavesConfig: window.wavesConfig });
-        window._waveRetrying = false;
-        if (window.wavesConfig && window.wavesConfig.waves) {
-          spawnWave(scene, gameLogic, waveIndex);
-        } else {
-          console.error('Still no wave config after retry! Actual window.wavesConfig:', window.wavesConfig);
-        }
-      }, 500);
-    }
-    return;
-  }
-  const waveStr = currentWavesConfig.waves[waveIndex % currentWavesConfig.waves.length];
+  const waveStr = wavesConfig.waves[waveIndex % wavesConfig.waves.length];
   const waveArray = parseWaveString(waveStr);
   gameLogic.spawnWave(waveArray);
   // Optionally update UI, wave number, etc. in the scene here if needed

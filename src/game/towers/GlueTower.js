@@ -1,7 +1,7 @@
 import { ProjectileTower } from "./ProjectileTower.js";
-// JSON files loaded globally from main.js
-const towerDefaults = window.towerConfig || {};
-const projectileDefaults = window.projectilesConfig || {};
+import towerDefaults from "./tower.json";
+
+import projectileDefaults from "../projectiles.json";
 import { GlueProjectile } from "../projectiles/GlueProjectile.js";
 
 export class GlueTower extends ProjectileTower {

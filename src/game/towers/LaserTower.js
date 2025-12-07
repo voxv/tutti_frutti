@@ -1,8 +1,7 @@
 
 import { AOETower } from "./AOETower.js";
-// JSON files loaded globally from main.js
-const towerDefaults = window.towerConfig || {};
-const projectileDefaults = window.projectilesConfig || {};
+import towerDefaults from "./tower.json";
+import projectileDefaults from "../projectiles.json";
 
 
 export class LaserTower extends AOETower {

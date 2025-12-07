@@ -1,5 +1,4 @@
-// Phaser is loaded globally from CDN in index.html
-const Phaser = window.Phaser;
+import Phaser from "phaser";
 
 export class TestImageScene extends Phaser.Scene {
   preload() {
