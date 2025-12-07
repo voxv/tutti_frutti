@@ -223,7 +223,6 @@ function handleStartWaveClick(scene, spawnWave) {
   
   // If starting wave 50, play boss music
   if (scene.waveNumber === 50) {
-    console.log('[Wave50 Handler] Starting wave 50 - preparing boss music');
     // Stop main game music
     if (scene.sound && scene.sound.getAll) {
       scene.sound.getAll('main_game_music').forEach(snd => snd.stop());
@@ -232,16 +231,10 @@ function handleStartWaveClick(scene, spawnWave) {
     }
     // Stop existing boss music if any
     if (scene.sound && scene.sound.get('boss_music')) {
-      console.log('[Wave50 Handler] Stopping existing boss music');
       scene.sound.get('boss_music').stop();
     }
-    console.log('[Wave50 Handler] soundOn:', scene.soundOn, 'boss_music exists:', scene.cache.audio.exists('boss_music'));
     if (scene.soundOn !== false && scene.cache.audio.exists('boss_music')) {
-      console.log('[Wave50 Handler] Playing boss_music now');
-      const bossSound = scene.sound.play('boss_music', { loop: true, volume: 0.8 });
-      console.log('[Wave50 Handler] Sound played. isPlaying:', bossSound?.isPlaying);
-    } else {
-      console.log('[Wave50 Handler] Cannot play: soundOn=', scene.soundOn, 'exists=', scene.cache.audio.exists('boss_music'));
+      scene.sound.play('boss_music', { loop: true, volume: 0.8 });
     }
   }
   

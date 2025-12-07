@@ -22,6 +22,7 @@
         "repeat": -1
       }
     },
+    "boomerangArcDuration": 1.2,
     "upgrades": {
       "lower": [
         { "name": "Range Boost 1", "key": "bigger_range", "cost": 120, "description": "Increases the attack range." },
@@ -305,6 +306,46 @@
       "high": [
         { "name": "WorldWide Range", "key": "extreme_range", "cost": 325, "description": "Massively increases the attack range." },
         { "name": "Rapid Fire 2", "key": "headshot", "cost": 880, "description": "Massively increases the fire rate." }
+      ]
+    }
+  },
+  "boomerang": {
+    "displayName": "Kangaroo",
+    "boomerangArcDuration": 0.8,
+    "description": "Throws boomerangs at fruits from long range.",
+    "type": "projectile",
+    "class": "BoomerangTower",
+    "towerType": "boomerang",
+    "cost": 650,
+    "range": 220,
+    "fireRate": 0.3,
+    "damage": 40,
+    "homing": false,
+    "assets": {
+      "shopImage": "/towers/kangaroo_shop.png",
+      "placedImage": "/towers/kangaroo_anim.png",
+      "animation": {
+        "key": "kangaroo_idle_anim",
+        "frameWidth": 516,
+        "frameHeight": 800,
+        "frames": { "start": 0, "end": 2 },
+        "frameRate": 8,
+        "repeat": -1
+      },
+      "projectile": "/towers/projectiles/boomerang.png"
+    },
+    "upgrades": {
+      "lower": [
+        { "name": "Attack Speed 1", "key": "attack_speed_1", "cost": 470, "description": "Increases the attack speed." },
+        { "name": "Double Boomerang", "key": "double_boomerang", "cost": 595, "description": "Throws two boomerangs per shot." }
+      ],
+      "medium": [
+        { "name": "Attack Speed 2", "key": "attack_speed_2", "cost": 650, "description": "Further increases the attack speed." },
+        { "name": "Triple Boomerang", "key": "triple_boomerang", "cost": 770, "description": "Throws three boomerangs per shot." }
+      ],
+      "high": [
+        { "name": "Attack Speed 3", "key": "attack_speed_3", "cost": 780, "description": "Massively increases the attack speed." },
+        { "name": "Quad Boomerang", "key": "quadruple_boomerang", "cost": 1000, "description": "Throws four boomerangs per shot." }
       ]
     }
   }

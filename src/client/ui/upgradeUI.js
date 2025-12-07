@@ -294,14 +294,7 @@ export function showUpgradeUI(scene, placedTower, towerConfig) {
               if (logicTower.towerType !== 'bird') {
                 let circleX = placedTower.x;
                 let circleY = placedTower.y;
-                // Debug: log the range and coordinates used
-                console.log('[UpgradeUI] Drawing range circle:', {
-                  range: logicTower.range,
-                  x: circleX,
-                  y: circleY,
-                  logicTower,
-                  placedTower
-                });
+                // ...existing code...
                 showRangeCircle(scene, circleX, circleY, logicTower.range);
               }
             }

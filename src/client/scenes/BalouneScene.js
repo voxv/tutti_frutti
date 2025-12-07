@@ -1,4 +1,6 @@
 import Phaser from "phaser";
+
+// DEV: Set this to true to skip the initial 'Survive 50 Waves' popup
 import { Baloune } from "../../game/Baloune.js";
 import towerConfig from "../../game/towers/tower.json";
 import bloonsConfig from "../../game/enemies/bloons.json";
@@ -14,15 +16,23 @@ import * as towerPlacement from "../logic/towerPlacement.js";
 import { renderEnemies } from "../renderer/enemyRenderer.js";
 import { showGameOverPopup } from "../ui/gameOverUI.js";
 import { showWinGamePopup } from "../ui/winGameUI.js";
+import { showGameStartPopup } from "../ui/gameStartUI.js";
+import { createSoundToggleButton } from "../ui/soundToggleUI.js";
+import { createStartWaveButton, createWaveText } from "../ui/startWaveUI.js";
+import { cleanupSceneUI, resetSceneUIElements } from "../ui/sceneUIUtils.js";
 import { showRangeCircle, hideRangeCircle } from "../logic/towerPlacement.js";
 import * as sceneUtils from "../utils/sceneUtils.js";
+import * as sceneSetup from "../utils/sceneSetup.js";
 import { setupTowerClickHandler, setupStartWaveButtonHandler, setupGameFieldClickHandler } from "../input/inputHandlers.js";
 import { setupGameStateMachine, GAME_PHASES, transitionGamePhase } from "../state/gameStateManager.js";
 import { setupAnimations, ANIMATION_KEYS, isPlayingAnimation } from "../animations/animationDefinitions.js";
+import * as musicManager from "../utils/musicManager.js";
 
 
 // DEV: Set this to start from a specific wave for testing
 const DEV_START_WAVE = 1 // Set to 1 for normal, or e.g. 5 to start from wave 5
+
+const SKIP_SURVIVE_50_POPUP = true;
 
 // DEV: Set this to control the overall size of all bloons (default 1)
 const BLOON_SIZE_MULTIPLIER = 1.1;
@@ -166,35 +176,19 @@ class BalouneScene extends Phaser.Scene {
       
       // Check if wave 50 (last wave) is complete
       if (this.waveNumber === 50) {
-        // Stop all instances of main game music if playing
-        if (this.sound && this.sound.getAll) {
-          this.sound.getAll('main_game_music').forEach(snd => snd.stop());
-        } else if (this.sound && this.sound.get('main_game_music')) {
-          this.sound.get('main_game_music').stop();
-        }
-        // Also stop boss music if playing
-        if (this.sound && this.sound.get('boss_music')) {
-          this.sound.get('boss_music').stop();
-        }
+        // Stop all instances of main game music and boss music
+        musicManager.stopMainMusic(this);
+        musicManager.stopBossMusic(this);
         // Show win game popup
         this._gameOverShown = true;
         showWinGamePopup(this, {
           onReplay: () => {
             this._gameOverShown = false;
-            // Stop game over music if playing
-            if (this.sound && this.sound.get('game_over_music')) {
-              this.sound.get('game_over_music').stop();
-            }
-            if (this.sound && this.sound.getAll) {
-              this.sound.getAll('main_game_music').forEach(snd => snd.stop());
-            }
-            // Restart main game music if sound is on
-            if (this.soundOn !== false && this.cache.audio.exists('main_game_music')) {
-              if (this.sound.get('main_game_music')) {
-                this.sound.get('main_game_music').stop();
-              }
-              this.sound.play('main_game_music', { loop: true, volume: 0.7 });
-            }
+            // Stop game over music and main game music
+            musicManager.stopGameOverMusic(this);
+            musicManager.stopMainMusic(this);
+            // Restart main game music
+            musicManager.playMainMusic(this);
             window.sceneRef = this;
             // Hide range circle before anything else
             if (typeof hideRangeCircle === 'function') hideRangeCircle(this);
@@ -242,11 +236,7 @@ class BalouneScene extends Phaser.Scene {
             this.gameStateMachine.reset(GAME_PHASES.BUYING);
             // Stop main game music if entering buying phase of wave 50
             if (this.waveNumber === 50) {
-              if (this.sound && this.sound.getAll) {
-                this.sound.getAll('main_game_music').forEach(snd => snd.stop());
-              } else if (this.sound && this.sound.get('main_game_music')) {
-                this.sound.get('main_game_music').stop();
-              }
+              musicManager.stopMainMusic(this);
             }
             // Reset game logic state
             sceneUtils.resetGameLogicState(this.gameLogic);
@@ -296,23 +286,15 @@ class BalouneScene extends Phaser.Scene {
             
             // Add pointer event tracking
             this.startWaveButton.on('pointerdown', () => {
-              console.log('[StartWave Button Click] Wave:', this.waveNumber, 'InPhase:', this.gameStateMachine.isInPhase(GAME_PHASES.BUYING));
               if (!this.gameStateMachine.isInPhase(GAME_PHASES.BUYING) || !this.startWaveButton.input.enabled) return;
               // If starting wave 50, play boss music
               if (this.waveNumber === 50) {
-                console.log('[Wave50] Starting wave 50 - preparing boss music');
                 // Always stop boss music before playing
                 if (this.sound && this.sound.get('boss_music')) {
-                  console.log('[Wave50] Stopping existing boss music');
                   this.sound.get('boss_music').stop();
                 }
-                console.log('[Wave50] soundOn:', this.soundOn, 'boss_music exists:', this.cache.audio.exists('boss_music'));
                 if (this.soundOn !== false && this.cache.audio.exists('boss_music')) {
-                  console.log('[Wave50] Playing boss_music now');
-                  const bossSound = this.sound.play('boss_music', { loop: true, volume: 0.8 });
-                  console.log('[Wave50] Sound played. isPlaying:', bossSound?.isPlaying);
-                } else {
-                  console.log('[Wave50] Cannot play: soundOn=', this.soundOn, 'exists=', this.cache.audio.exists('boss_music'));
+                  this.sound.play('boss_music', { loop: true, volume: 0.8 });
                 }
               }
               transitionGamePhase(this, GAME_PHASES.SPAWNING);
@@ -414,11 +396,7 @@ class BalouneScene extends Phaser.Scene {
         }
         // Stop main game music if entering buying phase of wave 50
         if (this.waveNumber === 50) {
-          if (this.sound && this.sound.getAll) {
-            this.sound.getAll('main_game_music').forEach(snd => snd.stop());
-          } else if (this.sound && this.sound.get('main_game_music')) {
-            this.sound.get('main_game_music').stop();
-          }
+          musicManager.stopMainMusic(this);
         }
         if (this.startWaveButton) {
           this.startWaveButton.destroy();
@@ -439,23 +417,10 @@ class BalouneScene extends Phaser.Scene {
         ).setOrigin(0.5).setInteractive({ useHandCursor: true });
         this.startWaveButton.setDepth(5000);
         this.startWaveButton.on("pointerdown", () => {
-          console.log('[StartWave Normal Button] Wave:', this.waveNumber);
           if (!this.gameStateMachine.isInPhase(GAME_PHASES.BUYING) || !this.startWaveButton.input.enabled) return;
           // If starting wave 50, play boss music
           if (this.waveNumber === 50) {
-            console.log('[Wave50 Normal] Starting wave 50 - preparing boss music');
-            if (this.sound && this.sound.get('boss_music')) {
-              console.log('[Wave50 Normal] Stopping existing boss music');
-              this.sound.get('boss_music').stop();
-            }
-            console.log('[Wave50 Normal] soundOn:', this.soundOn, 'boss_music exists:', this.cache.audio.exists('boss_music'));
-            if (this.soundOn !== false && this.cache.audio.exists('boss_music')) {
-              console.log('[Wave50 Normal] Playing boss_music now');
-              const bossSound = this.sound.play('boss_music', { loop: true, volume: 0.8 });
-              console.log('[Wave50 Normal] Sound played. isPlaying:', bossSound?.isPlaying);
-            } else {
-              console.log('[Wave50 Normal] Cannot play: soundOn=', this.soundOn, 'exists=', this.cache.audio.exists('boss_music'));
-            }
+            musicManager.playBossMusic(this);
           }
           transitionGamePhase(this, GAME_PHASES.SPAWNING);
           this.startWaveButton.setStyle({ fill: "#888" });
@@ -532,7 +497,6 @@ class BalouneScene extends Phaser.Scene {
         // Load main game music
         this.load.audio('main_game_music', '/sounds/main_game.mp3');
         // Load boss music
-        console.log('[BalouneScene preload] Loading boss music from /sounds/boss.mp3');
         this.load.audio('boss_music', '/sounds/boss.mp3');
         // Load game over music
         this.load.audio('game_over_music', '/sounds/game_over.mp3');
@@ -540,6 +504,10 @@ class BalouneScene extends Phaser.Scene {
     // Load explode_anim spritesheet for projectile destruction
     // 1477px / 7 frames = ~211px per frame
     this.load.spritesheet('explode_anim', 'towers/explode_anim.png', { frameWidth: 211, frameHeight: 202 }); // 1477/7=211
+    // Load boomerang projectile image for BoomerangTower
+    this.load.image('boomerang_projectile', '/towers/projectiles/boomerang.png');
+    // Load kangaroo_anim spritesheet for BoomerangTower
+    this.load.spritesheet('kangaroo_anim', '/towers/kangaroo_anim.png', { frameWidth: 516, frameHeight: 800 });
     // Preload laser projectile spritesheet
     this.load.spritesheet('laser_anim', '/towers/projectiles/laser_anim2.png', { frameWidth: 195, frameHeight: 190 });
     // Preload bzz sound for laser tower
@@ -639,36 +607,19 @@ class BalouneScene extends Phaser.Scene {
         const soundOnLoaded = this.textures.exists('sound_on');
         const soundOffLoaded = this.textures.exists('sound_off');
 
-    // Stop intro music if it's playing from previous scenes (ensure all instances are stopped)
+    // Stop intro music if it's playing from previous scenes
     if (this.sound && this.sound.getAll) {
       this.sound.getAll('intro_music').forEach(snd => snd.stop());
     } else if (this.sound && this.sound.get('intro_music')) {
       this.sound.get('intro_music').stop();
     }
-    // Always play main game music if sound is on
-    if (this.soundOn !== false && this.cache.audio.exists('main_game_music')) {
-      if (this.sound.get('main_game_music')) {
-        this.sound.get('main_game_music').stop();
-      }
-      this.sound.play('main_game_music', { loop: true, volume: 0.7 });
-    } else if (this.cache.audio.exists('main_game_music')) {
-      // Ensure no music is playing if sound is off
-      this.sound.getAll('main_game_music').forEach(snd => snd.stop());
+    // Use musicManager for main and boss music
+    musicManager.playMainMusic(this);
+    musicManager.stopBossMusic(this);
+    if (this._bossMusicStarted && (!this.waveInProgress || this._gameOverShown)) {
+      musicManager.stopBossMusic(this);
+      this._bossMusicStarted = false;
     }
-    // Ensure boss music is stopped at game start
-    console.log('[BalouneScene create] Checking boss music at game start');
-    if (this.sound.get('boss_music')) {
-      console.log('[BalouneScene create] Stopping existing boss music');
-      this.sound.get('boss_music').stop();
-    }
-    console.log('[BalouneScene create] Boss music exists in cache:', this.cache.audio.exists('boss_music'));
-            // Stop boss music if wave 50 ends (win or lose)
-            if (this._bossMusicStarted && (!this.waveInProgress || this._gameOverShown)) {
-              if (this.sound && this.sound.get('boss_music')) {
-                this.sound.get('boss_music').stop();
-              }
-              this._bossMusicStarted = false;
-            }
         // Remove lingering BirdTower selection circle if present
         if (this._birdSelectCircle) {
           this._birdSelectCircle.destroy();
@@ -679,37 +630,7 @@ class BalouneScene extends Phaser.Scene {
     this._createCallCount++;
     
     // Clear all display objects - check if any graphics are lingering
-    if (this.sys.displayList && this.sys.displayList.children) {
-      const displayChildren = [...this.sys.displayList.children];
-      displayChildren.forEach(child => {
-        if (child && typeof child.destroy === 'function') {
-          child.destroy();
-        }
-      });
-    }
-    
-    if (this.children && this.children.list) {
-      const childrenToDestroy = [...this.children.list]; // Clone array to avoid modification during iteration
-      childrenToDestroy.forEach(child => {
-        if (child && typeof child.destroy === 'function') {
-          child.destroy();
-        }
-      });
-    }
-    
-    // Also clear graphics objects explicitly (but preserve mainArea and enemyGraphics which are recreated below)
-    if (this.mainArea && typeof this.mainArea.destroy === 'function') {
-      this.mainArea.destroy();
-      this.mainArea = null;
-    }
-    if (this.enemyGraphics && typeof this.enemyGraphics.destroy === 'function') {
-      this.enemyGraphics.destroy();
-      this.enemyGraphics = null;
-    }
-    
-    // Reset range circle references
-    this.activeTowerRangeCircle = null;
-    this.dragRangeCircle = null;
+      cleanupSceneUI(this);
     
     window.sceneRef = this;
     window.bloonsConfig = bloonsConfig;
@@ -744,65 +665,12 @@ class BalouneScene extends Phaser.Scene {
     // const shopWidth = 220;
     // const infoBarHeight = 100;
 
-    // Use mapConfig from data
+    // Use mapConfig from data and modular setup
     const mapConfig = data?.mapConfig;
-    if (!mapConfig) {
-      this.add.text(600, 400, "Map config missing!", { font: "32px Arial", fill: "#f00" }).setOrigin(0.5);
-      return;
-    }
-    // Convert controlPoints to Phaser.Vector2 if needed
-    const controlPoints = mapConfig.controlPoints.map(pt =>
-      pt instanceof Phaser.Math.Vector2 ? pt : new Phaser.Math.Vector2(pt.x, pt.y)
-    );
-    this.spline = new Phaser.Curves.Spline(controlPoints);
-    // Set pathPoints for use by SpikeTower (as plain {x, y} objects)
-    this.pathPoints = controlPoints.map(pt => ({ x: pt.x, y: pt.y }));
-    const testMap = {
-      paths: [
-        { spline: this.spline, waypoints: controlPoints }
-      ],
-      towerSpots: mapConfig.towerSpots || [],
-      noBuildZones: mapConfig.noBuildZones || []
-    };
-    // Create the logical game (engine-side)
-    this.gameLogic = new Baloune(testMap);
+    sceneSetup.setupMapAndGameLogic(this, mapConfig);
 
-    // Draw background image first if present
-    let hasBgImage = false;
-    if (mapConfig.background) {
-      const bgKey = `mapBg_${mapConfig.id}`;
-      if (this.textures.exists(bgKey)) {
-        this.bgImage = this.add.image(0, 0, bgKey)
-          .setOrigin(0, 0)
-          .setDisplaySize(gameWidth - shopWidth, gameHeight - infoBarHeight)
-          .setAlpha(1)
-          .setDepth(0);
-        hasBgImage = true;
-      } else {
-        console.error('BalouneScene create: Background texture not found:', bgKey, 'path:', mapConfig.background);
-        // Try to load the image again and restart scene when loaded
-        this.load.image(bgKey, mapConfig.background);
-        this.load.once('complete', () => {
-          if (this.textures.exists(bgKey)) {
-            this.scene.restart({ mapConfig, soundOn: this.soundOn });
-          } else {
-            this.add.text(20, 20, `Background image NOT loaded: ${mapConfig.background}`, { font: '20px Arial', fill: '#f00' }).setDepth(10000);
-          }
-        });
-        this.load.start();
-        this.add.text(20, 50, `Background image missing or not loaded yet: ${mapConfig.background}`, { font: '20px Arial', fill: '#ff0' }).setDepth(10001);
-      }
-    }
-    // Draw mainArea after bgImage, only if no image
-    this.mainArea = this.add.graphics();
-    this.mainArea.fillStyle(0x000000, hasBgImage ? 0 : 1);
-    this.mainArea.fillRect(0, 0, gameWidth - shopWidth, gameHeight - infoBarHeight);
-    this.mainArea.setDepth(1);
-
-    // Ensure enemyGraphics is created after mainArea and above it
-    this.enemyGraphics = this.add.graphics();
-    this.enemyGraphics.setDepth(20);
-    this.enemyGraphics.setVisible(true);
+    // Modular background and graphics setup
+    sceneSetup.setupBackground(this, mapConfig, gameWidth, gameHeight, shopWidth, infoBarHeight);
 
     // Draw the shop UI using the modular function
     drawShopUI(this, gameWidth, gameHeight, shopWidth, infoBarHeight, towerConfig);
@@ -909,22 +777,31 @@ class BalouneScene extends Phaser.Scene {
     // Place wave text to the left of Start Wave button
     const startWaveBtnX = gameWidth - shopWidth / 2;
     const waveTextX = startWaveBtnX - 200; // 200px left of button for more spacing
-    this.waveText = this.add.text(waveTextX, gameHeight - infoBarHeight / 2, `Wave: ${this.waveNumber}`, {
-      font: "20px Arial",
-      fill: "#fff"
-    }).setOrigin(0, 0.5);
-
-    // Create Start Wave button
-    this.startWaveButton = this.add.text(gameWidth - shopWidth / 2, gameHeight - infoBarHeight / 2, "Start Wave", {
-      font: "28px Arial",
-      fill: "#00ff00",
-      backgroundColor: "#222",
-      padding: { x: 20, y: 10 }
-    }).setOrigin(0.5).setInteractive({ useHandCursor: true });
-    this.startWaveButton.setDepth(5000);
-    this.startWaveButton.input.enabled = true; // Ensure enabled
-    // Setup start wave button handler using modular input function
-    setupStartWaveButtonHandler(this.startWaveButton, this, spawnWave);
+    this.waveText = createWaveText(this, waveTextX, gameHeight - infoBarHeight / 2, this.waveNumber);
+    this.startWaveButton = createStartWaveButton(
+      this,
+      gameWidth - shopWidth / 2,
+      gameHeight - infoBarHeight / 2,
+      () => {
+        if (!this.gameStateMachine.isInPhase(GAME_PHASES.BUYING) || !this.startWaveButton.input.enabled) return;
+        // If starting wave 50, play boss music
+        if (this.waveNumber === 50) {
+          if (this.sound && this.sound.get('boss_music')) {
+            this.sound.get('boss_music').stop();
+          }
+          if (this.soundOn !== false && this.cache.audio.exists('boss_music')) {
+            this.sound.play('boss_music', { loop: true, volume: 0.8 });
+          }
+        }
+        transitionGamePhase(this, GAME_PHASES.SPAWNING);
+        this.startWaveButton.setStyle({ fill: "#888" });
+        this.startWaveButton.disableInteractive();
+        this._waveCompletionBonusAwarded = false;
+        this._waveEndTriggered = false;
+        spawnWave(this, this.gameLogic, this.currentWaveIndex);
+        this.currentWaveIndex++;
+      }
+    );
 
     // Setup game field click handler for tower deselection
     setupGameFieldClickHandler(this, gameWidth, shopWidth, gameHeight, infoBarHeight);
@@ -976,140 +853,30 @@ class BalouneScene extends Phaser.Scene {
       }
       
         // Stop boss music if playing
-        if (this.sound && this.sound.get('boss_music')) {
-          this.sound.get('boss_music').stop();
-        }
-        // Stop main game music if playing
-        if (this.sound && this.sound.getAll) {
-          this.sound.getAll('main_game_music').forEach(snd => snd.stop());
-        } else if (this.sound && this.sound.get('main_game_music')) {
-          this.sound.get('main_game_music').stop();
-        }
-      // Play game over music
-      if (this.cache.audio.exists('game_over_music')) {
-        if (!this.sound.get('game_over_music')) {
-          this.sound.play('game_over_music', { loop: false, volume: 0.8 });
-        } else {
-          this.sound.get('game_over_music').play();
-        }
-      }
+        musicManager.stopBossMusic(this);
+        musicManager.stopMainMusic(this);
+        musicManager.playGameOverMusic(this);
       showGameOverPopup(this, {
         onReplay: () => {
           this._gameOverShown = false;
-          // Stop game over music if playing
-          if (this.sound && this.sound.get('game_over_music')) {
-            this.sound.get('game_over_music').stop();
-          }
-          if (this.sound && this.sound.getAll) {
-           this.sound.getAll('main_game_music').forEach(snd => snd.stop());
-        }
-          // Restart main game music if sound is on
-          if (this.soundOn !== false && this.cache.audio.exists('main_game_music')) {
-            // Always stop any existing instance first
-            if (this.sound.get('main_game_music')) {
-              this.sound.get('main_game_music').stop();
-            }
-            this.sound.play('main_game_music', { loop: true, volume: 0.7 });
-          }
-          window.sceneRef = this; // Ensure global reference is correct after replay
-          // Hide range circle before anything else
+          musicManager.stopGameOverMusic(this);
+          musicManager.stopMainMusic(this);
+          musicManager.playMainMusic(this);
+          window.sceneRef = this;
           if (typeof hideRangeCircle === 'function') hideRangeCircle(this);
-          // Destroy upgrade UI and selected tower state
-          if (this.upgradeUI && typeof this.upgradeUI.destroy === 'function') {
-            this.upgradeUI.destroy();
-            this.upgradeUI = null;
-          }
-          if (this.upgradeTooltip && typeof this.upgradeTooltip.destroy === 'function') {
-            this.upgradeTooltip.destroy();
-            this.upgradeTooltip = null;
-          }
-          this.selectedTowerForUpgradeUI = null;
-          // Hide targeting buttons
-          if (this.targetingButtons && Array.isArray(this.targetingButtons)) {
-            // Hide all targeting buttons and label
-            if (typeof window !== 'undefined' && window.targetingUI && typeof window.targetingUI.hideTargetingButtons === 'function') {
-              window.targetingUI.hideTargetingButtons(this.targetingButtons);
-            } else if (this.targetingButtons.forEach) {
-              this.targetingButtons.forEach(btn => btn.setVisible(false));
-              if (this.targetingButtons.targetingLabel) this.targetingButtons.targetingLabel.setVisible(false);
-            }
-          }
-          // Reset gold to starting amount
-          this.goldAmount = STARTING_GOLD;
-          if (this.goldText) this.goldText.setText(String(this.goldAmount));
-          // Reset game state to wave 1
-          this.playerLives = this.maxPlayerLives;
-          this._updateLifeBar();
-          this.waveNumber = 1;
-          this.currentWaveIndex = 0;
-          // Reset game state machine to buying phase
-          this.gameStateMachine.reset(GAME_PHASES.BUYING);
-          // Reset game logic state using utility function
-          sceneUtils.resetGameLogicState(this.gameLogic);
-          // Remove placed tower images using utility function
-          sceneUtils.removePlacedTowerSprites(this, this.gameLogic);
-          // Remove all projectiles and spikes
-          sceneUtils.removeAllProjectiles(this);
-          // Clear spike projectiles array and destroy any remaining spike sprites
-          if (this.spikeProjectiles && Array.isArray(this.spikeProjectiles)) {
-            for (const spike of this.spikeProjectiles) {
-              if (spike && typeof spike.destroy === 'function') {
-                spike.destroy();
-              }
-            }
-            this.spikeProjectiles = [];
-          }
-          // Remove all fruit sprites/images using utility function
-          sceneUtils.removeFruitSprites(this);
-          // Show game elements again
-          if (this.enemyGraphics) this.enemyGraphics.setVisible(true);
+          cleanupSceneUI(this);
+          resetSceneUIElements(this);
           // Redraw the shop UI to restore tower images
           drawShopUI(this, 1600, 900, 220, 100, towerConfig);
-
-          // --- Additional cleanup for upgrades and fruit sprites ---
-          // Clear upgrade UI and selected tower state
-          this.selectedTowerForUpgradeUI = null;
-          if (this.upgradeUI && this.upgradeUI.setVisible) this.upgradeUI.setVisible(false);
-          // Remove all fruit sprites/images (any image with 'fruit' in texture key)
-          if (this.children && this.children.list) {
-            this.children.list
-              .filter(child => child.texture && typeof child.texture.key === 'string' && child.texture.key.includes('fruit'))
-              .forEach(child => { if (child.destroy) child.destroy(); });
-          }
-          
-          // --- Final comprehensive cleanup: destroy any remaining sprites at specific game depths ---
-          // Placed towers: depth 1001, Projectiles: depth 1000 (but NOT text objects like startWaveButton)
-          // Shop towers (depth 100), drag preview (depth 2000), range circle (1999) are preserved
-          if (this.children && this.children.list) {
-            // Only remove SPRITES at depths 1000 and 1001, not text objects
-            const remainingSprites = this.children.list.filter(child => {
-              if (child.depth === 1000 || child.depth === 1001) {
-                // Skip text objects (like startWaveButton)
-                return child.type !== 'Text';
-              }
-              return false;
-            });
-            remainingSprites.forEach(child => {
-              if (child.destroy) child.destroy();
-            });
-          }
-          
-          // Recreate the Start Wave button
-          const gameWidth = 1600;
-          const shopWidth = 220;
-          const infoBarHeight = 100;
-          
           // Update wave text
           if (this.waveText) {
             this.waveText.setText(`Wave: ${this.waveNumber}`);
           }
-          
           // Destroy old button if it exists
           if (this.startWaveButton) {
             this.startWaveButton.destroy();
             this.startWaveButton = null;
           }
-          
           // Create new Start Wave button
           this.startWaveButton = this.add.text(
             gameWidth - shopWidth / 2,
@@ -1178,36 +945,12 @@ class BalouneScene extends Phaser.Scene {
         });
       }
     });
-            if (soundOnLoaded && soundOffLoaded) {
-
-          this.soundToggleButton = this.add.image(1350, 770, 'sound_on')
-            .setDisplaySize(50, 50)
-            .setInteractive({ useHandCursor: true })
-            .setDepth(99999);
-          this.soundToggleButton.on('pointerdown', () => {
-            this.soundOn = !this.soundOn;
-            if (this.soundOn) {
-              this.soundToggleButton.setTexture('sound_on');
-              if (this.cache.audio.exists('main_game_music')) {
-                const allMusic = this.sound.getAll('main_game_music');
-                if (allMusic.length === 0 || allMusic.every(snd => !snd.isPlaying && !snd.isPaused)) {
-                  this.sound.play('main_game_music', { loop: true, volume: 0.7 });
-                } else {
-                  allMusic.forEach(snd => snd.resume());
-                }
-              }
-            } else {
-              this.soundToggleButton.setTexture('sound_off');
-              // Pause music
-              this.sound.getAll('main_game_music').forEach(snd => snd.pause());
-              console.log('Main game music paused');
-            }
-          });
-          // If music is off at start, show correct icon
-          if (!this.soundOn) {
-            this.soundToggleButton.setTexture('sound_off');
-          }
-        }
+    // Create sound toggle button using modular UI
+    this.soundToggleButton = createSoundToggleButton(this);
+    // Show game start popup unless skipping
+    if (!SKIP_SURVIVE_50_POPUP) {
+      showGameStartPopup(this);
+    }
   }
 
   shutdown() {
