@@ -22,7 +22,7 @@ import { setupAnimations, ANIMATION_KEYS, isPlayingAnimation } from "../animatio
 
 
 // DEV: Set this to start from a specific wave for testing
-const DEV_START_WAVE = 50 // Set to 1 for normal, or e.g. 5 to start from wave 5
+const DEV_START_WAVE = 1 // Set to 1 for normal, or e.g. 5 to start from wave 5
 
 // DEV: Set this to control the overall size of all bloons (default 1)
 const BLOON_SIZE_MULTIPLIER = 1.1;
