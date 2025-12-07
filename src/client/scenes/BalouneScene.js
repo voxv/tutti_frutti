@@ -86,11 +86,13 @@ class BalouneScene extends Phaser.Scene {
       }
       // Log whenever phase changes
       if (window._spikePhaseDebug.lastPhase !== this.gameStateMachine?.currentPhase) {
-        console.log('[DEBUG] Phase changed:', { from: window._spikePhaseDebug.lastPhase, to: this.gameStateMachine?.currentPhase, isSpawning });
+        console.log('[DEBUG] Phase changed:', { from: window._spikePhaseDebug.lastPhase, to: this.gameStateMachine?.currentPhase, isSpawning, towerCount: this.gameLogic.towers.length });
         window._spikePhaseDebug.lastPhase = this.gameStateMachine?.currentPhase;
       }
+      let spikeCount = 0;
       for (const tower of this.gameLogic.towers) {
         if (tower && tower.constructor && tower.constructor.name === 'SpikeTower') {
+          spikeCount++;
           const oldValue = tower._spikeShootingDisabled;
           tower._spikeShootingDisabled = !isSpawning;
           if (oldValue !== tower._spikeShootingDisabled) {
@@ -98,17 +100,18 @@ class BalouneScene extends Phaser.Scene {
           }
         }
       }
-      // Debug: Print all tower types and _placedSprite/anims presence
-      for (const tower of this.gameLogic.towers) {
-        // ...existing code...
+      if (!window._spikePhaseDebug.reportedCount && isSpawning) {
+        console.log('[DEBUG] Found', spikeCount, 'SpikeTowers total towers:', this.gameLogic.towers.length);
+        window._spikePhaseDebug.reportedCount = true;
       }
-      // Debug: Log animation state for all BirdTowers
-      for (const tower of this.gameLogic.towers) {
-        if (tower && tower.towerType === 'bird' && tower._placedSprite && tower._placedSprite.anims) {
-          // Infinity (figure-eight) flight motion is now handled in BirdTower.js
-        }
+    } else {
+      if (!window._spikePhaseDebug || !window._spikePhaseDebug.warnedMissing) {
+        console.log('[DEBUG] WARNING: gameLogic or towers array missing!', { hasGameLogic: !!this.gameLogic, isTowerArray: Array.isArray(this.gameLogic?.towers) });
+        if (!window._spikePhaseDebug) window._spikePhaseDebug = {};
+        window._spikePhaseDebug.warnedMissing = true;
       }
     }
+
     // --- Spike projectile collision logic ---
     if (this.spikeProjectiles && this.gameLogic && Array.isArray(this.gameLogic.enemies)) {
       for (const spike of [...this.spikeProjectiles]) { // clone array in case of removal
