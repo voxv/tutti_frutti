@@ -92,10 +92,10 @@ class BalouneScene extends Phaser.Scene {
       let spikeCount = 0;
       for (const tower of this.gameLogic.towers) {
         if (!window._spikePhaseDebug.towerTypes) window._spikePhaseDebug.towerTypes = {};
-        const towerName = tower?.constructor?.name || 'UNKNOWN';
-        window._spikePhaseDebug.towerTypes[towerName] = true;
+        const towerType = tower?.towerType || 'UNKNOWN';
+        window._spikePhaseDebug.towerTypes[towerType] = true;
         
-        if (tower && tower.constructor && tower.constructor.name === 'SpikeTower') {
+        if (tower && tower.towerType === 'spike') {
           spikeCount++;
           const oldValue = tower._spikeShootingDisabled;
           tower._spikeShootingDisabled = !isSpawning;

@@ -76,6 +76,7 @@ export class SpikeTower extends ProjectileTower {
     this.fireCooldown = 0; // Initialize to 0 so tower fires immediately
     this._spikeShootingDisabled = true; // Default to disabled until wave starts
     this._fatSpikes = false; // Only true after upgrade
+    this.towerType = 'spike'; // Add marker for detection
     // Assign a debug id for tracing
     this._debugId = Math.floor(Math.random() * 1000000);
   }
