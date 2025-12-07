@@ -285,6 +285,7 @@ class BalouneScene extends Phaser.Scene {
             const gameWidth = 1600;
             const shopWidth = 220;
             const infoBarHeight = 100;
+            console.log('[DEBUG] Creating Start Wave button at position:', gameWidth - shopWidth / 2, this.sys.game.config.height - infoBarHeight / 2);
             this.startWaveButton = this.add.text(
               gameWidth - shopWidth / 2,
               this.sys.game.config.height - infoBarHeight / 2,
@@ -296,8 +297,9 @@ class BalouneScene extends Phaser.Scene {
                 padding: { x: 20, y: 10 }
               }
             ).setOrigin(0.5).setInteractive({ useHandCursor: true });
-            this.startWaveButton.setDepth(1000);
+            this.startWaveButton.setDepth(5000);
             this.startWaveButton.input.enabled = true;
+            console.log('[DEBUG] Button created and interactive:', this.startWaveButton.input.enabled, 'depth:', this.startWaveButton.depth);
             this.startWaveButton.on('pointerdown', () => {
               console.log('[DEBUG] Start Wave button clicked, isInPhase BUYING:', this.gameStateMachine.isInPhase(GAME_PHASES.BUYING), 'button enabled:', this.startWaveButton.input.enabled);
               if (!this.gameStateMachine.isInPhase(GAME_PHASES.BUYING) || !this.startWaveButton.input.enabled) return;
@@ -417,7 +419,7 @@ class BalouneScene extends Phaser.Scene {
             padding: { x: 20, y: 10 }
           }
         ).setOrigin(0.5).setInteractive({ useHandCursor: true });
-        this.startWaveButton.setDepth(1000);
+        this.startWaveButton.setDepth(5000);
         this.startWaveButton.on("pointerdown", () => {
           if (!this.gameStateMachine.isInPhase(GAME_PHASES.BUYING) || !this.startWaveButton.input.enabled) return;
           transitionGamePhase(this, GAME_PHASES.SPAWNING);
@@ -867,7 +869,7 @@ class BalouneScene extends Phaser.Scene {
       backgroundColor: "#222",
       padding: { x: 20, y: 10 }
     }).setOrigin(0.5).setInteractive({ useHandCursor: true });
-    this.startWaveButton.setDepth(1000);
+    this.startWaveButton.setDepth(5000);
     this.startWaveButton.input.enabled = true; // Ensure enabled
     // Setup start wave button handler using modular input function
     setupStartWaveButtonHandler(this.startWaveButton, this, spawnWave);
