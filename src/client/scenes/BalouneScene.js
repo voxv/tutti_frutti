@@ -80,39 +80,10 @@ class BalouneScene extends Phaser.Scene {
     // Stop all SpikeTowers from firing if not in SPAWNING phase
     if (this.gameLogic && Array.isArray(this.gameLogic.towers)) {
       const isSpawning = this.gameStateMachine && this.gameStateMachine.isInPhase && this.gameStateMachine.isInPhase(GAME_PHASES.SPAWNING);
-      if (!window._spikePhaseDebug) {
-        window._spikePhaseDebug = { logged: false, lastPhase: null };
-        console.log('[DEBUG] isSpawning initial:', isSpawning, 'gameStateMachine:', !!this.gameStateMachine, 'currentPhase:', this.gameStateMachine?.currentPhase);
-      }
-      // Log whenever phase changes
-      if (window._spikePhaseDebug.lastPhase !== this.gameStateMachine?.currentPhase) {
-        console.log('[DEBUG] Phase changed:', { from: window._spikePhaseDebug.lastPhase, to: this.gameStateMachine?.currentPhase, isSpawning, towerCount: this.gameLogic.towers.length });
-        window._spikePhaseDebug.lastPhase = this.gameStateMachine?.currentPhase;
-      }
-      let spikeCount = 0;
       for (const tower of this.gameLogic.towers) {
-        if (!window._spikePhaseDebug.towerTypes) window._spikePhaseDebug.towerTypes = {};
-        const towerType = tower?.towerType || 'UNKNOWN';
-        window._spikePhaseDebug.towerTypes[towerType] = true;
-        
         if (tower && tower.towerType === 'spike') {
-          spikeCount++;
-          const oldValue = tower._spikeShootingDisabled;
           tower._spikeShootingDisabled = !isSpawning;
-          if (oldValue !== tower._spikeShootingDisabled) {
-            console.log('[DEBUG] SpikeTower flag changed:', { from: oldValue, to: tower._spikeShootingDisabled, isSpawning, phase: this.gameStateMachine?.currentPhase });
-          }
         }
-      }
-      if (!window._spikePhaseDebug.reportedCount && isSpawning) {
-        console.log('[DEBUG] Found', spikeCount, 'SpikeTowers total towers:', this.gameLogic.towers.length, 'Tower types:', Object.keys(window._spikePhaseDebug.towerTypes));
-        window._spikePhaseDebug.reportedCount = true;
-      }
-    } else {
-      if (!window._spikePhaseDebug || !window._spikePhaseDebug.warnedMissing) {
-        console.log('[DEBUG] WARNING: gameLogic or towers array missing!', { hasGameLogic: !!this.gameLogic, isTowerArray: Array.isArray(this.gameLogic?.towers) });
-        if (!window._spikePhaseDebug) window._spikePhaseDebug = {};
-        window._spikePhaseDebug.warnedMissing = true;
       }
     }
 
@@ -297,7 +268,6 @@ class BalouneScene extends Phaser.Scene {
             const gameWidth = 1600;
             const shopWidth = 220;
             const infoBarHeight = 100;
-            console.log('[DEBUG] Creating Start Wave button at position:', gameWidth - shopWidth / 2, this.sys.game.config.height - infoBarHeight / 2);
             this.startWaveButton = this.add.text(
               gameWidth - shopWidth / 2,
               this.sys.game.config.height - infoBarHeight / 2,
@@ -311,17 +281,11 @@ class BalouneScene extends Phaser.Scene {
             ).setOrigin(0.5).setInteractive({ useHandCursor: true });
             this.startWaveButton.setDepth(5000);
             this.startWaveButton.input.enabled = true;
-            console.log('[DEBUG] Button created and interactive:', this.startWaveButton.input.enabled, 'depth:', this.startWaveButton.depth);
             
             // Add pointer event tracking
-            this.startWaveButton.on('pointerover', () => console.log('[DEBUG] pointerover detected'));
-            this.startWaveButton.on('pointerout', () => console.log('[DEBUG] pointerout detected'));
             this.startWaveButton.on('pointerdown', () => {
-              console.log('[DEBUG] Start Wave button clicked, isInPhase BUYING:', this.gameStateMachine.isInPhase(GAME_PHASES.BUYING), 'button enabled:', this.startWaveButton.input.enabled);
               if (!this.gameStateMachine.isInPhase(GAME_PHASES.BUYING) || !this.startWaveButton.input.enabled) return;
-              console.log('[DEBUG] About to transition to SPAWNING');
               transitionGamePhase(this, GAME_PHASES.SPAWNING);
-              console.log('[DEBUG] After transition, currentPhase:', this.gameStateMachine.currentPhase);
               this.startWaveButton.setStyle({ fill: "#888" });
               this.startWaveButton.disableInteractive();
               this._waveCompletionBonusAwarded = false;
@@ -892,17 +856,6 @@ class BalouneScene extends Phaser.Scene {
 
     // Setup game field click handler for tower deselection
     setupGameFieldClickHandler(this, gameWidth, shopWidth, gameHeight, infoBarHeight);
-
-    // DEBUG: Add keyboard shortcut to test wave start (spacebar)
-    this.input.keyboard.on('keydown-SPACE', () => {
-      console.log('[DEBUG] SPACEBAR pressed - forcing wave start for testing');
-      if (this.gameStateMachine.isInPhase(GAME_PHASES.BUYING)) {
-        console.log('[DEBUG] Transitioning from BUYING to SPAWNING via keyboard');
-        transitionGamePhase(this, GAME_PHASES.SPAWNING);
-        spawnWave(this, this.gameLogic, this.currentWaveIndex);
-        this.currentWaveIndex++;
-      }
-    });
 
     // Animations are now set up centrally in setupAnimations() call during create()
 
