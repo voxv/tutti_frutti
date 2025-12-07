@@ -81,16 +81,17 @@ class BalouneScene extends Phaser.Scene {
     if (this.gameLogic && Array.isArray(this.gameLogic.towers)) {
       const isSpawning = this.gameStateMachine && this.gameStateMachine.isInPhase && this.gameStateMachine.isInPhase(GAME_PHASES.SPAWNING);
       if (!window._spikePhaseDebug) {
-        window._spikePhaseDebug = { logged: false };
+        window._spikePhaseDebug = { logged: false, lastPhase: null };
         console.log('[DEBUG] isSpawning initial:', isSpawning, 'gameStateMachine:', !!this.gameStateMachine, 'currentPhase:', this.gameStateMachine?.currentPhase);
+      }
+      // Log whenever phase changes
+      if (window._spikePhaseDebug.lastPhase !== this.gameStateMachine?.currentPhase) {
+        console.log('[DEBUG] Phase changed:', { from: window._spikePhaseDebug.lastPhase, to: this.gameStateMachine?.currentPhase, isSpawning });
+        window._spikePhaseDebug.lastPhase = this.gameStateMachine?.currentPhase;
       }
       for (const tower of this.gameLogic.towers) {
         if (tower && tower.constructor && tower.constructor.name === 'SpikeTower') {
           tower._spikeShootingDisabled = !isSpawning;
-          if (!window._spikePhaseDebug.logged && tower._spikeShootingDisabled === true) {
-            console.log('[DEBUG] SpikeTower disabled:', { isSpawning, currentPhase: this.gameStateMachine?.currentPhase, disabled: tower._spikeShootingDisabled });
-            window._spikePhaseDebug.logged = true;
-          }
         }
       }
       // Debug: Print all tower types and _placedSprite/anims presence

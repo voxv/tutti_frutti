@@ -83,15 +83,17 @@ export class SpikeTower extends ProjectileTower {
   update(deltaTime, enemies, path) {
     // DEBUG
     if (!window._spikeDebugLog) {
-      window._spikeDebugLog = {};
+      window._spikeDebugLog = { frameCount: 0 };
+    }
+    window._spikeDebugLog.frameCount++;
+    
+    // Log every 30 frames to see the flag status
+    if (window._spikeDebugLog.frameCount % 30 === 0) {
+      console.log('[SpikeTower] DEBUG frame', window._spikeDebugLog.frameCount, '- _spikeShootingDisabled:', this._spikeShootingDisabled);
     }
     
     // Only allow firing if not disabled (wave must be running)
     if (this._spikeShootingDisabled) {
-      if (window._spikeDebugLog.disabled === undefined) {
-        console.log('[SpikeTower] DEBUG: _spikeShootingDisabled is TRUE');
-        window._spikeDebugLog.disabled = true;
-      }
       return;
     }
     
@@ -100,8 +102,6 @@ export class SpikeTower extends ProjectileTower {
       console.log('[SpikeTower] DEBUG: _spikeShootingDisabled is FALSE - shooting ENABLED!');
       window._spikeDebugLog.enabled = true;
     }
-    
-    window._spikeDebugLog.disabled = false;
     
     // Get path points from the scene if not provided
     let pathPoints = path;
