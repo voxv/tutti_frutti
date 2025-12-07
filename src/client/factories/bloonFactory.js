@@ -4,6 +4,8 @@
  * Handles bloon spawning hierarchy (which bloon spawns which children)
  */
 
+import { importBloonClassFromRegistry } from '../../game/enemies/bloonRegistry.js';
+
 /**
  * Cache for already-imported bloon classes
  */
@@ -97,19 +99,12 @@ export async function importBloonClass(className) {
     return bloonClassCache[className];
   }
 
-  // Convert class name to file path
-  const filePath = `../../game/enemies/${className}.js`;
-
   try {
-    const module = await import(filePath);
-    const BloonClass = module[className];
+    // Use registry instead of dynamic import for Vite compatibility
+    const result = await importBloonClassFromRegistry(className);
     
-    if (!BloonClass) {
-      throw new Error(`${className} not found in module ${filePath}`);
-    }
-
     // Cache the import
-    bloonClassCache[className] = Promise.resolve({ BloonClass });
+    bloonClassCache[className] = Promise.resolve(result);
     return bloonClassCache[className];
   } catch (error) {
     console.error(`Failed to import bloon class ${className}:`, error);

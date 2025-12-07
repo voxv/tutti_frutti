@@ -4,6 +4,8 @@
  * New towers can be added to the config and will automatically appear in the shop
  */
 
+import { importTowerClassFromRegistry } from '../../game/towers/towerRegistry.js';
+
 /**
  * Mapping from tower type to class name for dynamic imports
  */
@@ -135,19 +137,12 @@ export async function importTowerClass(className) {
     return importCache[className];
   }
 
-  // Convert class name to file path
-  const filePath = `../../game/towers/${className}.js`;
-
   try {
-    const module = await import(filePath);
-    const TowerClass = module[className];
+    // Use registry instead of dynamic import for Vite compatibility
+    const result = await importTowerClassFromRegistry(className);
     
-    if (!TowerClass) {
-      throw new Error(`${className} not found in module ${filePath}`);
-    }
-
     // Cache the import
-    importCache[className] = Promise.resolve({ TowerClass });
+    importCache[className] = Promise.resolve(result);
     return importCache[className];
   } catch (error) {
     console.error(`Failed to import tower class ${className}:`, error);
