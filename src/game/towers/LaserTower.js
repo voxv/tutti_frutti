@@ -208,7 +208,7 @@ export class LaserTower extends AOETower {
     const frameHeight = 248;
     const placedSprite = scene.add.sprite(x, y, 'laser_placed', 0)
       .setDisplaySize(frameWidth * 0.19, frameHeight * 0.19)
-      .setDepth(1001)
+      .setDepth(8500)
       .setAlpha(1)
       .setInteractive({ useHandCursor: true });
     placedSprite.setFrame(0);

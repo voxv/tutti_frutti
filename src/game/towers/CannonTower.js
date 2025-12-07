@@ -68,7 +68,7 @@ export class CannonTower extends ProjectileTower {
     // Use spritesheet for cannon placed sprite
     const placedSprite = scene.add.sprite(x, y, 'cannon_placed')
       .setDisplaySize(cellWidth * 0.55, cellHeight * 0.55)
-      .setDepth(1001)
+      .setDepth(8500)
       .setAlpha(1)
       .setInteractive({ useHandCursor: true });
     placedSprite.towerType = 'cannon';

@@ -15,13 +15,13 @@ export class GlacialTower extends AOETower {
           }
           console.debug(`[GlacialTower] Bought ${upgradeKey}, new range:`, this.range);
       } else if (upgradeKey === 'attack_speed') {
-        this.fireRate += 0.7;
+        this.fireRate += 1.5;
         if (this._placedSprite && this._placedSprite.towerFireRate !== undefined) {
           this._placedSprite.towerFireRate = this.fireRate;
         }
         console.debug(`[GlacialTower] Bought attack_speed, new fireRate:`, this.fireRate);
       } else if (upgradeKey === 'attack_speed_2') {
-        this.fireRate += 0.7;
+        this.fireRate += 2;
         if (this._placedSprite && this._placedSprite.towerFireRate !== undefined) {
           this._placedSprite.towerFireRate = this.fireRate;
         }

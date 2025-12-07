@@ -180,7 +180,7 @@ export class SniperTower extends ProjectileTower {
             const dropProjectile = new BoulderProjectile({
               position: { x: dropX, y: -100 }, // Start above screen at target's X position or random path
               direction: { x: 0, y: 1 }, // Initial fall downward
-              speed: 500,
+              speed: 300,
               damage: this.damage * (this._headshot ? 999 : 1), // Instant kill if headshot upgrade
               texture: this.projectileTexture,
               target: targetBloon, // Set target for homing if in range, null otherwise

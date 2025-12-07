@@ -96,7 +96,7 @@ export class GlueTower extends ProjectileTower {
     // Use spritesheet for glue placed sprite
     const placedSprite = scene.add.sprite(x, y, 'glue_placed')
       .setDisplaySize(cellWidth * 0.6, cellHeight * 0.6)
-      .setDepth(1001)
+      .setDepth(8500)
       .setAlpha(1)
       .setInteractive({ useHandCursor: true });
     placedSprite.towerType = 'glue';

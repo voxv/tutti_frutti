@@ -48,9 +48,9 @@ export class BirdTower extends ProjectileTower {
       } else {
         this._pendingInfinityBIncrease = (this._pendingInfinityBIncrease || 0) + 20;
       }
-      this.fireRate += 0.35;
+      this.fireRate += 0.5;
     } else if (upgradeKey === 'faster_bird_1' || upgradeKey === 'faster_bird_2' || upgradeKey === 'faster_bird_3') {
-      this.fireRate += 0.35;
+      this.fireRate += 0.5;
     } else if (upgradeKey === 'double_shot') {
       this._doubleShot = true;
     } else if (upgradeKey === 'triple_shot') {
@@ -91,7 +91,7 @@ export class BirdTower extends ProjectileTower {
     // Use spritesheet for bird placed sprite
     const placedSprite = scene.add.sprite(x, y, 'bird_placed', 0)
       .setDisplaySize(cellWidth * 0.9, cellHeight * 0.9)
-      .setDepth(2000) // Above all towers (1001 or less)
+      .setDepth(8500) // Below boss (9999)
       .setAlpha(1)
       .setInteractive({ useHandCursor: true });
     // Play idle animation on placement (animation should already be created by setupTowerAnimations)
