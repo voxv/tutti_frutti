@@ -83,16 +83,24 @@ export class SpikeTower extends ProjectileTower {
   update(deltaTime, enemies, path) {
     // Only allow firing if not disabled (wave must be running)
     if (this._spikeShootingDisabled) return;
+    
     // Get path points from the scene if not provided
     let pathPoints = path;
     if ((!pathPoints || !Array.isArray(pathPoints) || pathPoints.length === 0) && this.scene && this.scene.pathPoints) {
       pathPoints = this.scene.pathPoints;
     }
+    
+    // Guard: require all necessary scene properties to be available
     if (!pathPoints || !Array.isArray(pathPoints) || pathPoints.length === 0) {
       return;
     }
+    if (!this.scene || !this.scene.spline) {
+      // Scene not ready yet, skip this frame
+      return;
+    }
+    
     // Only throw spike if cooldown is ready and there are path points
-    if ((!this.fireCooldown || this.fireCooldown <= 0) && pathPoints && pathPoints.length > 0 && this.scene && this.scene.spline) {
+    if ((this.fireCooldown === 0 || !this.fireCooldown || this.fireCooldown <= 0) && pathPoints && pathPoints.length > 0 && this.scene && this.scene.spline) {
       // Find all points along the spline (road) within the tower's range
       const pointsOnSpline = [];
       const numSamples = 100;
