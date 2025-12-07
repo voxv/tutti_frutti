@@ -81,8 +81,20 @@ export class SpikeTower extends ProjectileTower {
   }
 
   update(deltaTime, enemies, path) {
+    // DEBUG
+    if (!window._spikeDebugLog) {
+      window._spikeDebugLog = {};
+    }
+    
     // Only allow firing if not disabled (wave must be running)
-    if (this._spikeShootingDisabled) return;
+    if (this._spikeShootingDisabled) {
+      if (window._spikeDebugLog.disabled === undefined) {
+        console.log('[SpikeTower] DEBUG: _spikeShootingDisabled is TRUE');
+        window._spikeDebugLog.disabled = true;
+      }
+      return;
+    }
+    window._spikeDebugLog.disabled = false;
     
     // Get path points from the scene if not provided
     let pathPoints = path;
@@ -92,15 +104,34 @@ export class SpikeTower extends ProjectileTower {
     
     // Guard: require all necessary scene properties to be available
     if (!pathPoints || !Array.isArray(pathPoints) || pathPoints.length === 0) {
+      if (window._spikeDebugLog.pathPoints === undefined) {
+        console.log('[SpikeTower] DEBUG: pathPoints missing or empty');
+        window._spikeDebugLog.pathPoints = false;
+      }
       return;
     }
+    window._spikeDebugLog.pathPoints = true;
+    
     if (!this.scene || !this.scene.spline) {
-      // Scene not ready yet, skip this frame
+      if (window._spikeDebugLog.sceneSpline === undefined) {
+        console.log('[SpikeTower] DEBUG: scene or spline missing', { hasScene: !!this.scene, hasSpline: !!this.scene?.spline });
+        window._spikeDebugLog.sceneSpline = false;
+      }
       return;
+    }
+    window._spikeDebugLog.sceneSpline = true;
+    
+    // Decrement cooldown first
+    if (this.fireCooldown && this.fireCooldown > 0) {
+      this.fireCooldown -= deltaTime;
     }
     
     // Only throw spike if cooldown is ready and there are path points
-    if ((this.fireCooldown === 0 || !this.fireCooldown || this.fireCooldown <= 0) && pathPoints && pathPoints.length > 0 && this.scene && this.scene.spline) {
+    if ((this.fireCooldown === undefined || this.fireCooldown === 0 || this.fireCooldown <= 0) && pathPoints && pathPoints.length > 0 && this.scene && this.scene.spline) {
+      if (window._spikeDebugLog.cooldownReady === undefined) {
+        console.log('[SpikeTower] DEBUG: cooldown ready, about to throw spikes', { fireCooldown: this.fireCooldown });
+        window._spikeDebugLog.cooldownReady = true;
+      }
       // Find all points along the spline (road) within the tower's range
       const pointsOnSpline = [];
       const numSamples = 100;
