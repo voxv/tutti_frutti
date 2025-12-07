@@ -131,7 +131,10 @@ export function transitionGamePhase(scene, newPhase) {
     console.error('Game state machine not initialized on scene');
     return false;
   }
-  return scene.gameStateMachine.transition(newPhase);
+  console.log('[DEBUG] transitionGamePhase called:', { from: scene.gameStateMachine.currentPhase, to: newPhase });
+  const result = scene.gameStateMachine.transition(newPhase);
+  console.log('[DEBUG] transitionGamePhase result:', result, 'new phase:', scene.gameStateMachine.currentPhase);
+  return result;
 }
 
 /**

@@ -299,8 +299,11 @@ class BalouneScene extends Phaser.Scene {
             this.startWaveButton.setDepth(1000);
             this.startWaveButton.input.enabled = true;
             this.startWaveButton.on('pointerdown', () => {
+              console.log('[DEBUG] Start Wave button clicked, isInPhase BUYING:', this.gameStateMachine.isInPhase(GAME_PHASES.BUYING), 'button enabled:', this.startWaveButton.input.enabled);
               if (!this.gameStateMachine.isInPhase(GAME_PHASES.BUYING) || !this.startWaveButton.input.enabled) return;
+              console.log('[DEBUG] About to transition to SPAWNING');
               transitionGamePhase(this, GAME_PHASES.SPAWNING);
+              console.log('[DEBUG] After transition, currentPhase:', this.gameStateMachine.currentPhase);
               this.startWaveButton.setStyle({ fill: "#888" });
               this.startWaveButton.disableInteractive();
               this._waveCompletionBonusAwarded = false;
