@@ -35,13 +35,13 @@ const DEV_START_WAVE = 1 // Set to 1 for normal, or e.g. 5 to start from wave 5
 const SKIP_SURVIVE_50_POPUP = false;
 
 // DEV: Set this to control the overall size of all bloons (default 1)
-const BLOON_SIZE_MULTIPLIER = 1.1;
+const BLOON_SIZE_MULTIPLIER = (window.GAME_SCALE || 1) * 1.1;
 
 // DEV: Set this to control the overall size of all placed towers (default 1)
-const PLACED_TOWER_SIZE_MULTIPLIER = 1.2;
+const PLACED_TOWER_SIZE_MULTIPLIER = (window.GAME_SCALE || 1) * 1.2;
 
 // DEV: Set this to control the overall speed of all bloons (default 1)
-const BLOON_SPEED_MULTIPLIER = 1.2;
+const BLOON_SPEED_MULTIPLIER = (window.GAME_SCALE || 1) * 1.2;
 
 // DEV: Set the starting gold amount for the player
 const STARTING_GOLD = 650;
@@ -695,10 +695,10 @@ class BalouneScene extends Phaser.Scene {
             const towerInst = TowerClass.placeOnScene(this, x, y);
             // Apply global placed tower size multiplier
             if (towerInst && towerInst._placedSprite && typeof towerInst._placedSprite.setScale === 'function') {
-              // Keep relative scale, but multiply by global multiplier
+              // Keep relative scale, but multiply by global multiplier and GAME_SCALE
               const currentScaleX = towerInst._placedSprite.scaleX || 1;
               const currentScaleY = towerInst._placedSprite.scaleY || 1;
-              towerInst._placedSprite.setScale(currentScaleX * PLACED_TOWER_SIZE_MULTIPLIER, currentScaleY * PLACED_TOWER_SIZE_MULTIPLIER);
+              towerInst._placedSprite.setScale(currentScaleX * PLACED_TOWER_SIZE_MULTIPLIER * (window.GAME_SCALE || 1), currentScaleY * PLACED_TOWER_SIZE_MULTIPLIER * (window.GAME_SCALE || 1));
             }
             // Ensure BirdTower has correct towerType and _pathCenter
             if (towerType === 'bird') {

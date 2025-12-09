@@ -1,10 +1,10 @@
 // Start Wave Button & Wave Text UI module
 export function createStartWaveButton(scene, x, y, onStartWave) {
   const button = scene.add.text(x, y, "Start Wave", {
-    font: "28px Arial",
+    font: `${Math.round(28 * (window.GAME_SCALE || 1))}px Arial`,
     fill: "#00ff00",
     backgroundColor: "#222",
-    padding: { x: 20, y: 10 }
+    padding: { x: 20 * (window.GAME_SCALE || 1), y: 10 * (window.GAME_SCALE || 1) }
   }).setOrigin(0.5).setInteractive({ useHandCursor: true });
   button.setDepth(5000);
   button.input.enabled = true;
