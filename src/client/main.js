@@ -24,32 +24,12 @@ window.CoconutBloon = CoconutBloon;
 
 
 // import { TestImageScene } from "./TestImageScene.js";
-function getGameSize() {
-  return {
-    width: window.innerWidth,
-    height: window.innerHeight
-  };
-}
-
 var config = {
   type: Phaser.AUTO,
-  ...getGameSize(),
+  width: Math.floor(1600 * 0.8),
+  height: Math.floor(900 * 0.8),
   backgroundColor: "#222222",
   scene: [IntroScene, MapSelectScene, BalouneScene],
 };
 
-const game = new Phaser.Game(config);
-
-window.addEventListener('resize', () => {
-  const size = getGameSize();
-  game.scale.resize(size.width, size.height);
-  if (game.canvas) {
-    game.canvas.style.width = '100vw';
-    game.canvas.style.height = '100vh';
-  }
-});
-
-if (game.canvas) {
-  game.canvas.style.width = '100vw';
-  game.canvas.style.height = '100vh';
-}
+new Phaser.Game(config);
