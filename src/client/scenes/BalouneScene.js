@@ -936,6 +936,11 @@ class BalouneScene extends Phaser.Scene {
           }
         });
       }
+      // Clean up boss health bar HTML container
+      if (this._bossHealthBarContainer && this._bossHealthBarContainer.parentNode) {
+        this._bossHealthBarContainer.remove();
+        this._bossHealthBarContainer = null;
+      }
     });
     // Create sound toggle button using modular UI
     this.soundToggleButton = createSoundToggleButton(this);

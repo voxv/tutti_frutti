@@ -7,8 +7,23 @@ export function renderEnemies(scene) {
   if (!scene.enemyGraphics) {
     scene.enemyGraphics = scene.add.graphics();
     scene.enemyGraphics.setDepth(3500); // Ensure graphics are visible above other elements
+    scene.enemyGraphics.setScrollFactor(0); // Prevent scrolling with scene
+    console.log('Created enemyGraphics with depth 3500');
   }
   scene.enemyGraphics.clear();
+  
+  // Create/update boss health bar HTML container if needed
+  if (!scene._bossHealthBarContainer) {
+    scene._bossHealthBarContainer = document.createElement('div');
+    scene._bossHealthBarContainer.id = 'boss-health-bar-container';
+    scene._bossHealthBarContainer.style.position = 'absolute';
+    scene._bossHealthBarContainer.style.pointerEvents = 'none';
+    scene._bossHealthBarContainer.style.zIndex = '9999';
+    document.body.appendChild(scene._bossHealthBarContainer);
+    console.log('Created boss health bar HTML container');
+  }
+  scene._bossHealthBarContainer.innerHTML = ''; // Clear old bars
+  
   // Check for escaped bloons and decrease player health BEFORE drawing
   if (!scene._escapedBloons) scene._escapedBloons = new Set();
   for (const e of scene.gameLogic.enemies) {
@@ -27,27 +42,53 @@ export function renderEnemies(scene) {
     // Game area: 1600px wide (minus 220px shop), 900px tall (minus 100px info bar)
     const outOfBounds = e.position.x < 0 || e.position.x > 1380 || e.position.y < 0 || e.position.y > 800;
     
-    // Draw health bar for boss bloons FIRST (so it's behind other rendering)
+    // Draw health bar for boss bloons using HTML (more reliable than graphics)
     if ((e.constructor.name === 'BossBloon' || e.type === 'boss') && e.isActive && e.health > 0) {
       const multiplier = window.BLOON_SIZE_MULTIPLIER || 1;
       const size = (e.size ?? 20) * multiplier;
       const barWidth = size * 1.5;
       const barHeight = 10;
-      const barX = e.position.x - barWidth / 2;
-      const barY = e.position.y - size + 5;
       
-      // Background (dark gray)
-      scene.enemyGraphics.fillStyle(0x333333, 1);
-      scene.enemyGraphics.fillRect(barX, barY, barWidth, barHeight);
+      // Get canvas position (Phaser canvas)
+      const canvas = scene.game.canvas;
+      const canvasRect = canvas.getBoundingClientRect();
+      const barX = canvasRect.left + e.position.x - barWidth / 2;
+      const barY = canvasRect.top + e.position.y - size + 5;
       
-      // Health bar (green)
-      const healthPercent = Math.max(0, e.health / (e.maxHealth || 500)); // Use maxHealth from config
-      scene.enemyGraphics.fillStyle(0x00FF00, 1);
-      scene.enemyGraphics.fillRect(barX, barY, barWidth * healthPercent, barHeight);
+      console.log('Creating HTML boss health bar:', { 
+        name: e.constructor.name, 
+        type: e.type, 
+        health: e.health, 
+        maxHealth: e.maxHealth,
+        canvasPos: { left: canvasRect.left, top: canvasRect.top },
+        barX, barY, barWidth, barHeight 
+      });
       
-      // Border (white)
-      scene.enemyGraphics.lineStyle(2, 0xFFFFFF, 1);
-      scene.enemyGraphics.strokeRect(barX, barY, barWidth, barHeight);
+      // Create health bar HTML elements
+      const healthPercent = Math.max(0, e.health / (e.maxHealth || 500));
+      
+      // Create bar container
+      const barDiv = document.createElement('div');
+      barDiv.style.position = 'absolute';
+      barDiv.style.left = barX + 'px';
+      barDiv.style.top = barY + 'px';
+      barDiv.style.width = barWidth + 'px';
+      barDiv.style.height = barHeight + 'px';
+      barDiv.style.backgroundColor = '#333333';
+      barDiv.style.border = '2px solid #FFFFFF';
+      barDiv.style.boxSizing = 'border-box';
+      
+      // Create health fill
+      const fillDiv = document.createElement('div');
+      fillDiv.style.position = 'absolute';
+      fillDiv.style.left = '0';
+      fillDiv.style.top = '0';
+      fillDiv.style.width = (barWidth * healthPercent - 4) + 'px'; // Subtract border
+      fillDiv.style.height = (barHeight - 4) + 'px'; // Subtract border
+      fillDiv.style.backgroundColor = '#00FF00';
+      
+      barDiv.appendChild(fillDiv);
+      scene._bossHealthBarContainer.appendChild(barDiv);
     }
     
     // Always call updateAnimation if sprite exists and bloon uses spritesheet
