@@ -66,11 +66,11 @@ export function renderEnemies(scene) {
       }
       
       // Draw health bar for boss bloons
-      if (e.constructor.name === 'BossBloon' && e.isActive && e.health > 0) {
+      if ((e.constructor.name === 'BossBloon' || e.type === 'boss') && e.isActive && e.health > 0) {
         const multiplier = window.BLOON_SIZE_MULTIPLIER || 1;
         const size = (e.size ?? 20) * multiplier;
         const barWidth = size * 1.5;
-        const barHeight = 8;
+        const barHeight = 10;
         const barX = e.position.x - barWidth / 2;
         const barY = e.position.y - size + 5;
         
@@ -84,7 +84,7 @@ export function renderEnemies(scene) {
         scene.enemyGraphics.fillRect(barX, barY, barWidth * healthPercent, barHeight);
         
         // Border (white)
-        scene.enemyGraphics.lineStyle(1, 0xFFFFFF, 1);
+        scene.enemyGraphics.lineStyle(2, 0xFFFFFF, 1);
         scene.enemyGraphics.strokeRect(barX, barY, barWidth, barHeight);
       }
       continue;
