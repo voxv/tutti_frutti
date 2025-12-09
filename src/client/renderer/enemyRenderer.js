@@ -107,7 +107,12 @@ export function renderEnemies(scene) {
   // Draw health bars for boss bloons AFTER all sprites are rendered
   for (const e of scene.gameLogic.enemies) {
     if (!e) continue;
-    if ((e.constructor.name === 'BossBloon' || e.type === 'boss') && e.isActive && e.health > 0) {
+    // Robust boss detection: works even if minified
+    if ((
+      (e.constructor && typeof e.constructor.name === 'string' && e.constructor.name === 'BossBloon') ||
+      (e.type === 'boss') ||
+      (e.health >= 2000 && e.size >= 100 && e.reward >= 100 && e.isActive)
+    ) && e.isActive && e.health > 0) {
       const multiplier = window.BLOON_SIZE_MULTIPLIER || 1;
       const size = (e.size ?? 20) * multiplier;
       const barWidth = size * 1.5;
