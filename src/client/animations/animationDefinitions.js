@@ -33,11 +33,12 @@ export const ANIMATION_CONFIGS = {
 export function setupAnimations(scene, towerConfig, bloonsConfig) {
         // Add explode_anim animation for boulder/projectile destruction
         if (!scene.anims.exists('explode_anim')) {
-          const frames = scene.anims.generateFrameNumbers('explode_anim', { start: 0, end: 5 });
+          const frames = scene.anims.generateFrameNumbers('explode_anim', { start: 0, end: 6 });
+          console.log('[setupAnimations] explode_anim frames:', frames);
           scene.anims.create({
             key: 'explode_anim',
             frames,
-            frameRate: 16,
+            frameRate: 18,
             repeat: 0
           });
         }

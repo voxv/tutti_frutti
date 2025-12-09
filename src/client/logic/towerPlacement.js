@@ -1,3 +1,4 @@
+
 import { pointInPolygon } from "./noBuildUtils.js";
 /**
  * Tower Placement and Drag/Drop Logic Module
@@ -46,7 +47,7 @@ export function startTowerDrag(scene, pointer, towerType, price, range) {
 
   // Create draggable tower image
   scene.dragImage = scene.add.image(pointer.x, pointer.y, towerType)
-    .setDisplaySize(SHOP_CELL_WIDTH * 0.6 * (window.GAME_SCALE || 1), SHOP_CELL_HEIGHT * 0.6 * (window.GAME_SCALE || 1))
+    .setDisplaySize(SHOP_CELL_WIDTH * 0.6, SHOP_CELL_HEIGHT * 0.6)
     .setDepth(2000)
     .setAlpha(0.8);
 

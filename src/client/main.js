@@ -1,3 +1,4 @@
+
 import wavesConfig from '../../waves.json';
 import towerConfig from '../game/towers/tower.json';
 import Phaser from "phaser";
@@ -22,14 +23,14 @@ window.OrangeBloon = OrangeBloon;
 window.MelonBloon = MelonBloon;
 window.CoconutBloon = CoconutBloon;
 
-const GAME_SCALE = 0.5;
+
+// import { TestImageScene } from "./TestImageScene.js";
 var config = {
   type: Phaser.AUTO,
-  width: Math.floor(1600 * GAME_SCALE),
-  height: Math.floor(900 * GAME_SCALE),
+  width: 1600,
+  height: 900,
   backgroundColor: "#222222",
   scene: [IntroScene, MapSelectScene, BalouneScene],
 };
-window.GAME_SCALE = GAME_SCALE;
 
 new Phaser.Game(config);

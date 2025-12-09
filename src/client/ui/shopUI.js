@@ -40,8 +40,8 @@ export function drawShopUI(scene, gameWidth, gameHeight, shopWidth, infoBarHeigh
   // Get all towers from config (object keys)
   const towerKeys = Object.keys(towerConfig);
   const cols = 2;
-  const cellWidth = shopWidth / cols * (window.GAME_SCALE || 1);
-  const cellHeight = 100 * (window.GAME_SCALE || 1);
+  const cellWidth = shopWidth / cols;
+  const cellHeight = 100;
   const rows = Math.floor((gameHeight - infoBarHeight) / cellHeight);
   
   // Draw the shop grid above the background but below tower images
@@ -155,9 +155,9 @@ export function drawShopUI(scene, gameWidth, gameHeight, shopWidth, infoBarHeigh
       });
     }
     // Always display price below tower (or blank for placeholder)
-    const priceText = scene.add.text(x + cellWidth / 2, y + cellHeight / 2 + 40 * (window.GAME_SCALE || 1), config ? `$${price}` : '',
+    const priceText = scene.add.text(x + cellWidth / 2, y + cellHeight / 2 + 40, config ? `$${price}` : '',
       {
-        font: config && canAfford ? `bold ${Math.round(14 * (window.GAME_SCALE || 1))}px Arial` : `${Math.round(14 * (window.GAME_SCALE || 1))}px Arial`,
+        font: config && canAfford ? "bold 14px Arial" : "14px Arial",
         fill: config && canAfford ? "#008000" : "#888"
       }
     ).setOrigin(0.5);

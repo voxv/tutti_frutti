@@ -117,15 +117,15 @@ export function showUpgradeUI(scene, placedTower, towerConfig) {
     scene.upgradeUI.removeAll(true);
   }
   // Position at bottom center above info bar
-  const gameWidth = 1200 * (window.GAME_SCALE || 1);
-  const gameHeight = 900 * (window.GAME_SCALE || 1);
-  const infoBarHeight = 100 * (window.GAME_SCALE || 1);
+  const gameWidth = 1200;
+  const gameHeight = 900;
+  const infoBarHeight = 100;
   const baseY = gameHeight - infoBarHeight / 2;
   const baseX = gameWidth / 2;
-  const boxWidth = 140 * (window.GAME_SCALE || 1); // approximate width of each box
-  const gap = 70 * (window.GAME_SCALE || 1); // increased gap between boxes for more space
+  const boxWidth = 140; // approximate width of each box
+  const gap = 70; // increased gap between boxes for more space
   const offset = (boxWidth / 2) + (gap / 2); // centers separated by boxWidth + gap
-  const sellBtnOffset = offset + boxWidth + 30 * (window.GAME_SCALE || 1); // right of upgrades
+  const sellBtnOffset = offset + boxWidth + 30; // right of upgrades
   if (!placedTower.unlockedUpgrades) placedTower.unlockedUpgrades = { left: 0, right: 0 };
   // Map towerType to config key
   const towerTypeToConfigKey = {
@@ -175,10 +175,10 @@ export function showUpgradeUI(scene, placedTower, towerConfig) {
   const leftAffordable = leftUpgrade ? scene.goldAmount >= leftUpgrade.cost : false;
   const leftBtn = scene.add.text(baseX - offset, baseY, leftText,
     {
-      font: leftText === 'MAX' ? `bold ${Math.round(20 * (window.GAME_SCALE || 1))}px Arial` : `${Math.round(20 * (window.GAME_SCALE || 1))}px Arial`,
+      font: leftText === 'MAX' ? 'bold 20px Arial' : '20px Arial',
       fill: leftText === 'MAX' ? '#bbb' : (leftAffordable ? '#fff' : '#bbb'),
       backgroundColor: '#444',
-      padding: { x: 20 * (window.GAME_SCALE || 1), y: 10 * (window.GAME_SCALE || 1) }
+      padding: { x: 20, y: 10 }
     })
     .setOrigin(0.5);
   leftBtn.setAlpha(leftText === 'MAX' ? 0.5 : (leftAffordable ? 1 : 0.5));
@@ -248,10 +248,10 @@ export function showUpgradeUI(scene, placedTower, towerConfig) {
   const rightAffordable = rightUpgrade ? scene.goldAmount >= rightUpgrade.cost : false;
   const rightBtn = scene.add.text(baseX + offset, baseY, rightText,
     {
-      font: rightText === 'MAX' ? `bold ${Math.round(20 * (window.GAME_SCALE || 1))}px Arial` : `${Math.round(20 * (window.GAME_SCALE || 1))}px Arial`,
+      font: rightText === 'MAX' ? 'bold 20px Arial' : '20px Arial',
       fill: rightText === 'MAX' ? '#bbb' : (rightAffordable ? '#fff' : '#bbb'),
       backgroundColor: '#444',
-      padding: { x: 20 * (window.GAME_SCALE || 1), y: 10 * (window.GAME_SCALE || 1) }
+      padding: { x: 20, y: 10 }
     })
     .setOrigin(0.5);
   rightBtn.setAlpha(rightText === 'MAX' ? 0.5 : (rightAffordable ? 1 : 0.5));
@@ -294,6 +294,7 @@ export function showUpgradeUI(scene, placedTower, towerConfig) {
               if (logicTower.towerType !== 'bird') {
                 let circleX = placedTower.x;
                 let circleY = placedTower.y;
+                // ...existing code...
                 showRangeCircle(scene, circleX, circleY, logicTower.range);
               }
             }

@@ -72,18 +72,6 @@ export class ProjectileTower extends Tower {
     // Example placeholder:
     // let projectile = ...
     // this.projectiles.push(projectile);
-    // Visualization: pulse effect
-    if (typeof window.sceneRef === 'object' && window.sceneRef) {
-      const pulse = window.sceneRef.add.circle(this.position.x, this.position.y, this.range * 0.5, 0xff8800, 0.4);
-      pulse.setDepth(3000);
-      window.sceneRef.tweens.add({
-        targets: pulse,
-        alpha: 0,
-        scale: 2,
-        duration: 200,
-        onComplete: () => pulse.destroy()
-      });
-    }
   }
 
   update(deltaTime, enemies) {

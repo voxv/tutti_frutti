@@ -23,7 +23,7 @@ export class AOETower extends Tower {
     // Use a generic sprite for AOE, or customize as needed
     const placedSprite = scene.add.image(x, y, 'tower_1')
       .setDisplaySize(cellWidth * 0.8, cellHeight * 0.8)
-      .setDepth(1001)
+      .setDepth(8500)
       .setAlpha(1)
       .setInteractive({ useHandCursor: true });
     placedSprite.towerType = 'aoe';

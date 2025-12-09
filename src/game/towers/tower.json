@@ -348,5 +348,42 @@
         { "name": "Quad Boomerang", "key": "quadruple_boomerang", "cost": 1050, "description": "Throws four boomerangs per shot." }
       ]
     }
+  },
+  "star": {
+    "displayName": "Starfish",
+    "description": "Fires spikes at fruits.",
+    "type": "projectile",
+    "class": "StarTower",
+    "towerType": "star",
+    "cost": 650,
+    "range": 110,
+    "fireRate": 1.0,
+    "damage": 1,
+    "assets": {
+      "shopImage": "/towers/star_shop.png",
+      "placedImage": "/towers/star_anim.png",
+      "animation": {
+        "key": "star_tower_anim",
+        "frameWidth": 455,
+        "frameHeight": 551,
+        "frames": { "start": 0, "end": 2 },
+        "frameRate": 8,
+        "repeat": 0
+      }
+    },
+    "upgrades": {
+      "lower": [
+        { "name": "Attack Speed 1", "key": "attack_speed_1", "cost": 320, "description": "Increases the attack speed." },
+        { "name": "7 Spikes", "key": "double_spike", "cost": 765, "description": "Shoots 7 spikes around it." }
+      ],
+      "medium": [
+        { "name": "Attack Speed 2", "key": "attack_speed_2", "cost": 550, "description": "Further increases the attack speed." },
+        { "name": "8 Spikes", "key": "triple_spike", "cost": 870, "description": "Shoots 8 spikes around it." }
+      ],
+      "high": [
+        { "name": "Attack Speed 3", "key": "attack_speed_3", "cost": 725, "description": "Massively increases the attack speed." },
+        { "name": "10 Spikes", "key": "quadruple_spike", "cost": 980, "description": "Shoots 10 spikes around it." }
+      ]
+    }
   }
 }

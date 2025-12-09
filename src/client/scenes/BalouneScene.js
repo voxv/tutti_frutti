@@ -12,6 +12,7 @@ import { createTargetingButtons, updateTargetingButtons } from "../ui/targetingU
 import { AOETower } from "../../game/towers/AOETower.js";
 import { SniperTower } from "../../game/towers/SniperTower.js";
 import { addSpikeProjectile } from "../../game/towers/spikeProjectile.js";
+import { StarTower } from "../../game/towers/StarTower.js";
 import * as towerPlacement from "../logic/towerPlacement.js";
 import { renderEnemies } from "../renderer/enemyRenderer.js";
 import { showGameOverPopup } from "../ui/gameOverUI.js";
@@ -30,21 +31,21 @@ import * as musicManager from "../utils/musicManager.js";
 
 
 // DEV: Set this to start from a specific wave for testing
-const DEV_START_WAVE = 1 // Set to 1 for normal, or e.g. 5 to start from wave 5
+const DEV_START_WAVE = 9 // Set to 1 for normal, or e.g. 5 to start from wave 5
 
-const SKIP_SURVIVE_50_POPUP = false;
+const SKIP_SURVIVE_50_POPUP = true;
 
 // DEV: Set this to control the overall size of all bloons (default 1)
-const BLOON_SIZE_MULTIPLIER = (window.GAME_SCALE || 1) * 1.1;
+const BLOON_SIZE_MULTIPLIER = 1.1;
 
 // DEV: Set this to control the overall size of all placed towers (default 1)
-const PLACED_TOWER_SIZE_MULTIPLIER = (window.GAME_SCALE || 1) * 1.2;
+const PLACED_TOWER_SIZE_MULTIPLIER = 1.2;
 
 // DEV: Set this to control the overall speed of all bloons (default 1)
-const BLOON_SPEED_MULTIPLIER = (window.GAME_SCALE || 1) * 1.2;
+const BLOON_SPEED_MULTIPLIER = 1.2;
 
 // DEV: Set the starting gold amount for the player
-const STARTING_GOLD = 650;
+const STARTING_GOLD = 233650;
 
 // Ensure the global variables are set from here if not already set
 if (typeof window !== 'undefined') {
@@ -69,6 +70,10 @@ class BalouneScene extends Phaser.Scene {
 
   constructor() {
     super("BalouneScene");
+
+    // Enable physics system
+    this.physics = this.physics || this.sys.physics;
+
     this.gameLogic = null;
     this.waveInProgress = false;
     this.gamePhase = "buying";
@@ -695,10 +700,10 @@ class BalouneScene extends Phaser.Scene {
             const towerInst = TowerClass.placeOnScene(this, x, y);
             // Apply global placed tower size multiplier
             if (towerInst && towerInst._placedSprite && typeof towerInst._placedSprite.setScale === 'function') {
-              // Keep relative scale, but multiply by global multiplier and GAME_SCALE
+              // Keep relative scale, but multiply by global multiplier
               const currentScaleX = towerInst._placedSprite.scaleX || 1;
               const currentScaleY = towerInst._placedSprite.scaleY || 1;
-              towerInst._placedSprite.setScale(currentScaleX * PLACED_TOWER_SIZE_MULTIPLIER * (window.GAME_SCALE || 1), currentScaleY * PLACED_TOWER_SIZE_MULTIPLIER * (window.GAME_SCALE || 1));
+              towerInst._placedSprite.setScale(currentScaleX * PLACED_TOWER_SIZE_MULTIPLIER, currentScaleY * PLACED_TOWER_SIZE_MULTIPLIER);
             }
             // Ensure BirdTower has correct towerType and _pathCenter
             if (towerType === 'bird') {
