@@ -1,4 +1,3 @@
-
 import wavesConfig from '../../waves.json';
 import towerConfig from '../game/towers/tower.json';
 import Phaser from "phaser";
@@ -25,12 +24,32 @@ window.CoconutBloon = CoconutBloon;
 
 
 // import { TestImageScene } from "./TestImageScene.js";
+function getGameSize() {
+  return {
+    width: window.innerWidth,
+    height: window.innerHeight
+  };
+}
+
 var config = {
   type: Phaser.AUTO,
-  width: 1600,
-  height: 900,
+  ...getGameSize(),
   backgroundColor: "#222222",
   scene: [IntroScene, MapSelectScene, BalouneScene],
 };
 
-new Phaser.Game(config);
+const game = new Phaser.Game(config);
+
+window.addEventListener('resize', () => {
+  const size = getGameSize();
+  game.scale.resize(size.width, size.height);
+  if (game.canvas) {
+    game.canvas.style.width = '100vw';
+    game.canvas.style.height = '100vh';
+  }
+});
+
+if (game.canvas) {
+  game.canvas.style.width = '100vw';
+  game.canvas.style.height = '100vh';
+}
