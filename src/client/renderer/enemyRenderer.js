@@ -106,25 +106,17 @@ export function renderEnemies(scene) {
       const barHeight = 10;
       const barX = e.position.x - barWidth / 2;
       const barY = e.position.y - size + 5;
-      
-      console.log('Drawing boss health bar:', { 
-        name: e.constructor.name, 
-        type: e.type, 
-        health: e.health, 
-        maxHealth: e.maxHealth,
-        position: e.position, 
-        barX, barY, barWidth, barHeight 
-      });
-      
+      // TEST: Draw a cyan rectangle at the boss health bar position
+      scene.enemyGraphics.fillStyle(0x00FFFF, 1);
+      scene.enemyGraphics.fillRect(barX, barY, barWidth, barHeight);
+      console.log('TEST boss health bar position:', {barX, barY, barWidth, barHeight, bossPos: e.position});
       // Background (dark gray)
       scene.enemyGraphics.fillStyle(0x333333, 1);
       scene.enemyGraphics.fillRect(barX, barY, barWidth, barHeight);
-      
       // Health bar (green)
       const healthPercent = Math.max(0, e.health / (e.maxHealth || 500)); // Use maxHealth from config
       scene.enemyGraphics.fillStyle(0x00FF00, 1);
       scene.enemyGraphics.fillRect(barX, barY, barWidth * healthPercent, barHeight);
-      
       // Border (white)
       scene.enemyGraphics.lineStyle(2, 0xFFFFFF, 1);
       scene.enemyGraphics.strokeRect(barX, barY, barWidth, barHeight);
