@@ -26,6 +26,30 @@ export function renderEnemies(scene) {
     if (!e) continue;
     // Game area: 1600px wide (minus 220px shop), 900px tall (minus 100px info bar)
     const outOfBounds = e.position.x < 0 || e.position.x > 1380 || e.position.y < 0 || e.position.y > 800;
+    
+    // Draw health bar for boss bloons FIRST (so it's behind other rendering)
+    if ((e.constructor.name === 'BossBloon' || e.type === 'boss') && e.isActive && e.health > 0) {
+      const multiplier = window.BLOON_SIZE_MULTIPLIER || 1;
+      const size = (e.size ?? 20) * multiplier;
+      const barWidth = size * 1.5;
+      const barHeight = 10;
+      const barX = e.position.x - barWidth / 2;
+      const barY = e.position.y - size + 5;
+      
+      // Background (dark gray)
+      scene.enemyGraphics.fillStyle(0x333333, 1);
+      scene.enemyGraphics.fillRect(barX, barY, barWidth, barHeight);
+      
+      // Health bar (green)
+      const healthPercent = Math.max(0, e.health / (e.maxHealth || 500)); // Use maxHealth from config
+      scene.enemyGraphics.fillStyle(0x00FF00, 1);
+      scene.enemyGraphics.fillRect(barX, barY, barWidth * healthPercent, barHeight);
+      
+      // Border (white)
+      scene.enemyGraphics.lineStyle(2, 0xFFFFFF, 1);
+      scene.enemyGraphics.strokeRect(barX, barY, barWidth, barHeight);
+    }
+    
     // Always call updateAnimation if sprite exists and bloon uses spritesheet
     if (e.spritesheet && scene.textures.exists(e.spritesheet) && e.frameCount > 1) {
       const multiplier = window.BLOON_SIZE_MULTIPLIER || 1;
@@ -63,29 +87,6 @@ export function renderEnemies(scene) {
           e._sprite.destroy();
           e._sprite = null;
         }
-      }
-      
-      // Draw health bar for boss bloons
-      if ((e.constructor.name === 'BossBloon' || e.type === 'boss') && e.isActive && e.health > 0) {
-        const multiplier = window.BLOON_SIZE_MULTIPLIER || 1;
-        const size = (e.size ?? 20) * multiplier;
-        const barWidth = size * 1.5;
-        const barHeight = 10;
-        const barX = e.position.x - barWidth / 2;
-        const barY = e.position.y - size + 5;
-        
-        // Background (dark gray)
-        scene.enemyGraphics.fillStyle(0x333333, 1);
-        scene.enemyGraphics.fillRect(barX, barY, barWidth, barHeight);
-        
-        // Health bar (green)
-        const healthPercent = Math.max(0, e.health / (e.maxHealth || 500)); // Use maxHealth from config
-        scene.enemyGraphics.fillStyle(0x00FF00, 1);
-        scene.enemyGraphics.fillRect(barX, barY, barWidth * healthPercent, barHeight);
-        
-        // Border (white)
-        scene.enemyGraphics.lineStyle(2, 0xFFFFFF, 1);
-        scene.enemyGraphics.strokeRect(barX, barY, barWidth, barHeight);
       }
       continue;
     }
