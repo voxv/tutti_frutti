@@ -10,6 +10,9 @@ export function renderEnemies(scene) {
     console.log('Created enemyGraphics with depth 3500');
   }
   scene.enemyGraphics.clear();
+  // TEST: Draw a red rectangle at the top-left to verify graphics rendering
+  scene.enemyGraphics.fillStyle(0xFF0000, 1);
+  scene.enemyGraphics.fillRect(10, 10, 100, 30);
   // Check for escaped bloons and decrease player health BEFORE drawing
   if (!scene._escapedBloons) scene._escapedBloons = new Set();
   for (const e of scene.gameLogic.enemies) {
