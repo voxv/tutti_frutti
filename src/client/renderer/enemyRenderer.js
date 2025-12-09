@@ -96,6 +96,14 @@ export function renderEnemies(scene) {
     }
   }
   
+  // DEBUG: Log all enemies for boss detection
+  console.log('ENEMY DEBUG:', scene.gameLogic.enemies.map(e => ({
+    name: e && e.constructor && e.constructor.name,
+    type: e && e.type,
+    health: e && e.health,
+    isActive: e && e.isActive,
+    pos: e && e.position
+  })));
   // Draw health bars for boss bloons AFTER all sprites are rendered
   for (const e of scene.gameLogic.enemies) {
     if (!e) continue;
