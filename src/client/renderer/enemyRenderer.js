@@ -7,12 +7,8 @@ export function renderEnemies(scene) {
   if (!scene.enemyGraphics) {
     scene.enemyGraphics = scene.add.graphics();
     scene.enemyGraphics.setDepth(3500); // Ensure graphics are visible above other elements
-    console.log('Created enemyGraphics with depth 3500');
   }
   scene.enemyGraphics.clear();
-  // TEST: Draw a red rectangle at the top-left to verify graphics rendering
-  scene.enemyGraphics.fillStyle(0xFF0000, 1);
-  scene.enemyGraphics.fillRect(10, 10, 100, 30);
   // Check for escaped bloons and decrease player health BEFORE drawing
   if (!scene._escapedBloons) scene._escapedBloons = new Set();
   for (const e of scene.gameLogic.enemies) {
@@ -96,14 +92,6 @@ export function renderEnemies(scene) {
     }
   }
   
-  // DEBUG: Log all enemies for boss detection
-  console.log('ENEMY DEBUG:', scene.gameLogic.enemies.map(e => ({
-    name: e && e.constructor && e.constructor.name,
-    type: e && e.type,
-    health: e && e.health,
-    isActive: e && e.isActive,
-    pos: e && e.position
-  })));
   // Draw health bars for boss bloons AFTER all sprites are rendered
   for (const e of scene.gameLogic.enemies) {
     if (!e) continue;
@@ -119,10 +107,6 @@ export function renderEnemies(scene) {
       const barHeight = 10;
       const barX = e.position.x - barWidth / 2;
       const barY = e.position.y - size + 5;
-      // TEST: Draw a cyan rectangle at the boss health bar position
-      scene.enemyGraphics.fillStyle(0x00FFFF, 1);
-      scene.enemyGraphics.fillRect(barX, barY, barWidth, barHeight);
-      console.log('TEST boss health bar position:', {barX, barY, barWidth, barHeight, bossPos: e.position});
       // Background (dark gray)
       scene.enemyGraphics.fillStyle(0x333333, 1);
       scene.enemyGraphics.fillRect(barX, barY, barWidth, barHeight);
