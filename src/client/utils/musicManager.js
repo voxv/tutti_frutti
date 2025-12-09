@@ -18,6 +18,8 @@ export function stopMainMusic(scene) {
 }
 
 export function playBossMusic(scene) {
+  // Stop main game music first
+  stopMainMusic(scene);
   if (scene.sound && scene.sound.get('boss_music')) {
     scene.sound.get('boss_music').stop();
   }

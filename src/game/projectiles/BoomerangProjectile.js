@@ -1,7 +1,7 @@
 import { Projectile } from "./Projectile.js";
 
 export class BoomerangProjectile extends Projectile {
-  constructor({ position, towerPosition, speed, texture, sourceTower, arcDuration, flipArc = false, arcRadius = 120, verticalScale = 0.5, destroyOnReturn = true }) {
+  constructor({ position, towerPosition, speed, texture, sourceTower, arcDuration, flipArc = false, arcRadius = 120, verticalScale = 0.5, destroyOnReturn = true, hitRadius = 60 }) {
     super({ position, direction: { x: 0, y: 0 }, speed, damage: 0, texture });
     this.towerPosition = { ...towerPosition };
     this.sourceTower = sourceTower;
@@ -14,6 +14,7 @@ export class BoomerangProjectile extends Projectile {
     // Store the true start position at spawn
     this._startPosition = { x: position.x, y: position.y };
     this.destroyOnReturn = destroyOnReturn;
+    this.hitRadius = hitRadius; // Increased detection radius
   }
 
   update(deltaTime) {

@@ -6,6 +6,7 @@ export function renderEnemies(scene) {
   if (!scene.gameLogic || !scene.gameLogic.enemies) return;
   if (!scene.enemyGraphics) {
     scene.enemyGraphics = scene.add.graphics();
+    scene.enemyGraphics.setDepth(3500); // Ensure graphics are visible above other elements
   }
   scene.enemyGraphics.clear();
   // Check for escaped bloons and decrease player health BEFORE drawing
@@ -71,7 +72,7 @@ export function renderEnemies(scene) {
         const barWidth = size * 1.5;
         const barHeight = 8;
         const barX = e.position.x - barWidth / 2;
-        const barY = e.position.y - size - 15;
+        const barY = e.position.y - size + 5;
         
         // Background (dark gray)
         scene.enemyGraphics.fillStyle(0x333333, 1);

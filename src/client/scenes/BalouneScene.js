@@ -30,9 +30,9 @@ import * as musicManager from "../utils/musicManager.js";
 
 
 // DEV: Set this to start from a specific wave for testing
-const DEV_START_WAVE = 1 // Set to 1 for normal, or e.g. 5 to start from wave 5
+const DEV_START_WAVE = 50 // Set to 1 for normal, or e.g. 5 to start from wave 5
 
-const SKIP_SURVIVE_50_POPUP = false;
+const SKIP_SURVIVE_50_POPUP = true;
 
 // DEV: Set this to control the overall size of all bloons (default 1)
 const BLOON_SIZE_MULTIPLIER = 1.1;
@@ -44,7 +44,7 @@ const PLACED_TOWER_SIZE_MULTIPLIER = 1.2;
 const BLOON_SPEED_MULTIPLIER = 1.2;
 
 // DEV: Set the starting gold amount for the player
-const STARTING_GOLD = 650;
+const STARTING_GOLD = 233650;
 
 // Ensure the global variables are set from here if not already set
 if (typeof window !== 'undefined') {
@@ -176,8 +176,7 @@ class BalouneScene extends Phaser.Scene {
       
       // Check if wave 50 (last wave) is complete
       if (this.waveNumber === 50) {
-        // Stop all instances of main game music and boss music
-        musicManager.stopMainMusic(this);
+        // Stop boss music when showing win screen
         musicManager.stopBossMusic(this);
         // Show win game popup
         this._gameOverShown = true;
@@ -234,10 +233,6 @@ class BalouneScene extends Phaser.Scene {
             this.currentWaveIndex = 0;
             // Reset game state machine to buying phase
             this.gameStateMachine.reset(GAME_PHASES.BUYING);
-            // Stop main game music if entering buying phase of wave 50
-            if (this.waveNumber === 50) {
-              musicManager.stopMainMusic(this);
-            }
             // Reset game logic state
             sceneUtils.resetGameLogicState(this.gameLogic);
             // Remove placed tower sprites
@@ -289,6 +284,8 @@ class BalouneScene extends Phaser.Scene {
               if (!this.gameStateMachine.isInPhase(GAME_PHASES.BUYING) || !this.startWaveButton.input.enabled) return;
               // If starting wave 50, play boss music
               if (this.waveNumber === 50) {
+                // Stop main game music first
+                musicManager.stopMainMusic(this);
                 // Always stop boss music before playing
                 if (this.sound && this.sound.get('boss_music')) {
                   this.sound.get('boss_music').stop();
@@ -393,10 +390,6 @@ class BalouneScene extends Phaser.Scene {
         this.waveNumber++;
         if (this.waveText) {
           this.waveText.setText(`Wave: ${this.waveNumber}`);
-        }
-        // Stop main game music if entering buying phase of wave 50
-        if (this.waveNumber === 50) {
-          musicManager.stopMainMusic(this);
         }
         if (this.startWaveButton) {
           this.startWaveButton.destroy();
@@ -852,7 +845,7 @@ class BalouneScene extends Phaser.Scene {
         this.gameLogic.enemies = [];
       }
       
-        // Stop boss music if playing
+        // Stop boss music and main music when showing game over screen
         musicManager.stopBossMusic(this);
         musicManager.stopMainMusic(this);
         musicManager.playGameOverMusic(this);
@@ -860,7 +853,6 @@ class BalouneScene extends Phaser.Scene {
         onReplay: () => {
           this._gameOverShown = false;
           musicManager.stopGameOverMusic(this);
-          musicManager.stopMainMusic(this);
           musicManager.playMainMusic(this);
           window.sceneRef = this;
           if (typeof hideRangeCircle === 'function') hideRangeCircle(this);
