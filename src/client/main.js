@@ -22,7 +22,7 @@ window.OrangeBloon = OrangeBloon;
 window.MelonBloon = MelonBloon;
 window.CoconutBloon = CoconutBloon;
 
-const GAME_SCALE = 0.7;
+const GAME_SCALE = 0.5;
 var config = {
   type: Phaser.AUTO,
   width: Math.floor(1600 * GAME_SCALE),
