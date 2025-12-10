@@ -4,6 +4,7 @@ import { Baloune } from "../../game/Baloune.js";
 
 export function setupMapAndGameLogic(scene, mapConfig) {
   if (!mapConfig) {
+    console.error('Map config missing in setupMapAndGameLogic');
     scene.add.text(600, 400, "Map config missing!", { font: "32px Arial", fill: "#f00" }).setOrigin(0.5);
     return null;
   }
@@ -27,7 +28,7 @@ export function setupMapAndGameLogic(scene, mapConfig) {
 
 export function setupBackground(scene, mapConfig, gameWidth, gameHeight, shopWidth, infoBarHeight) {
   let hasBgImage = false;
-  if (mapConfig.background) {
+  if (mapConfig && mapConfig.background) {
     const bgKey = `mapBg_${mapConfig.id}`;
     if (scene.textures.exists(bgKey)) {
       scene.bgImage = scene.add.image(0, 0, bgKey)
@@ -37,18 +38,10 @@ export function setupBackground(scene, mapConfig, gameWidth, gameHeight, shopWid
         .setDepth(0);
       hasBgImage = true;
     } else {
-      scene.load.image(bgKey, mapConfig.background);
-      scene.load.once('complete', () => {
-        if (scene.textures.exists(bgKey)) {
-          scene.scene.restart({ mapConfig, soundOn: scene.soundOn });
-        } else {
-          scene.add.text(20, 20, `Background image NOT loaded: ${mapConfig.background}`, { font: '20px Arial', fill: '#f00' }).setDepth(10000);
-        }
-      });
-      scene.load.start();
-      scene.add.text(20, 50, `Background image missing or not loaded yet: ${mapConfig.background}`, { font: '20px Arial', fill: '#ff0' }).setDepth(10001);
+      console.warn(`Background texture ${bgKey} not preloaded. Game will proceed without background.`);
     }
   }
+  // Always create the main game area
   scene.mainArea = scene.add.graphics();
   scene.mainArea.fillStyle(0x000000, hasBgImage ? 0 : 1);
   scene.mainArea.fillRect(0, 0, gameWidth - shopWidth, gameHeight - infoBarHeight);
@@ -57,3 +50,4 @@ export function setupBackground(scene, mapConfig, gameWidth, gameHeight, shopWid
   scene.enemyGraphics.setDepth(20);
   scene.enemyGraphics.setVisible(true);
 }
+

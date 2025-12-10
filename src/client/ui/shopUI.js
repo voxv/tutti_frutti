@@ -44,12 +44,11 @@ export function drawShopUI(scene, gameWidth, gameHeight, shopWidth, infoBarHeigh
   const cellHeight = 100;
   const rows = Math.floor((gameHeight - infoBarHeight) / cellHeight);
   
-  // Draw the shop grid above the background but below tower images
-  if (scene.shopGrid) {
-    scene.shopGrid.clear();
-  } else {
-    scene.shopGrid = scene.add.graphics();
+  // Always create a new shopGrid graphics object to avoid issues after replay
+  if (scene.shopGrid && typeof scene.shopGrid.destroy === 'function') {
+    scene.shopGrid.destroy();
   }
+  scene.shopGrid = scene.add.graphics();
   scene.shopGrid.setDepth(3001); // Ensure grid is above background (22) and above all towers
   scene.shopGrid.lineStyle(3, 0x000000, 1);
 

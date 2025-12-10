@@ -355,7 +355,7 @@
     "type": "projectile",
     "class": "StarTower",
     "towerType": "star",
-    "cost": 650,
+    "cost": 660,
     "range": 110,
     "fireRate": 1.0,
     "damage": 1,

@@ -191,163 +191,12 @@ class BalouneScene extends Phaser.Scene {
             // Stop game over music and main game music
             musicManager.stopGameOverMusic(this);
             musicManager.stopMainMusic(this);
-            // Restart main game music
-            musicManager.playMainMusic(this);
             window.sceneRef = this;
             // Hide range circle before anything else
-            if (typeof hideRangeCircle === 'function') hideRangeCircle(this);
-            // Also clean up drag range circle if it exists
-            if (this.dragRangeCircle && typeof this.dragRangeCircle.destroy === 'function') {
-              this.dragRangeCircle.destroy();
-              this.dragRangeCircle = null;
-            }
-            // Destroy all graphics objects (range circles, etc)
-            if (this.children && this.children.list) {
-              const graphicsToDestroy = this.children.list.filter(child => child && child.type === 'Graphics');
-              graphicsToDestroy.forEach(graphic => {
-                if (typeof graphic.destroy === 'function') {
-                  graphic.destroy();
-                }
-              });
-            }
-            // Destroy upgrade UI and selected tower state
-            if (this.upgradeUI && typeof this.upgradeUI.destroy === 'function') {
-              this.upgradeUI.destroy();
-              this.upgradeUI = null;
-            }
-            if (this.upgradeTooltip && typeof this.upgradeTooltip.destroy === 'function') {
-              this.upgradeTooltip.destroy();
-              this.upgradeTooltip = null;
-            }
-            this.selectedTowerForUpgradeUI = null;
-            // Hide targeting buttons
-            if (this.targetingButtons && Array.isArray(this.targetingButtons)) {
-              if (typeof window !== 'undefined' && window.targetingUI && typeof window.targetingUI.hideTargetingButtons === 'function') {
-                window.targetingUI.hideTargetingButtons(this.targetingButtons);
-              } else if (this.targetingButtons.forEach) {
-                this.targetingButtons.forEach(btn => btn.setVisible(false));
-                if (this.targetingButtons.targetingLabel) this.targetingButtons.targetingLabel.setVisible(false);
-              }
-            }
-            // Reset gold to starting amount
-            this.goldAmount = STARTING_GOLD;
-            if (this.goldText) this.goldText.setText(String(this.goldAmount));
-            // Reset game state to wave 1
-            this.playerLives = this.maxPlayerLives;
-            this.waveNumber = 1;
-            this.currentWaveIndex = 0;
-            // Reset game state machine to buying phase
-            this.gameStateMachine.reset(GAME_PHASES.BUYING);
-            // Reset game logic state
-            sceneUtils.resetGameLogicState(this.gameLogic);
-            // Remove placed tower sprites
-            sceneUtils.removePlacedTowerSprites(this, this.gameLogic);
-            // Remove all projectiles and spikes
-            sceneUtils.removeAllProjectiles(this);
-            if (this.spikeProjectiles && Array.isArray(this.spikeProjectiles)) {
-              for (const spike of this.spikeProjectiles) {
-                if (spike && typeof spike.destroy === 'function') {
-                  spike.destroy();
-                }
-              }
-              this.spikeProjectiles = [];
-            }
-            // Remove all fruit sprites
-            sceneUtils.removeFruitSprites(this);
-            // Show game elements again
-            if (this.enemyGraphics) this.enemyGraphics.setVisible(true);
-            
-            // Update wave text display
-            if (this.waveText) {
-              this.waveText.setText(`Wave: ${this.waveNumber}`);
-            }
-            
-            // Destroy old button if it exists and recreate it
-            if (this.startWaveButton) {
-              this.startWaveButton.destroy();
-              this.startWaveButton = null;
-            }
-            const gameWidth = 1600;
-            const shopWidth = 220;
-            const infoBarHeight = 100;
-            this.startWaveButton = this.add.text(
-              gameWidth - shopWidth / 2,
-              this.sys.game.config.height - infoBarHeight / 2,
-              "Start Wave",
-              {
-                font: "28px Arial",
-                fill: "#00ff00",
-                backgroundColor: "#222",
-                padding: { x: 20, y: 10 }
-              }
-            ).setOrigin(0.5).setInteractive({ useHandCursor: true });
-            this.startWaveButton.setDepth(5000);
-            this.startWaveButton.input.enabled = true;
-            
-            // Add pointer event tracking
-            this.startWaveButton.on('pointerdown', () => {
-              if (!this.gameStateMachine.isInPhase(GAME_PHASES.BUYING) || !this.startWaveButton.input.enabled) return;
-              // If starting wave 50, play boss music
-              if (this.waveNumber === 50) {
-                // Stop main game music first
-                musicManager.stopMainMusic(this);
-                // Always stop boss music before playing
-                if (this.sound && this.sound.get('boss_music')) {
-                  this.sound.get('boss_music').stop();
-                }
-                if (this.soundOn !== false && this.cache.audio.exists('boss_music')) {
-                  this.sound.play('boss_music', { loop: true, volume: 0.8 });
-                }
-              }
-              transitionGamePhase(this, GAME_PHASES.SPAWNING);
-              this.startWaveButton.setStyle({ fill: "#888" });
-              this.startWaveButton.disableInteractive();
-              this._waveCompletionBonusAwarded = false;
-              this._waveEndTriggered = false;
-              spawnWave(this, this.gameLogic, this.currentWaveIndex);
-              this.currentWaveIndex++;
-            });
-            
-            // Redraw the info bar and shop UI backgrounds after replay
-            // Destroy old UI elements first
-            if (this.infoBar) this.infoBar.destroy();
-            if (this.goldText) this.goldText.destroy();
-            if (this.lifeBar) this.lifeBar.destroy();
-            if (this.lifeBarBg) this.lifeBarBg.destroy();
-            if (this.lifeText) this.lifeText.destroy();
-            if (this.heartImage) this.heartImage.destroy();
-            if (this.nuggetImage) this.nuggetImage.destroy();
-            drawInfoBarUI(this, gameWidth, this.sys.game.config.height, shopWidth, infoBarHeight);
-            // Update life bar to show full health after UI is recreated
-            this._updateLifeBar();
-            if (this.shopUI) this.shopUI.destroy();
-            if (this.shopGrid) {
-              this.shopGrid.destroy();
-              this.shopGrid = null;
-            }
-            drawShopUI(this, gameWidth, this.sys.game.config.height, shopWidth, infoBarHeight, towerConfig);
-
-            // Recreate the Wave: X label in the info bar
-            if (this.waveText) {
-              this.waveText.destroy();
-              this.waveText = null;
-            }
-            const startWaveBtnX = gameWidth - shopWidth / 2;
-            const waveTextX = startWaveBtnX - 200;
-            this.waveText = this.add.text(waveTextX, this.sys.game.config.height - infoBarHeight / 2, `Wave: ${this.waveNumber}`, {
-              font: "20px Arial",
-              fill: "#fff"
-            }).setOrigin(0, 0.5);
-          },
-          onQuit: () => {
-            this._gameOverShown = false;
-            // Hide range circles before anything else
-            if (typeof hideRangeCircle === 'function') hideRangeCircle(this);
-            // Also clean up drag range circle if it exists
-            if (this.dragRangeCircle && typeof this.dragRangeCircle.destroy === 'function') {
-              this.dragRangeCircle.destroy();
-              this.dragRangeCircle = null;
-            }
+            // Use Phaser's scene.restart to fully reset the scene and UI
+            // Always use the stored mapConfig for replay
+            const mapConfig = window._lastMapConfig || this._initialMapConfig;
+            this.scene.restart({ mapConfig, soundOn: this.soundOn });
             // Stop game over music if playing
             if (this.sound && this.sound.get('game_over_music')) {
               this.sound.get('game_over_music').stop();
@@ -663,14 +512,23 @@ class BalouneScene extends Phaser.Scene {
     // const shopWidth = 220;
     // const infoBarHeight = 100;
 
-    // Use mapConfig from data and modular setup
+    // Use mapConfig from data and store it globally for replay
     const mapConfig = data?.mapConfig;
-    sceneSetup.setupMapAndGameLogic(this, mapConfig);
+    // Also check if mapConfig is stored on window (for replay fallback)
+    const finalMapConfig = mapConfig || window._lastMapConfig;
+    // Store mapConfig globally so it persists across scene restarts
+    if (finalMapConfig) {
+      window._lastMapConfig = finalMapConfig;
+      this._initialMapConfig = finalMapConfig;
+    }
+    sceneSetup.setupMapAndGameLogic(this, finalMapConfig);
 
     // Modular background and graphics setup
-    sceneSetup.setupBackground(this, mapConfig, gameWidth, gameHeight, shopWidth, infoBarHeight);
+    console.log('[BalouneScene] Calling setupBackground');
+    sceneSetup.setupBackground(this, finalMapConfig, gameWidth, gameHeight, shopWidth, infoBarHeight);
 
     // Draw the shop UI using the modular function
+    console.log('[BalouneScene] Calling drawShopUI');
     drawShopUI(this, gameWidth, gameHeight, shopWidth, infoBarHeight, towerConfig);
 
         // Place tower at location - dynamically load and instantiate based on towerType
@@ -763,6 +621,7 @@ class BalouneScene extends Phaser.Scene {
     this._refreshShopAvailability = () => refreshShopAvailability(this);
 
     // Draw info bar, life bar, heart, and gold UI using the modular function
+    console.log('[BalouneScene] Calling drawInfoBarUI');
     drawInfoBarUI(this, gameWidth, gameHeight, shopWidth, infoBarHeight);
     // Provide a generic updateLifeBar method for the scene
     this._updateLifeBar = () => updateLifeBar(this);
@@ -858,54 +717,10 @@ class BalouneScene extends Phaser.Scene {
         onReplay: () => {
           this._gameOverShown = false;
           musicManager.stopGameOverMusic(this);
-          musicManager.playMainMusic(this);
           window.sceneRef = this;
-          if (typeof hideRangeCircle === 'function') hideRangeCircle(this);
-          cleanupSceneUI(this);
-          resetSceneUIElements(this);
-          // Redraw the shop UI to restore tower images
-          drawShopUI(this, 1600, 900, 220, 100, towerConfig);
-          // Update wave text
-          if (this.waveText) {
-            this.waveText.setText(`Wave: ${this.waveNumber}`);
-          }
-          // Destroy old button if it exists
-          if (this.startWaveButton) {
-            this.startWaveButton.destroy();
-            this.startWaveButton = null;
-          }
-          // Create new Start Wave button
-          this.startWaveButton = this.add.text(
-            gameWidth - shopWidth / 2,
-            this.sys.game.config.height - infoBarHeight / 2,
-            "Start Wave",
-            {
-              font: "28px Arial",
-              fill: "#00ff00",
-              backgroundColor: "#222",
-              padding: { x: 20, y: 10 }
-            }
-          ).setOrigin(0.5);
-          
-          // Ensure button is interactive and enabled
-          this.startWaveButton.setInteractive({ useHandCursor: true });
-          this.startWaveButton.input.enabled = true;
-          this.startWaveButton.setDepth(500);
-          
-          // Add event listener
-          this.startWaveButton.on("pointerdown", () => {
-            if (!this.gameStateMachine.isInPhase(GAME_PHASES.BUYING) || !this.startWaveButton.input.enabled) return;
-            transitionGamePhase(this, GAME_PHASES.SPAWNING);
-            this.startWaveButton.setStyle({ fill: "#888" });
-            this.startWaveButton.disableInteractive();
-            this._waveCompletionBonusAwarded = false;
-            this._waveEndTriggered = false;
-            spawnWave(this, this.gameLogic, this.currentWaveIndex);
-            this.currentWaveIndex++;
-          });
-          
-          // Reset UI elements now that button exists
-          sceneUtils.resetSceneUIElements(this);
+          // Always restart the scene to fully reset UI and game state
+          const mapConfig = window._lastMapConfig || this._initialMapConfig;
+          this.scene.restart({ mapConfig, soundOn: this.soundOn });
         },
         onQuit: () => {
           this._gameOverShown = false;
