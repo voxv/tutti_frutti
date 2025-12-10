@@ -524,11 +524,9 @@ class BalouneScene extends Phaser.Scene {
     sceneSetup.setupMapAndGameLogic(this, finalMapConfig);
 
     // Modular background and graphics setup
-    console.log('[BalouneScene] Calling setupBackground');
     sceneSetup.setupBackground(this, finalMapConfig, gameWidth, gameHeight, shopWidth, infoBarHeight);
 
     // Draw the shop UI using the modular function
-    console.log('[BalouneScene] Calling drawShopUI');
     drawShopUI(this, gameWidth, gameHeight, shopWidth, infoBarHeight, towerConfig);
 
         // Place tower at location - dynamically load and instantiate based on towerType
@@ -621,7 +619,6 @@ class BalouneScene extends Phaser.Scene {
     this._refreshShopAvailability = () => refreshShopAvailability(this);
 
     // Draw info bar, life bar, heart, and gold UI using the modular function
-    console.log('[BalouneScene] Calling drawInfoBarUI');
     drawInfoBarUI(this, gameWidth, gameHeight, shopWidth, infoBarHeight);
     // Provide a generic updateLifeBar method for the scene
     this._updateLifeBar = () => updateLifeBar(this);
