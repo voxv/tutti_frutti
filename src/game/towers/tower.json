@@ -473,7 +473,7 @@
   },
   "bomb": {
     "displayName": "Bomb Trap",
-    "description": "Explodes destroying all nearby fruits.",
+    "description": "Place on the road. Explodes destroying all nearby fruits.",
     "type": "trap",
     "class": "BombTrap",
     "towerType": "bomb_trap",
