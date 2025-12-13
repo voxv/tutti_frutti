@@ -462,11 +462,11 @@
     "type": "projectile",
     "class": "FireTower",
     "towerType": "fire",
-    "cost": 670,
+    "cost": 420,
     "range": 180,
-    "fireRate": 0.6,
+    "fireRate": 0.1,
     "damage": 2,
-    "fireLifespan": 1000,
+    "fireLifespan": 2000,
     "homing": false,
     "assets": {
       "shopImage": "/towers/dragon_shop.png",
@@ -484,16 +484,16 @@
     },
     "upgrades": {
       "lower": [
-        { "name": "Persistent Fire 1", "key": "persistent_fire_1", "cost": 280, "description": "Fireballs persist on the ground for a longer duration." },
-        { "name": "Rapid Fire 1", "key": "rapid_fire_1", "cost": 350, "description": "Increases the fire rate by 1." }
+        { "name": "Range Boost 1", "key": "bigger_range", "cost": 180, "description": "Increases the attack range." },
+        { "name": "Burning Shot", "key": "burning_shot", "cost": 350, "description": "Fireballs deal extra burn damage over time." }
       ],
       "medium": [
-        { "name": "Persistent Fire 2", "key": "persistent_fire_2 ", "cost": 360, "description": "Fireballs persist on the ground for an even longer duration." },
-        { "name": "Rapid Fire 2", "key": "rapid_fire_2", "cost": 520, "description": "Increases the fire rate by 1." }
+        { "name": "Range Boost 2", "key": "even_bigger_range", "cost": 260, "description": "Further increases the attack range." },
+        { "name": "Piercing Flames", "key": "piercing_flames", "cost": 420, "description": "Fireballs pierce through more fruits." }
       ],
       "high": [
-        { "name": "Persistent Fire 3", "key": "persistent_fire_3", "cost": 515, "description": "Fireballs persist on the ground for an even longer duration." },
-        { "name": "Rapid Fire 3", "key": "rapid_fire_3", "cost": 750, "description": "Increases the fire rate by 1." }
+        { "name": "Inferno", "key": "inferno", "cost": 600, "description": "Massively increases fire rate and damage." },
+        { "name": "Dragon's Breath", "key": "dragons_breath", "cost": 750, "description": "Fireballs explode in a small area." }
       ]
     }
   },

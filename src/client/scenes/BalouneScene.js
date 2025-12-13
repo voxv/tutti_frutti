@@ -375,6 +375,8 @@ class BalouneScene extends Phaser.Scene {
     this.load.spritesheet('kangaroo_anim', '/towers/kangaroo_anim.png', { frameWidth: 516, frameHeight: 800 });
     // Preload laser projectile spritesheet
     this.load.spritesheet('laser_anim', '/towers/projectiles/laser_anim2.png', { frameWidth: 195, frameHeight: 190 });
+    // Preload fire projectile spritesheet (7 frames of 97x133)
+    this.load.spritesheet('fire_anim', '/towers/projectiles/fire_anim.png', { frameWidth: 97, frameHeight: 133 });
     // Preload bzz sound for laser tower
     this.load.audio('bzz', '/sounds/bzz.wav');
     // Preload boom sound for explosions
@@ -606,18 +608,13 @@ class BalouneScene extends Phaser.Scene {
             // Add to towers array after sprite is linked
             this.gameLogic.towers.push(towerInst);
             const placedTower = towerInst._placedSprite;
-            // Deselect previous tower and select the new one
+            // Deselect previous tower (don't auto-select the newly placed tower)
             if (typeof window !== 'undefined' && window.inputHandlers && typeof window.inputHandlers.deselectTower === 'function') {
               window.inputHandlers.deselectTower(this);
             } else if (typeof this.deselectTower === 'function') {
               this.deselectTower();
             } else {
               this.selectedTowerForUpgradeUI = null;
-            }
-            // Select the newly placed tower for upgrade UI
-            this.selectedTowerForUpgradeUI = towerInst;
-            if (typeof this.showUpgradeUI === 'function') {
-              this.showUpgradeUI(towerInst);
             }
             
             // Initialize targeting priority and UI for towers that are NOT clumpspike or bomb_trap

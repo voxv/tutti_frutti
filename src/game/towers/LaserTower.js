@@ -128,7 +128,7 @@ export class LaserTower extends AOETower {
         let laserDamage = this.damage;
         // Check by class or type property
         if ((enemy.constructor && enemy.constructor.name === 'BossBloon') || enemy.type === 'boss') {
-          laserDamage = Math.round(this.damage * 4); // Double damage to boss, adjust as desired
+          laserDamage = Math.round(this.damage * 2); // Double damage to boss, adjust as desired
         }
         // Pass special value to mark as laser kill if this will destroy
         let wasAlive = enemy.isActive;

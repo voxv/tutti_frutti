@@ -221,9 +221,7 @@ export function showUpgradeUI(scene, placedTower, towerConfig) {
         const logicTower = (scene.gameLogic && Array.isArray(scene.gameLogic.towers))
           ? scene.gameLogic.towers.find(t => t._placedSprite === placedTower)
           : null;
-        console.log(`[upgradeUI] leftBtn clicked. logicTower found: ${logicTower !== null}, logicTower.towerType: ${logicTower?.towerType}, leftUpgrade.key: ${leftUpgrade.key}`);
         if (logicTower && typeof logicTower.applyUpgrade === 'function') {
-          console.log(`[upgradeUI] Calling applyUpgrade with key: ${leftUpgrade.key || leftUpgrade.name}`);
           logicTower.applyUpgrade(leftUpgrade.key || leftUpgrade.name);
         }
         scene.goldText.setText(String(scene.goldAmount));

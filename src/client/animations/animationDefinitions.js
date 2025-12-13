@@ -52,6 +52,16 @@ export function setupAnimations(scene, towerConfig, bloonsConfig) {
       });
     }
 
+    // Ensure fire_anim animation exists for the fire projectile (7 frames)
+    if (!scene.anims.exists('fire_anim')) {
+      scene.anims.create({
+        key: 'fire_anim',
+        frames: scene.anims.generateFrameNumbers('fire_anim', { start: 0, end: 6 }),
+        frameRate: 12,
+        repeat: -1
+      });
+    }
+
     // Ensure laser_shooter_anim animation exists for the laser tower projectile (normal order)
     if (towerConfig && towerConfig.laser && towerConfig.laser.assets && towerConfig.laser.assets.placedImage && towerConfig.laser.assets.animation) {
       const anim = towerConfig.laser.assets.animation;

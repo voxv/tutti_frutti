@@ -48,9 +48,9 @@ export class BirdTower extends ProjectileTower {
       } else {
         this._pendingInfinityBIncrease = (this._pendingInfinityBIncrease || 0) + 20;
       }
-      this.fireRate += 0.4;
+      this.fireRate += 0.5;
     } else if (upgradeKey === 'faster_bird_1' || upgradeKey === 'faster_bird_2' || upgradeKey === 'faster_bird_3') {
-      this.fireRate += 0.4;
+      this.fireRate += 0.5;
     } else if (upgradeKey === 'double_shot') {
       this._doubleShot = true;
     } else if (upgradeKey === 'triple_shot') {

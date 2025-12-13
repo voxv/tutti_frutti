@@ -1,6 +1,26 @@
 import { Tower } from "./Tower.js";
 
 export class DartMonkeyTower extends Tower {
+    static placeOnScene(scene, x, y) {
+      let range = 120;
+      if (scene && scene.towerConfig && scene.towerConfig.dart_monkey && scene.towerConfig.dart_monkey.range) {
+        range = scene.towerConfig.dart_monkey.range;
+      }
+      const tower = new DartMonkeyTower({ position: { x, y }, range });
+      const cellWidth = 100;
+      const cellHeight = 100;
+      const placedSprite = scene.add.sprite(x, y, 'dart_monkey_placed', 0)
+        .setDisplaySize(cellWidth * 0.7, cellHeight * 0.7)
+        .setDepth(8500)
+        .setAlpha(1)
+        .setInteractive({ useHandCursor: true });
+      placedSprite.towerType = 'dart_monkey';
+      placedSprite.towerX = x;
+      placedSprite.towerY = y;
+      placedSprite.towerRange = range;
+      tower._placedSprite = placedSprite;
+      return tower;
+    }
   constructor(config) {
     super({
       ...config,

@@ -159,7 +159,7 @@ export class ElephantTower extends ProjectileTower {
       texture: this.projectileTexture,
       target: target,
       homing: this.homing,
-      hitRadius: 60,  // Tornado hits multiple fruits in a very wide radius
+      hitRadius: 130,  // Tornado hits multiple fruits in a very wide radius
       maxHits: maxHits
     });
     // Create sprite with animation

@@ -180,7 +180,7 @@ export class SniperTower extends ProjectileTower {
             const dropProjectile = new BoulderProjectile({
               position: { x: dropX, y: -100 }, // Start above screen at target's X position or random path
               direction: { x: 0, y: 1 }, // Initial fall downward
-              speed: 800,
+              speed: 300,
               // Headshot: one-shot normal, but not boss
               damage: (this._headshot && targetBloon && (targetBloon.type !== 'boss' && targetBloon.constructor.name !== 'BossBloon'))
                 ? this.damage * 999
@@ -216,7 +216,7 @@ export class SniperTower extends ProjectileTower {
           if (idx !== -1) {
             this._pendingDrops.splice(idx, 1);
           }
-        }, 1000); // 2 second delay
+        }, 2000); // 2 second delay
         
         this._pendingDrops.push(dropTimeout);
       }

@@ -48,7 +48,7 @@ export class SpikeTower extends ProjectileTower {
       const cellHeight = 100;
       // Make the placed sprite smaller (e.g., 0.4x instead of 0.6x)
       const placedSprite = scene.add.sprite(x, y, 'spike_placed', 0)
-        .setDisplaySize(64, 64)
+        .setDisplaySize(57, 57)
         .setDepth(1001)
         .setAlpha(1)
         .setInteractive({ useHandCursor: true });
