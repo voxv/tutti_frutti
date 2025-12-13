@@ -24,7 +24,7 @@ export function drawShopUI(scene, gameWidth, gameHeight, shopWidth, infoBarHeigh
       // (Phaser 3.50+ supports BBCode in Text objects)
       // If not, fallback to plain text
     })
-      .setDepth(4000)
+      .setDepth(100000)
       .setVisible(false)
       .setScrollFactor(0)
       .setAlpha(0.99);

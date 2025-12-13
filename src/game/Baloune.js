@@ -175,7 +175,8 @@ export class Baloune extends Game {
         const dx = clump.sprite.x - enemy.position.x;
         const dy = clump.sprite.y - enemy.position.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
-        const clumpRadius = (clump.sprite.displayWidth || 60) * 0.5;
+          // Use a fixed larger hitbox for clump collision (e.g., 60 radius)
+          const clumpRadius = 40; // Only hitbox is larger, sprite stays small
         const enemyRadius = (enemy.radius || enemy.displayWidth || 32) * 0.5;
         if (dist < clumpRadius + enemyRadius) {
           // Hit detected: destroy fruit, decrement clump life

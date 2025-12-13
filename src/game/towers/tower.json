@@ -457,7 +457,7 @@
   },
   "clump": {
     "displayName": "Clump of Spikes",
-    "description": "Place on the road. Destroys fruits that touch it. 5 lives, shrinks as it is used.",
+    "description": "Place on the road. Destroys fruits that touch it.",
     "type": "clump",
     "class": "ClumpSpike",
     "towerType": "clump_spike",
@@ -473,7 +473,7 @@
   },
   "bomb": {
     "displayName": "Bomb Trap",
-    "description": "Place in the no-build zone near the path. Explodes on contact, destroying all nearby fruits.",
+    "description": "Explodes destroying all nearby fruits.",
     "type": "trap",
     "class": "BombTrap",
     "towerType": "bomb_trap",

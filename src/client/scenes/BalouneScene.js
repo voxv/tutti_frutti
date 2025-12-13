@@ -620,20 +620,16 @@ class BalouneScene extends Phaser.Scene {
               this.showUpgradeUI(towerInst);
             }
             
-            // Initialize targeting priority on both sprite and logic tower
-            // Hide targeting UI for clumpspike
-            if (placedTower.towerType !== 'clumpspike') {
+            // Initialize targeting priority and UI for towers that are NOT clumpspike or bomb_trap
+            const isTrap = placedTower.towerType === 'clumpspike' || placedTower.towerType === 'bomb_trap';
+            if (!isTrap) {
               sceneUtils.initializeTowerTargetingPriority(placedTower);
               sceneUtils.initializeTowerTargetingPriority(towerInst);
-            }
-            
-            // Update targeting buttons immediately when tower is placed
-            if (updateTargetingButtons && this.targetingButtons) {
-              updateTargetingButtons(this.targetingButtons, placedTower, this.gameLogic, AOETower);
-            }
-            
-            // Setup tower click handler for all except clumpspike
-            if (towerInst.towerType !== 'clumpspike') {
+              // Update targeting buttons immediately when tower is placed
+              if (updateTargetingButtons && this.targetingButtons) {
+                updateTargetingButtons(this.targetingButtons, placedTower, this.gameLogic, AOETower);
+              }
+              // Setup tower click handler
               setupTowerClickHandler(
                 placedTower,
                 this,

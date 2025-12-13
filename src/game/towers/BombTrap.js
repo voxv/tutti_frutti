@@ -70,7 +70,29 @@ export class BombTrap {
         this.destroy();
       }, duration);
     }
-    // Damage all fruits in radius (handled in collision logic)
+
+    // Damage all fruits/bloons in radius
+    const DAMAGE_RADIUS = 120;
+    const DAMAGE_AMOUNT = 3; // Adjust as needed for balance
+    if (this.scene && this.scene.gameLogic && Array.isArray(this.scene.gameLogic.enemies)) {
+      for (const enemy of this.scene.gameLogic.enemies) {
+        if (!enemy || !enemy.isActive) continue;
+        const dx = (enemy.position?.x ?? enemy.x ?? 0) - this.x;
+        const dy = (enemy.position?.y ?? enemy.y ?? 0) - this.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist <= DAMAGE_RADIUS) {
+          if (typeof enemy.takeDamage === 'function') {
+            enemy.takeDamage(DAMAGE_AMOUNT, 'bomb_trap');
+          } else if (typeof enemy.damage === 'number') {
+            enemy.damage -= DAMAGE_AMOUNT;
+            if (enemy.damage <= 0 && typeof enemy.destroy === 'function') {
+              enemy.destroy();
+              enemy.isActive = false;
+            }
+          }
+        }
+      }
+    }
   }
 
   destroy() {

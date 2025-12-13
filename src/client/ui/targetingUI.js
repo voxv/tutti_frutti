@@ -99,9 +99,10 @@ export function updateTargetingButtons(buttons, selectedTower, gameLogic, AOETow
   const isLaser = logicTower && logicTower.constructor && logicTower.constructor.name === 'LaserTower';
   const isSpike = logicTower && logicTower.constructor && logicTower.constructor.name === 'SpikeTower';
   const isClumpSpike = logicTower && logicTower.towerType === 'clumpspike';
+  const isBombTrap = logicTower && logicTower.towerType === 'bomb_trap';
 
-  // Hide targeting for clumpspike
-  if (isClumpSpike) {
+  // Hide targeting for clumpspike and bomb_trap
+  if (isClumpSpike || isBombTrap) {
     buttons.forEach(btn => btn.setVisible(false));
     if (buttons.targetingLabel) buttons.targetingLabel.setVisible(false);
     return;

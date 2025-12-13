@@ -9,7 +9,7 @@ export class ClumpSpike {
     this.maxLife = 5;
     this.life = 5;
     this.sprite = scene.add.sprite(x, y, 'clump_spike');
-    this.sprite.setDisplaySize(50, 50);
+      this.sprite.setDisplaySize(50, 50); // Keep original sprite size
     this.sprite.setDepth(9000);
     // Do NOT set interactive for clump spike (not clickable)
     this.sprite.setOrigin(0.5, 0.5);
