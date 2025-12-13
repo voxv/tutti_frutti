@@ -223,7 +223,7 @@
   },
   "elephant": {
     "displayName": "Elephant Tower",
-    "description": "Launches heavy projectiles at fruits with great force.",
+    "description": "Blows tornados that push back fruits.",
     "type": "projectile",
     "class": "ElephantTower",
     "towerType": "elephant",
