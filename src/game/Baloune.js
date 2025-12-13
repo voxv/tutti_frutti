@@ -148,7 +148,8 @@ export class Baloune extends Game {
   }
 
   update(deltaTime) {
-      if (!Array.isArray(this.currentWaveEnemies)) this.currentWaveEnemies = [];
+
+    if (!Array.isArray(this.currentWaveEnemies)) this.currentWaveEnemies = [];
     this.time += deltaTime;
 
     // Update enemies
@@ -162,6 +163,34 @@ export class Baloune extends Game {
 
     // Handle collisions
     this.handleCollisions();
+
+    // --- ClumpSpike collision with fruits ---
+    // Find all active clump spikes
+    const clumpSpikes = this.towers.filter(t => t && t.towerType === 'clumpspike' && t.active !== false && t.sprite);
+    for (const clump of clumpSpikes) {
+      if (!clump.sprite) continue;
+      for (const enemy of this.enemies) {
+        if (!enemy || !enemy.isActive) continue;
+        // Use bounding box or circle collision (simple distance check)
+        const dx = clump.sprite.x - enemy.position.x;
+        const dy = clump.sprite.y - enemy.position.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const clumpRadius = (clump.sprite.displayWidth || 60) * 0.5;
+        const enemyRadius = (enemy.radius || enemy.displayWidth || 32) * 0.5;
+        if (dist < clumpRadius + enemyRadius) {
+          // Hit detected: destroy fruit, decrement clump life
+          if (typeof clump.hit === 'function') clump.hit();
+          // If clump was destroyed by this hit, stop further checks for this clump
+          if (!clump.sprite) break;
+          if (typeof enemy.takeDamage === 'function') {
+            enemy.takeDamage(enemy.health);
+          } else if (typeof enemy.destroy === 'function') {
+            enemy.destroy();
+          }
+          enemy.isActive = false;
+        }
+      }
+    }
 
     // Cleanup inactive entities
     let removedThisFrame = 0;

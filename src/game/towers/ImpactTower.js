@@ -54,19 +54,14 @@ export class ImpactTower extends AOETower {
   }
 
   applyUpgrade(upgradeKey) {
-    console.log(`[ImpactTower] [ID ${this._impactTowerId}] Applying upgrade: ${upgradeKey}, current maxBloonsPerAttack: ${this.maxBloonsPerAttack}`, this);
     if (upgradeKey === 'bigger_impact') {
       this.maxBloonsPerAttack = 2; // Destroy 2 fruits
-      console.log(`[ImpactTower] bigger_impact applied, maxBloonsPerAttack now: ${this.maxBloonsPerAttack}`);
     } else if (upgradeKey === 'bigger_impact2') {
       this.maxBloonsPerAttack = 3; // Destroy 3 fruits
-      console.log(`[ImpactTower] bigger_impact2 applied, maxBloonsPerAttack now: ${this.maxBloonsPerAttack}`);
     } else if (upgradeKey === 'bigger_impact3') {
       this.maxBloonsPerAttack = 4; // Destroy 4 fruits
-      console.log(`[ImpactTower] bigger_impact3 applied, maxBloonsPerAttack now: ${this.maxBloonsPerAttack}`);
     } else if (upgradeKey === 'faster_impact' || upgradeKey === 'faster_impact2' || upgradeKey === 'faster_impact3') {
       this.fireRate += 0.5;
-      console.log(`[ImpactTower] ${upgradeKey} applied, fireRate now: ${this.fireRate}`);
       if (this._placedSprite && this._placedSprite.towerFireRate !== undefined) {
         this._placedSprite.towerFireRate = this.fireRate;
       }
@@ -79,7 +74,6 @@ export class ImpactTower extends AOETower {
     }
     if (!this.upgrades) this.upgrades = [];
     this.upgrades.push(upgradeKey);
-    console.log(`[ImpactTower] [ID ${this._impactTowerId}] Upgrades array after apply:`, this.upgrades, this);
   }
 
   update(deltaTime, enemies) {
@@ -163,7 +157,6 @@ export class ImpactTower extends AOETower {
       // Select up to maxBloonsPerAttack enemies (including the target)
       const maxBloons = this.maxBloonsPerAttack || 1;
       const targetedEnemies = bloonsInRange.slice(0, maxBloons);
-      console.log(`[ImpactTower fire] [ID ${this._impactTowerId}] maxBloonsPerAttack=${maxBloons}, bloonsInRange=${bloonsInRange.length}, targetedEnemies=${targetedEnemies.length}`, this);
       
       // Start attack animation if there are enemies to hit
       if (targetedEnemies.length > 0) {

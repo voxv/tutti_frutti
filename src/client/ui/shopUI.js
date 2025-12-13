@@ -2,6 +2,7 @@
 // Exports functions to create and refresh the shop UI
 
 import * as towerPlacement from "../logic/towerPlacement.js";
+import { GAME_PHASES } from "../state/gameStateManager.js";
 
 export function drawShopUI(scene, gameWidth, gameHeight, shopWidth, infoBarHeight, towerConfig) {
   // Draw tower shop (vertical panel on right)
@@ -174,6 +175,13 @@ export function drawShopUI(scene, gameWidth, gameHeight, shopWidth, infoBarHeigh
 export function refreshShopAvailability(scene) {
   if (!scene.shopTowerItems) return;
   const currentGold = typeof scene.goldAmount === 'number' ? scene.goldAmount : 0;
+  
+  // Check if currently in SPAWNING phase (for trap availability)
+  let isSpawning = false;
+  if (scene.gameStateMachine) {
+    isSpawning = scene.gameStateMachine.isInPhase && scene.gameStateMachine.isInPhase(GAME_PHASES.SPAWNING);
+  }
+  
   scene.shopTowerItems.forEach(item => {
     // Skip placeholder cells (no config)
     if (!item.config) {
@@ -182,11 +190,15 @@ export function refreshShopAvailability(scene) {
       return;
     }
     const canAfford = currentGold >= item.config.cost;
-    item.image.setAlpha(canAfford ? 1 : 0.07);
-    item.image.setInteractive({ useHandCursor: canAfford });
+    const isTrap = item.config.towerType === 'clump_spike' || item.config.towerType === 'bomb_trap';
+    // Traps are only available during wave (SPAWNING phase)
+    const isAvailable = canAfford && (!isTrap || isSpawning);
+    
+    item.image.setAlpha(isAvailable ? 1 : 0.07);
+    item.image.setInteractive({ useHandCursor: isAvailable });
     item.priceText.setStyle({
-      fill: canAfford ? '#008000' : '#888',
-      font: canAfford ? 'bold 14px Arial' : '14px Arial'
+      fill: isAvailable ? '#008000' : '#888',
+      font: isAvailable ? 'bold 14px Arial' : '14px Arial'
     });
   });
 }

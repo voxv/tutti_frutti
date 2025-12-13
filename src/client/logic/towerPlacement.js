@@ -1,5 +1,6 @@
 
 import { pointInPolygon } from "./noBuildUtils.js";
+import { GAME_PHASES } from "../state/gameStateManager.js";
 /**
  * Tower Placement and Drag/Drop Logic Module
  * Handles tower placement, drag-and-drop UI, and range circle display
@@ -42,6 +43,15 @@ export function setupTowerPlacement(scene, options = {}) {
  * @param {number} range - Tower range for display
  */
 export function startTowerDrag(scene, pointer, towerType, price, range) {
+  // Check if this is a trap (clump_spike or bomb_trap) - block if not spawning
+  const trapTowerTypes = ['clump_spike', 'bomb_trap'];
+  if (trapTowerTypes.includes(towerType) && scene.gameStateMachine) {
+    const isSpawning = scene.gameStateMachine.isInPhase && scene.gameStateMachine.isInPhase(GAME_PHASES.SPAWNING);
+    if (!isSpawning) {
+      return; // Can't drag trap when not spawning
+    }
+  }
+
   // Clean up any existing drag operations
   cleanupDrag(scene);
 
@@ -135,10 +145,18 @@ export function updateDragPosition(scene, pointer) {
   // Update range circle position and visuals only if not BirdTower
   if (scene.dragRangeCircle && scene.dragTowerRange && scene.dragTowerType !== 'bird') {
     scene.dragRangeCircle.clear();
-    if (inNoBuildZone || inShopOrInfoBar || tooCloseToOtherTower) {
-      scene.dragRangeCircle.fillStyle(0xff3333, 0.25); // reddish
-    } else {
+      const isClumpSpike = scene.dragTowerType === 'clump_spike';
+      const isBombTrap = scene.dragTowerType === 'bomb_trap';
+      let valid = false;
+      if (isClumpSpike || isBombTrap) {
+        valid = inNoBuildZone && !inShopOrInfoBar && !tooCloseToOtherTower;
+      } else {
+        valid = !inNoBuildZone && !inShopOrInfoBar && !tooCloseToOtherTower;
+      }
+    if (valid) {
       scene.dragRangeCircle.fillStyle(0x00ff00, 0.18); // green
+    } else {
+      scene.dragRangeCircle.fillStyle(0xff3333, 0.25); // reddish
     }
     scene.dragRangeCircle.fillCircle(pointer.x, pointer.y, scene.dragTowerRange);
   }
@@ -188,7 +206,14 @@ export function dropTower(scene, pointer, options = {}) {
     }
   }
 
-  if (isValidDropZone && !inNoBuildZone && !tooCloseToOtherTower && scene.dragTowerPrice !== null) {
+  // For clumpspike, allow placement ONLY inside no-build zone
+  // For all other towers, allow placement ONLY outside no-build zone
+    const isClumpSpike = scene.dragTowerType === 'clump_spike';
+    const isBombTrap = scene.dragTowerType === 'bomb_trap';
+    const canPlace = isValidDropZone &&
+      (((isClumpSpike || isBombTrap) && inNoBuildZone) || (!isClumpSpike && !isBombTrap && !inNoBuildZone)) &&
+      !tooCloseToOtherTower && scene.dragTowerPrice !== null;
+  if (canPlace) {
     // Only place if player can afford
     if (scene.goldAmount >= scene.dragTowerPrice) {
       if (typeof options.onPlaceTower === 'function') {

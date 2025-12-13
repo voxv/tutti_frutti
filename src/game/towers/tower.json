@@ -454,5 +454,46 @@
         { "name": "Strong Wind 3", "key": "storm_wind3", "cost": 600, "description": "Massive storm.", "maxHits": 5 }
       ]
     }
+  },
+  "clump": {
+    "displayName": "Clump of Spikes",
+    "description": "Place on the road. Destroys fruits that touch it. 5 lives, shrinks as it is used.",
+    "type": "clump",
+    "class": "ClumpSpike",
+    "towerType": "clump_spike",
+    "cost": 50,
+    "range": 0,
+    "fireRate": 0,
+    "damage": 0,
+    "upgrades": {},
+    "assets": {
+      "shopImage": "/towers/clump.png",
+      "placedImage": "/towers/clump.png"
+    }
+  },
+  "bomb": {
+    "displayName": "Bomb Trap",
+    "description": "Place in the no-build zone near the path. Explodes on contact, destroying all nearby fruits.",
+    "type": "trap",
+    "class": "BombTrap",
+    "towerType": "bomb_trap",
+    "cost": 60,
+    "range": 0,
+    "fireRate": 0,
+    "damage": 0,
+    "upgrades": {},
+    "assets": {
+      "shopImage": "/towers/bomb_shop.png",
+      "shopImageScale": 1.7,
+      "placedImage": "/towers/bomb_anim.png",
+      "animation": {
+        "key": "bomb_idle",
+        "frameWidth": 150,
+        "frameHeight": 150,
+        "frames": { "start": 0, "end": 2 },
+        "frameRate": 12,
+        "repeat": 0
+      }
+    }
   }
 }

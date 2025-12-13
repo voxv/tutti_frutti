@@ -6,6 +6,7 @@
 
 import * as towerPlacement from "../logic/towerPlacement.js";
 import { getAvailableTowers, getTowerShopInfo } from "../factories/towerFactory.js";
+import { GAME_PHASES } from "../state/gameStateManager.js";
 
 /**
  * Draw dynamic shop UI based on tower config
@@ -79,6 +80,15 @@ export function drawDynamicShopUI(scene, gameWidth, gameHeight, shopWidth, infoB
         return;
       }
 
+      // Check if this is a trap (clump_spike or bomb_trap) - only allow during SPAWNING phase
+      const isTrap = towerKey === 'clump' || towerKey === 'bomb';
+      if (isTrap && scene.gameStateMachine) {
+        const isSpawning = scene.gameStateMachine.isInPhase && scene.gameStateMachine.isInPhase(GAME_PHASES.SPAWNING);
+        if (!isSpawning) {
+          return; // Can't drag trap when not spawning
+        }
+      }
+
       // Start drag using modular placement function
       const range = config.range || 100;
       towerPlacement.startTowerDrag(scene, pointer, imgKey, config.cost, range, towerKey);
@@ -109,23 +119,32 @@ export function drawDynamicShopUI(scene, gameWidth, gameHeight, shopWidth, infoB
 }
 
 /**
- * Refresh shop availability based on current gold
+ * Refresh shop availability based on current gold and game phase
  * @param {Phaser.Scene} scene - The Phaser scene
  */
 export function refreshDynamicShopAvailability(scene) {
   if (!scene.shopTowerItems) return;
 
+  // Check if currently in SPAWNING phase (for trap availability)
+  let isSpawning = false;
+  if (scene.gameStateMachine) {
+    isSpawning = scene.gameStateMachine.isInPhase && scene.gameStateMachine.isInPhase(GAME_PHASES.SPAWNING);
+  }
+
   scene.shopTowerItems.forEach(item => {
     const canAfford = scene.goldAmount >= item.config.cost;
+    const isTrap = item.towerKey === 'clump' || item.towerKey === 'bomb';
+    // Traps are only available during wave (SPAWNING phase)
+    const isAvailable = canAfford && (!isTrap || isSpawning);
 
     // Update image
-    item.image.setAlpha(canAfford ? 1 : 0.07);
-    item.image.setInteractive({ useHandCursor: canAfford });
+    item.image.setAlpha(isAvailable ? 1 : 0.07);
+    item.image.setInteractive({ useHandCursor: isAvailable });
 
     // Update price text
     item.priceText.setStyle({
-      fill: canAfford ? '#008000' : '#888',
-      font: canAfford ? 'bold 14px Arial' : '14px Arial'
+      fill: isAvailable ? '#008000' : '#888',
+      font: isAvailable ? 'bold 14px Arial' : '14px Arial'
     });
   });
 }

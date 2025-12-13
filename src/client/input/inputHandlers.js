@@ -64,6 +64,10 @@ function handleGameFieldClick(scene, pointer) {
   }
 
   if (clickedTower) {
+    // Prevent clumpspike from being selected or triggering UI
+    if (clickedTower.towerType === 'clumpspike') {
+      return;
+    }
     // Always use the logic tower object for selection
     let logicTower = clickedTower;
     let sprite = logicTower._placedSprite;

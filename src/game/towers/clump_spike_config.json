@@ -1,0 +1,16 @@
+{
+  "displayName": "Clump of Spikes",
+  "description": "Place on the road. Destroys fruits that touch it. 5 lives, shrinks as it is used.",
+  "type": "clump",
+  "class": "ClumpSpike",
+  "towerType": "clump_spike",
+  "cost": 30,
+  "range": 0,
+  "fireRate": 0,
+  "damage": 0,
+  "upgrades": {},
+  "assets": {
+    "shopImage": "/towers/clump.png",
+    "placedImage": "/towers/clump.png"
+  }
+}

@@ -1,5 +1,7 @@
 // Tower Class Registry - Import all tower classes statically for Vite bundling
 import { KnifeTower } from './KnifeTower.js';
+import { BombTrap } from './BombTrap.js';
+import { ClumpSpike } from './ClumpSpike.js';
 import { CannonTower } from './CannonTower.js';
 import { GlacialTower } from './GlacialTower.js';
 import { LaserTower } from './LaserTower.js';
@@ -13,8 +15,10 @@ import { DartMonkeyTower } from './DartMonkeyTower.js';
  * Static registry of all tower classes
  * This ensures Vite bundles all classes and they're available at runtime
  */
-export const TOWER_REGISTRY = {
+const TOWER_REGISTRY = {
   KnifeTower,
+  BombTrap,
+  ClumpSpike,
   CannonTower,
   GlacialTower,
   LaserTower,

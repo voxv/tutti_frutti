@@ -7,6 +7,7 @@ import bloonsConfig from "../../game/enemies/bloons.json";
 import { showUpgradeUI, refreshUpgradeUIIfVisible } from "../ui/upgradeUI.js";
 import { spawnWave, parseWaveString } from "../logic/waveLogic.js";
 import { drawShopUI, refreshShopAvailability } from "../ui/shopUI.js";
+import { refreshDynamicShopAvailability } from "../ui/dynamicShopUI.js";
 import { drawInfoBarUI, updateLifeBar } from "../ui/infoBarUI.js";
 import { createTargetingButtons, updateTargetingButtons } from "../ui/targetingUI.js";
 import { AOETower } from "../../game/towers/AOETower.js";
@@ -531,6 +532,11 @@ class BalouneScene extends Phaser.Scene {
     // Setup game state machine
     setupGameStateMachine(this, GAME_PHASES.BUYING);
     
+    // Subscribe to phase changes to refresh shop availability (for trap availability)
+    this.gameStateMachine.onChange(() => {
+      refreshShopAvailability(this);
+    });
+    
     // Setup all game animations (pass bloonsConfig for dynamic bloon animations)
     setupAnimations(this, towerConfig, bloonsConfig);
     
@@ -555,6 +561,8 @@ class BalouneScene extends Phaser.Scene {
 
     // Draw the shop UI using the modular function
     drawShopUI(this, gameWidth, gameHeight, shopWidth, infoBarHeight, towerConfig);
+    // Ensure trap buttons are grayed out if not in SPAWNING phase
+    refreshShopAvailability(this);
 
         // Place tower at location - dynamically load and instantiate based on towerType
         this._placeTowerAt = async function(x, y, towerType, price) {
@@ -607,30 +615,35 @@ class BalouneScene extends Phaser.Scene {
               this.selectedTowerForUpgradeUI = null;
             }
             // Select the newly placed tower for upgrade UI
-            this.selectedTowerForUpgradeUI = placedTower;
+            this.selectedTowerForUpgradeUI = towerInst;
             if (typeof this.showUpgradeUI === 'function') {
-              this.showUpgradeUI(placedTower);
+              this.showUpgradeUI(towerInst);
             }
             
             // Initialize targeting priority on both sprite and logic tower
-            sceneUtils.initializeTowerTargetingPriority(placedTower);
-            sceneUtils.initializeTowerTargetingPriority(towerInst);
+            // Hide targeting UI for clumpspike
+            if (placedTower.towerType !== 'clumpspike') {
+              sceneUtils.initializeTowerTargetingPriority(placedTower);
+              sceneUtils.initializeTowerTargetingPriority(towerInst);
+            }
             
             // Update targeting buttons immediately when tower is placed
             if (updateTargetingButtons && this.targetingButtons) {
               updateTargetingButtons(this.targetingButtons, placedTower, this.gameLogic, AOETower);
             }
             
-            // Setup tower click handler using modular input function
-            setupTowerClickHandler(
-              placedTower,
-              this,
-              this.gameLogic,
-              showRangeCircle,
-              updateTargetingButtons,
-              AOETower,
-              sceneUtils
-            );
+            // Setup tower click handler for all except clumpspike
+            if (towerInst.towerType !== 'clumpspike') {
+              setupTowerClickHandler(
+                placedTower,
+                this,
+                this.gameLogic,
+                showRangeCircle,
+                updateTargetingButtons,
+                AOETower,
+                sceneUtils
+              );
+            }
             
             // Deduct gold using utility function
             sceneUtils.deductGold(this, price);

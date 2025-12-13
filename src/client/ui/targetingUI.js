@@ -90,6 +90,7 @@ export function createTargetingButtons(scene, gameHeight, infoBarHeight, gameLog
  * @param {Class} AOETower - AOETower class for type checking
  */
 export function updateTargetingButtons(buttons, selectedTower, gameLogic, AOETower) {
+
   if (!buttons || buttons.length === 0) return;
 
   // Find the logic tower object
@@ -97,6 +98,14 @@ export function updateTargetingButtons(buttons, selectedTower, gameLogic, AOETow
   const isAOE = AOETower && typeof AOETower === 'function' ? logicTower instanceof AOETower : false;
   const isLaser = logicTower && logicTower.constructor && logicTower.constructor.name === 'LaserTower';
   const isSpike = logicTower && logicTower.constructor && logicTower.constructor.name === 'SpikeTower';
+  const isClumpSpike = logicTower && logicTower.towerType === 'clumpspike';
+
+  // Hide targeting for clumpspike
+  if (isClumpSpike) {
+    buttons.forEach(btn => btn.setVisible(false));
+    if (buttons.targetingLabel) buttons.targetingLabel.setVisible(false);
+    return;
+  }
 
   // Show/hide the Targeting label if present
   if (buttons.targetingLabel) {

@@ -82,64 +82,18 @@ export function refreshUpgradeUIIfVisible(scene, towerConfig) {
   }
 }
 export function showUpgradeUI(scene, placedTower, towerConfig) {
-  // Clear any existing circles from previously selected tower
-  if (scene.activeTowerRangeCircle && scene.activeTowerRangeCircle.destroy) {
-    scene.activeTowerRangeCircle.destroy();
-    scene.activeTowerRangeCircle = null;
+  // Hide upgrade UI for clumpspike (must be first)
+  if (placedTower && placedTower.towerType === 'clumpspike') {
+    if (scene.upgradeUI) scene.upgradeUI.setVisible(false);
+    return;
   }
-  if (scene._birdSelectCircle && scene._birdSelectCircle.destroy) {
-    scene._birdSelectCircle.destroy();
-    scene._birdSelectCircle = null;
+  // Hide upgrade UI for bomb_trap
+  if (placedTower && placedTower.towerType === 'bomb_trap') {
+    if (scene.upgradeUI) scene.upgradeUI.setVisible(false);
+    return;
   }
   
-  // Only hide tooltip if switching towers
-  if (scene.selectedTowerForUpgradeUI !== placedTower) {
-    if (scene.upgradeTooltip && scene.upgradeTooltip.setVisible) {
-      scene.upgradeTooltip.setVisible(false);
-    }
-  }
-  // Only destroy and recreate UI if switching towers
-  if (scene.upgradeUI && scene.selectedTowerForUpgradeUI !== placedTower) {
-    scene.upgradeUI.destroy();
-    scene.upgradeUI = null;
-  }
-  scene.selectedTowerForUpgradeUI = placedTower;
-  // Always create a new container if needed
-  if (!scene.upgradeUI) {
-    scene.upgradeUI = scene.add.container(0, 0);
-  }
-  // Tooltip for upgrade descriptions: create once per scene, not per UI
-  if (!scene.upgradeTooltip) {
-    scene.upgradeTooltip = scene.add.text(0, 0, '', {
-      font: '16px Arial',
-      fill: '#fff',
-      backgroundColor: 'rgba(40,40,40,0.92)',
-      padding: { x: 12, y: 8 },
-      wordWrap: { width: 260 },
-      align: 'left',
-      alpha: 0.95,
-      zIndex: 9999
-    }).setVisible(false).setDepth(9999);
-  }
-  let upgradeTooltip = scene.upgradeTooltip;
-  // Ensure container is visible
-  scene.upgradeUI.setVisible(true);
-  // Remove all children before rebuilding, but do NOT destroy the container
-  if (scene.upgradeUI.list && scene.upgradeUI.list.length > 0) {
-    scene.upgradeUI.removeAll(true);
-  }
-  // Position at bottom center above info bar
-  const gameWidth = 1200;
-  const gameHeight = 900;
-  const infoBarHeight = 100;
-  const baseY = gameHeight - infoBarHeight / 2;
-  const baseX = gameWidth / 2;
-  const boxWidth = 140; // approximate width of each box
-  const gap = 70; // increased gap between boxes for more space
-  const offset = (boxWidth / 2) + (gap / 2); // centers separated by boxWidth + gap
-  const sellBtnOffset = offset + boxWidth + 30; // right of upgrades
-  if (!placedTower.unlockedUpgrades) placedTower.unlockedUpgrades = { left: 0, right: 0 };
-  // Map towerType to config key
+  // Get upgrades config for this tower
   const towerTypeToConfigKey = {
     'knife_tower': 'knife',
     'cannon': 'cannon',
@@ -148,13 +102,42 @@ export function showUpgradeUI(scene, placedTower, towerConfig) {
   };
   const configKey = towerTypeToConfigKey[placedTower.towerType] || placedTower.towerType;
   const upgrades = towerConfig[configKey]?.upgrades;
-  console.log(`[upgradeUI] configKey: ${configKey}, towerConfig[configKey]:`, towerConfig[configKey], upgrades);
   
-  // Guard: if upgrades don't exist for this tower, don't show UI
-  if (!upgrades) {
+  if (!upgrades || Object.keys(upgrades).length === 0) {
+    // No upgrades for this tower, hide UI
     if (scene.upgradeUI) scene.upgradeUI.setVisible(false);
     return;
   }
+  
+  // Destroy existing UI if present
+  if (scene.upgradeUI && typeof scene.upgradeUI.destroy === 'function') {
+    scene.upgradeUI.destroy();
+  }
+  
+  // Create new UI container
+  scene.upgradeUI = scene.add.container(0, 0);
+  
+  // Create or reset tooltip
+  if (!scene.upgradeTooltip || scene.upgradeTooltip._destroyed) {
+    scene.upgradeTooltip = scene.add.text(0, 0, '', {
+      font: '14px Arial',
+      fill: '#333',
+      backgroundColor: '#ffffcc',
+      padding: { left: 8, right: 8, top: 6, bottom: 6 },
+      wordWrap: { width: 200 }
+    }).setOrigin(0.5).setVisible(false).setDepth(5000);
+    scene.upgradeTooltip._destroyed = false;
+  }
+  const upgradeTooltip = scene.upgradeTooltip;
+  
+  // Position UI elements in bottom screen
+  const baseX = 650; // Left of center
+  const baseY = 845; // Bottom screen area (info bar)
+  const offset = 110;
+  const sellBtnOffset = 280;
+  
+  // Initialize unlockedUpgrades if missing
+  if (!placedTower.unlockedUpgrades) placedTower.unlockedUpgrades = { left: 0, right: 0 };
   
   const leftTier = placedTower.unlockedUpgrades.left;
   const rightTier = placedTower.unlockedUpgrades.right;
