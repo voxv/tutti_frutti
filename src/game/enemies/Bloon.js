@@ -90,7 +90,41 @@ export class Bloon extends Enemy {
     }
   }
 
+  // Tornado knockback: push bloon backward for a short time
+  knockback(duration = 0.5, speedMultiplier = 3) {
+    if (this._knockbackTimer) return; // Already being knocked back
+    this._knockbackTimer = duration;
+    this._knockbackSpeed = (this._originalSpeed || this.speed) * speedMultiplier;
+    this._knockbackDirection = -1; // Move backward
+    if (this._sprite) {
+      this._sprite.setTint(0x00ffcc); // Cyan tint for knockback
+    }
+  }
+
   update(deltaTime) {
+    // --- Knockback logic ---
+    if (this._knockbackTimer && this._knockbackTimer > 0) {
+      this._knockbackTimer -= deltaTime;
+      const speedMultiplier = (typeof window !== 'undefined' && window.BLOON_SPEED_MULTIPLIER) ? window.BLOON_SPEED_MULTIPLIER : 1;
+      this.distanceTraveled -= this._knockbackSpeed * speedMultiplier * deltaTime;
+      if (this.distanceTraveled < 0) this.distanceTraveled = 0;
+      this.progress = this._distanceToProgress(this.distanceTraveled);
+      let pos = null;
+      if (this.path.spline && typeof this.path.spline.getPoint === 'function') {
+        pos = this.path.spline.getPoint(this.progress);
+      }
+      if (pos) {
+        this.position.x = pos.x;
+        this.position.y = pos.y;
+      }
+      if (this._knockbackTimer <= 0) {
+        this._knockbackTimer = 0;
+        this._knockbackSpeed = 0;
+        this._knockbackDirection = 1;
+        if (this._sprite) this._sprite.clearTint();
+      }
+      return;
+    }
     // --- Freeze logic ---
     if (this._frozenUntil && Date.now() < this._frozenUntil) {
       // If frozen, skip movement and keep bright white tint

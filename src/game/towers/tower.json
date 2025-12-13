@@ -414,5 +414,45 @@
         { "name": "Faster Impact 3", "key": "massive_impact3", "cost": 500, "description": "Increases damage massively." }
       ]
     }
-  }  
+  },
+  "elephant": {
+    "displayName": "Elephant Tower",
+    "description": "Launches heavy projectiles at fruits with great force.",
+    "type": "projectile",
+    "class": "ElephantTower",
+    "towerType": "elephant",
+    "cost": 200,
+    "range": 140,
+    "fireRate": 1.2,
+    "damage": 2,
+    "homing": false,
+    "assets": {
+      "shopImage": "/towers/elephant_shop.png",
+      "shopImageScale": 1.5,
+      "placedImage": "/towers/elephant_anim.png",
+      "animation": {
+        "key": "elephant_tower_anim",
+        "frameWidth": 350,
+        "frameHeight": 350,
+        "frames": { "start": 0, "end": 2 },
+        "frameRate": 8,
+        "repeat": -1
+      },
+      "projectile": "/towers/projectiles/tornado_anim.png"
+    },
+    "upgrades": {
+      "lower": [
+        { "name": "Range Boost 1", "key": "bigger_range", "cost": 250, "description": "Increases the attack range." },
+        { "name": "Strong Wind 1", "key": "storm_wind1", "cost": 350, "description": "Wind blows harder pushing back more fruits.", "maxHits": 3 }
+      ],
+      "medium": [
+        { "name": "Range Boost 2", "key": "even_bigger_range", "cost": 320, "description": "Further increases the attack range." },
+        { "name": "Strong Wind 2", "key": "storm_wind2", "cost": 420, "description": "Wind blows even harder.", "maxHits": 4 }
+      ],
+      "high": [
+        { "name": "WorldWide Range", "key": "world_wide_range", "cost": 480, "description": "Massively increases the attack range." },
+        { "name": "Strong Wind 3", "key": "storm_wind3", "cost": 600, "description": "Massive storm.", "maxHits": 5 }
+      ]
+    }
+  }
 }

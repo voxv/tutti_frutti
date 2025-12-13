@@ -385,12 +385,20 @@ class BalouneScene extends Phaser.Scene {
         const keyName = config.towerType || key;
         this.load.image(keyName, config.assets.shopImage);
       }
-      // Load placed image as spritesheet if animation config exists
+    // Load placed image as spritesheet if animation config exists
       if (config.assets?.placedImage && config.assets?.animation) {
         this.load.spritesheet(`${key}_placed`, config.assets.placedImage, {
           frameWidth: config.assets.animation.frameWidth,
           frameHeight: config.assets.animation.frameHeight
         });
+        // Also load with animation key if different from ${key}_placed
+        const animKey = config.assets.animation.key || `${key}_placed`;
+        if (animKey !== `${key}_placed`) {
+          this.load.spritesheet(animKey, config.assets.placedImage, {
+            frameWidth: config.assets.animation.frameWidth,
+            frameHeight: config.assets.animation.frameHeight
+          });
+        }
       } else if (config.assets?.placedImage) {
         this.load.image(`${key}_placed`, config.assets.placedImage);
       }
@@ -404,6 +412,8 @@ class BalouneScene extends Phaser.Scene {
     this.load.image('boulder', '/towers/projectiles/boulder.png');
     // Load sniper projectile image
     this.load.image('sniper_projectile', '/towers/projectiles/sniper_projectile.png');
+    // Load tornado projectile spritesheet for elephant tower
+    this.load.spritesheet('tornado_anim', '/towers/projectiles/tornado_anim.png', { frameWidth: 135, frameHeight: 134 });
     // Load squirt sound for bloon destruction
     this.load.audio('squirt', '/sounds/squirt.wav');
     // Load nugget image for gold display

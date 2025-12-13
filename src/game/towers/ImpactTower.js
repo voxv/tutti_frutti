@@ -56,16 +56,16 @@ export class ImpactTower extends AOETower {
   applyUpgrade(upgradeKey) {
     console.log(`[ImpactTower] [ID ${this._impactTowerId}] Applying upgrade: ${upgradeKey}, current maxBloonsPerAttack: ${this.maxBloonsPerAttack}`, this);
     if (upgradeKey === 'bigger_impact') {
-      this.maxBloonsPerAttack = 3; // Destroy 2 fruits
+      this.maxBloonsPerAttack = 2; // Destroy 2 fruits
       console.log(`[ImpactTower] bigger_impact applied, maxBloonsPerAttack now: ${this.maxBloonsPerAttack}`);
     } else if (upgradeKey === 'bigger_impact2') {
-      this.maxBloonsPerAttack = 4; // Destroy 3 fruits
+      this.maxBloonsPerAttack = 3; // Destroy 3 fruits
       console.log(`[ImpactTower] bigger_impact2 applied, maxBloonsPerAttack now: ${this.maxBloonsPerAttack}`);
     } else if (upgradeKey === 'bigger_impact3') {
-      this.maxBloonsPerAttack = 5; // Destroy 4 fruits
+      this.maxBloonsPerAttack = 4; // Destroy 4 fruits
       console.log(`[ImpactTower] bigger_impact3 applied, maxBloonsPerAttack now: ${this.maxBloonsPerAttack}`);
     } else if (upgradeKey === 'faster_impact' || upgradeKey === 'faster_impact2' || upgradeKey === 'faster_impact3') {
-      this.fireRate += 0.7;
+      this.fireRate += 0.5;
       console.log(`[ImpactTower] ${upgradeKey} applied, fireRate now: ${this.fireRate}`);
       if (this._placedSprite && this._placedSprite.towerFireRate !== undefined) {
         this._placedSprite.towerFireRate = this.fireRate;
@@ -174,7 +174,12 @@ export class ImpactTower extends AOETower {
       
       // Damage all targeted bloons
       for (const enemy of targetedEnemies) {
-        enemy.takeDamage(this.damage);
+        // Deal extra damage to boss bloons
+        if (enemy.constructor && enemy.constructor.name === 'BossBloon') {
+          enemy.takeDamage(this.damage * 5); // 5x damage to boss, adjust as needed
+        } else {
+          enemy.takeDamage(this.damage);
+        }
         // Award gold if bloon is destroyed and NOT at end
         if (!enemy.isActive && !(enemy.isAtEnd && enemy.isAtEnd()) && typeof window.sceneRef === 'object' && window.sceneRef) {
           window.sceneRef.goldAmount += enemy.reward;
