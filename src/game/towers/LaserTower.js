@@ -124,9 +124,15 @@ export class LaserTower extends AOETower {
         continue; // skip if in cooldown
       }
       if (!enemy._lastLaserHitTime || (performance.now() - enemy._lastLaserHitTime > 200)) {
+        // Increase damage for BossBloon only
+        let laserDamage = this.damage;
+        // Check by class or type property
+        if ((enemy.constructor && enemy.constructor.name === 'BossBloon') || enemy.type === 'boss') {
+          laserDamage = Math.round(this.damage * 4); // Double damage to boss, adjust as desired
+        }
         // Pass special value to mark as laser kill if this will destroy
         let wasAlive = enemy.isActive;
-        const willDestroy = (enemy.health - this.damage <= 0);
+        const willDestroy = (enemy.health - laserDamage <= 0);
         if (willDestroy) {
           // Propagate tower upgrades to the bloon for child cooldown logic
           if (this.upgrades) {
@@ -167,7 +173,7 @@ export class LaserTower extends AOETower {
             }, 60);
           }
         } else {
-          enemy.takeDamage(this.damage);
+          enemy.takeDamage(laserDamage);
         }
         // Award gold if the enemy was alive and is now dead
         if (wasAlive && !enemy.isActive && typeof enemy.reward === 'number' && window.sceneRef) {

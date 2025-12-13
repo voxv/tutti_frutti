@@ -10,7 +10,8 @@ function updateUpgradeButtonAffordability(scene, placedTower, towerConfig) {
   const towerTypeToConfigKey = {
     'knife_tower': 'knife',
     'cannon': 'cannon',
-    'glacial': 'glacial'
+    'glacial': 'glacial',
+    'impact': 'impact'
   };
   const configKey = towerTypeToConfigKey[placedTower.towerType] || placedTower.towerType;
   const upgrades = towerConfig[configKey]?.upgrades;
@@ -21,12 +22,23 @@ function updateUpgradeButtonAffordability(scene, placedTower, towerConfig) {
   const rightTier = placedTower.unlockedUpgrades.right;
   
   let leftUpgrade, rightUpgrade;
-  if (leftTier < 1) {
-    leftUpgrade = upgrades.lower[0];
-  } else if (leftTier < 2) {
-    leftUpgrade = upgrades.medium[0];
-  } else if (leftTier < 3) {
-    leftUpgrade = upgrades.high[0];
+  // Special case: ImpactTower uses its own left upgrade (not range)
+  if (placedTower.towerType === 'impact') {
+    if (leftTier < 1) {
+      leftUpgrade = upgrades.lower[0];
+    } else if (leftTier < 2) {
+      leftUpgrade = upgrades.medium[0];
+    } else if (leftTier < 3) {
+      leftUpgrade = upgrades.high[0];
+    }
+  } else {
+    if (leftTier < 1) {
+      leftUpgrade = upgrades.lower[0];
+    } else if (leftTier < 2) {
+      leftUpgrade = upgrades.medium[0];
+    } else if (leftTier < 3) {
+      leftUpgrade = upgrades.high[0];
+    }
   }
   
   if (rightTier < 1) {
@@ -131,10 +143,12 @@ export function showUpgradeUI(scene, placedTower, towerConfig) {
   const towerTypeToConfigKey = {
     'knife_tower': 'knife',
     'cannon': 'cannon',
-    'glacial': 'glacial'
+    'glacial': 'glacial',
+    'impact': 'impact'
   };
   const configKey = towerTypeToConfigKey[placedTower.towerType] || placedTower.towerType;
   const upgrades = towerConfig[configKey]?.upgrades;
+  console.log(`[upgradeUI] configKey: ${configKey}, towerConfig[configKey]:`, towerConfig[configKey], upgrades);
   
   // Guard: if upgrades don't exist for this tower, don't show UI
   if (!upgrades) {
@@ -145,18 +159,35 @@ export function showUpgradeUI(scene, placedTower, towerConfig) {
   const leftTier = placedTower.unlockedUpgrades.left;
   const rightTier = placedTower.unlockedUpgrades.right;
   let leftUpgrade, rightUpgrade, leftText, rightText;
-  if (leftTier < 1) {
-    leftUpgrade = upgrades.lower[0];
-    leftText = leftUpgrade.name + '\n$' + leftUpgrade.cost;
-  } else if (leftTier < 2) {
-    leftUpgrade = upgrades.medium[0];
-    leftText = leftUpgrade.name + '\n$' + leftUpgrade.cost;
-  } else if (leftTier < 3) {
-    leftUpgrade = upgrades.high[0];
-    leftText = leftUpgrade.name + '\n$' + leftUpgrade.cost;
+  // Special case: ImpactTower uses its own left upgrade (not range)
+  if (placedTower.towerType === 'impact') {
+    if (leftTier < 1) {
+      leftUpgrade = upgrades.lower[0];
+      leftText = leftUpgrade.name + '\n$' + leftUpgrade.cost;
+    } else if (leftTier < 2) {
+      leftUpgrade = upgrades.medium[0];
+      leftText = leftUpgrade.name + '\n$' + leftUpgrade.cost;
+    } else if (leftTier < 3) {
+      leftUpgrade = upgrades.high[0];
+      leftText = leftUpgrade.name + '\n$' + leftUpgrade.cost;
+    } else {
+      leftUpgrade = null;
+      leftText = 'MAX';
+    }
   } else {
-    leftUpgrade = null;
-    leftText = 'MAX';
+    if (leftTier < 1) {
+      leftUpgrade = upgrades.lower[0];
+      leftText = leftUpgrade.name + '\n$' + leftUpgrade.cost;
+    } else if (leftTier < 2) {
+      leftUpgrade = upgrades.medium[0];
+      leftText = leftUpgrade.name + '\n$' + leftUpgrade.cost;
+    } else if (leftTier < 3) {
+      leftUpgrade = upgrades.high[0];
+      leftText = leftUpgrade.name + '\n$' + leftUpgrade.cost;
+    } else {
+      leftUpgrade = null;
+      leftText = 'MAX';
+    }
   }
   if (rightTier < 1) {
     rightUpgrade = upgrades.lower[1];
@@ -207,7 +238,9 @@ export function showUpgradeUI(scene, placedTower, towerConfig) {
         const logicTower = (scene.gameLogic && Array.isArray(scene.gameLogic.towers))
           ? scene.gameLogic.towers.find(t => t._placedSprite === placedTower)
           : null;
+        console.log(`[upgradeUI] leftBtn clicked. logicTower found: ${logicTower !== null}, logicTower.towerType: ${logicTower?.towerType}, leftUpgrade.key: ${leftUpgrade.key}`);
         if (logicTower && typeof logicTower.applyUpgrade === 'function') {
+          console.log(`[upgradeUI] Calling applyUpgrade with key: ${leftUpgrade.key || leftUpgrade.name}`);
           logicTower.applyUpgrade(leftUpgrade.key || leftUpgrade.name);
         }
         scene.goldText.setText(String(scene.goldAmount));

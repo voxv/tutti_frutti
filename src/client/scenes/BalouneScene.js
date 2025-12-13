@@ -10,6 +10,7 @@ import { drawShopUI, refreshShopAvailability } from "../ui/shopUI.js";
 import { drawInfoBarUI, updateLifeBar } from "../ui/infoBarUI.js";
 import { createTargetingButtons, updateTargetingButtons } from "../ui/targetingUI.js";
 import { AOETower } from "../../game/towers/AOETower.js";
+import { ImpactTower } from "../../game/towers/ImpactTower.js";
 import { SniperTower } from "../../game/towers/SniperTower.js";
 import { addSpikeProjectile } from "../../game/towers/spikeProjectile.js";
 import { StarTower } from "../../game/towers/StarTower.js";
@@ -31,9 +32,9 @@ import * as musicManager from "../utils/musicManager.js";
 
 
 // DEV: Set this to start from a specific wave for testing
-const DEV_START_WAVE = 1 // Set to 1 for normal, or e.g. 5 to start from wave 5
+const DEV_START_WAVE = 8 // Set to 1 for normal, or e.g. 5 to start from wave 5
 
-const SKIP_SURVIVE_50_POPUP = false;
+const SKIP_SURVIVE_50_POPUP = true;
 
 // DEV: Set this to control the overall size of all bloons (default 1)
 const BLOON_SIZE_MULTIPLIER = 1.1;
@@ -42,10 +43,10 @@ const BLOON_SIZE_MULTIPLIER = 1.1;
 const PLACED_TOWER_SIZE_MULTIPLIER = 1.2;
 
 // DEV: Set this to control the overall speed of all bloons (default 1)
-const BLOON_SPEED_MULTIPLIER = 1.2;
+const BLOON_SPEED_MULTIPLIER = 1.0;
 
 // DEV: Set the starting gold amount for the player
-const STARTING_GOLD = 650;
+const STARTING_GOLD = 23650;
 
 // Ensure the global variables are set from here if not already set
 if (typeof window !== 'undefined') {
@@ -200,6 +201,22 @@ class BalouneScene extends Phaser.Scene {
             // Stop game over music if playing
             if (this.sound && this.sound.get('game_over_music')) {
               this.sound.get('game_over_music').stop();
+            }
+            // Completely clear the scene before leaving
+            if (this.children && this.children.list) {
+              const allChildren = [...this.children.list];
+              allChildren.forEach(child => {
+                if (child && typeof child.destroy === 'function') {
+                  child.destroy();
+                }
+              });
+            }
+          },
+          onQuit: () => {
+            this._gameOverShown = false;
+            // Stop win sound if playing
+            if (this.sound && this.sound.get('win')) {
+              this.sound.get('win').stop();
             }
             // Completely clear the scene before leaving
             if (this.children && this.children.list) {

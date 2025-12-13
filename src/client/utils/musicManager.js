@@ -29,7 +29,9 @@ export function playBossMusic(scene) {
 }
 
 export function stopBossMusic(scene) {
-  if (scene.sound && scene.sound.get('boss_music')) {
+  if (scene.sound && scene.sound.getAll) {
+    scene.sound.getAll('boss_music').forEach(snd => snd.stop());
+  } else if (scene.sound && scene.sound.get('boss_music')) {
     scene.sound.get('boss_music').stop();
   }
 }

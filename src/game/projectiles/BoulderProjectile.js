@@ -95,7 +95,12 @@ export class BoulderProjectile extends Projectile {
 
   onHit(enemy) {
     if (enemy && typeof enemy.takeDamage === 'function') {
-      enemy.takeDamage(this.damage);
+      let dmg = this.damage;
+      // If this is a BirdTower projectile and enemy is BossBloon, increase damage
+      if (this.sourceTower && this.sourceTower.towerType === 'bird' && (enemy.constructor?.name === 'BossBloon' || enemy.type === 'boss')) {
+        dmg = Math.round(this.damage * 4); // Double damage to boss, adjust as needed
+      }
+      enemy.takeDamage(dmg);
     }
     // Award gold if bloon is destroyed and NOT at end
     if (enemy && !enemy.isActive && !(enemy.isAtEnd && enemy.isAtEnd()) && typeof window.sceneRef === 'object' && window.sceneRef) {
