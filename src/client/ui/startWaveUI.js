@@ -18,5 +18,5 @@ export function createWaveText(scene, x, y, waveNumber) {
   return scene.add.text(x, y, `Wave: ${waveNumber}`, {
     font: "20px Arial",
     fill: "#fff"
-  }).setOrigin(0, 0.5);
+  }).setOrigin(0, 0.5).setDepth(2001);
 }

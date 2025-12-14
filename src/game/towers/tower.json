@@ -488,15 +488,15 @@
     "upgrades": {
       "lower": [
         { "name": "Persistent Fire 1", "key": "persistent_fire_1", "cost": 280, "description": "Fireballs persist on the ground for a longer duration." },
-        { "name": "Rapid Fire 1", "key": "rapid_fire_1", "cost": 350, "description": "Increases the fire rate by 1." }
+        { "name": "Rapid Fire 1", "key": "rapid_fire_1", "cost": 350, "description": "Increases the fire rate." }
       ],
       "medium": [
         { "name": "Persistent Fire 2", "key": "persistent_fire_2 ", "cost": 360, "description": "Fireballs persist on the ground for an even longer duration." },
-        { "name": "Rapid Fire 2", "key": "rapid_fire_2", "cost": 520, "description": "Increases the fire rate by 1." }
+        { "name": "Rapid Fire 2", "key": "rapid_fire_2", "cost": 520, "description": "Increases the fire rate." }
       ],
       "high": [
         { "name": "Persistent Fire 3", "key": "persistent_fire_3", "cost": 515, "description": "Fireballs persist on the ground for an even longer duration." },
-        { "name": "Rapid Fire 3", "key": "rapid_fire_3", "cost": 750, "description": "Increases the fire rate by 1." }
+        { "name": "Rapid Fire 3", "key": "rapid_fire_3", "cost": 750, "description": "Increases the fire rate." }
       ]
     }
   },
