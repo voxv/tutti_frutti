@@ -12,27 +12,34 @@ export function drawShopUI(scene, gameWidth, gameHeight, shopWidth, infoBarHeigh
   scene.shopArea.setDepth(3000);
 
   // Tooltip for tower descriptions: create once per scene, not per UI
+  if (!scene.shopTooltipBg || scene.shopTooltipBg._destroyed) {
+    // Background graphics for rounded rectangle and drop shadow
+    scene.shopTooltipBg = scene.add.graphics();
+    scene.shopTooltipBg.setDepth(99999).setVisible(false);
+    scene.shopTooltipBg._destroyed = false;
+  }
   if (!scene.shopTooltip || scene.shopTooltip._destroyed) {
     scene.shopTooltip = scene.add.text(0, 0, '', {
-      font: '16px Arial',
-      fill: '#222',
-      backgroundColor: 'rgba(255,255,255,0.97)',
-      padding: { left: 12, right: 12, top: 10, bottom: 10 },
-      wordWrap: { width: 260 },
+      fontFamily: 'Montserrat, Segoe UI, Arial',
+      fontSize: '18px',
+      fontStyle: 'bold',
+      color: '#fff',
       align: 'center',
-      // Enable BBCode/rich text if Phaser supports it
-      // (Phaser 3.50+ supports BBCode in Text objects)
-      // If not, fallback to plain text
+      padding: { left: 18, right: 18, top: 14, bottom: 14 },
+      wordWrap: { width: 300 },
+      shadow: { offsetX: 0, offsetY: 3, color: '#000', blur: 8, fill: true },
+      // BBCode/rich text supported
     })
       .setDepth(100000)
       .setVisible(false)
       .setScrollFactor(0)
-      .setAlpha(0.99);
+      .setAlpha(0);
     scene.shopTooltip._destroyed = false;
   }
   // Hide tooltip on shop refresh
   if (scene.shopTooltip && scene.shopTooltip.setVisible) {
     scene.shopTooltip.setVisible(false);
+    if (scene.shopTooltipBg) scene.shopTooltipBg.setVisible(false);
   }
 
   // Set starting gold before shop grid (if not already set)
@@ -137,37 +144,60 @@ export function drawShopUI(scene, gameWidth, gameHeight, shopWidth, infoBarHeigh
     // Tooltip on hover
     if (config && config.description) {
       towerImage.on('pointerover', (pointer) => {
-        // Guard: check if scene still exists and shopTooltip is valid
         if (!scene || !scene.shopTooltip || scene.shopTooltip.active === false) return;
-        
         const name = config.displayName || key;
         const desc = config.description;
-        // Use BBCode for style if supported
-        // Tower name: large, bold, colored
-        // Description: slightly larger, colored
-        let richText = `[color=#ffb300][b][size=22]${name}[/size][/b][/color]\n[color=#3a7cff][size=16]${desc}[/size][/color]`;
-        // Fallback for non-BBCode support
+        // Modern BBCode style: gold title, blue desc, larger, bold, with shadow
+        let richText = `[color=#ffe066][b][size=26]${name}[/size][/b][/color]\n[color=#7ecfff][size=18]${desc}[/size][/color]`;
         if (!scene.shopTooltip.style.richText) {
           richText = name.toUpperCase() + '\n' + desc;
         }
         scene.shopTooltip.setText(richText);
-        // Clamp tooltip x so it doesn't go off the right edge
+        // Calculate tooltip position
         let tooltipX = towerImage.x - scene.shopTooltip.width / 2;
-        const maxX = scene.sys.game.config.width - scene.shopTooltip.width - 8;
+        const maxX = scene.sys.game.config.width - scene.shopTooltip.width - 16;
         if (tooltipX + scene.shopTooltip.width > scene.sys.game.config.width) {
           tooltipX = maxX;
         }
-        if (tooltipX < 8) tooltipX = 8;
-        scene.shopTooltip.setPosition(
-          tooltipX,
-          towerImage.y + cellHeight / 2 + 8
-        );
-        scene.shopTooltip.setVisible(true);
+        if (tooltipX < 16) tooltipX = 16;
+        const tooltipY = towerImage.y + cellHeight / 2 + 12;
+        scene.shopTooltip.setPosition(tooltipX, tooltipY);
+        // Draw background with rounded corners and drop shadow
+        if (scene.shopTooltipBg) {
+          scene.shopTooltipBg.clear();
+          scene.shopTooltipBg.fillStyle(0x232946, 0.96);
+          scene.shopTooltipBg.fillRoundedRect(
+            tooltipX - 12,
+            tooltipY - 10,
+            scene.shopTooltip.width + 24,
+            scene.shopTooltip.height + 20,
+            18
+          );
+          // Border glow
+          scene.shopTooltipBg.lineStyle(4, 0x7ecfff, 0.7);
+          scene.shopTooltipBg.strokeRoundedRect(
+            tooltipX - 12,
+            tooltipY - 10,
+            scene.shopTooltip.width + 24,
+            scene.shopTooltip.height + 20,
+            18
+          );
+          scene.shopTooltipBg.setVisible(true);
+        }
+        // Fade in
+        scene.tweens.add({
+          targets: scene.shopTooltip,
+          alpha: 1,
+          duration: 120,
+          ease: 'Quad.easeOut',
+          onStart: () => scene.shopTooltip.setVisible(true)
+        });
       });
       towerImage.on('pointerout', () => {
-        // Guard: check if scene still exists
         if (!scene || !scene.shopTooltip) return;
         scene.shopTooltip.setVisible(false);
+        if (scene.shopTooltipBg) scene.shopTooltipBg.setVisible(false);
+        scene.shopTooltip.setAlpha(0);
       });
     }
     // Always display price below tower (or blank for placeholder)

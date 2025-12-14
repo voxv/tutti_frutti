@@ -80,7 +80,7 @@
   },
   "glacial": {
     "displayName": "Penguin",
-    "description": "Freezes and slows groups of fruits in an area.",
+    "description": "Freezes groups of fruits in an area.",
     "type": "aoe",
     "class": "GlacialTower",
     "towerType": "glacial",
@@ -149,7 +149,7 @@
   },
   "spike": {
     "displayName": "Porcupine",
-    "description": "Throws spikes onto the path to pop passing fruits.",
+    "description": "Throws spikes onto the path to damage passing fruits.",
     "type": "projectile",
     "class": "SpikeTower",
     "towerType": "spike",
@@ -264,8 +264,8 @@
     }
   },
   "impact": {
-    "displayName": "Impact Tower",
-    "description": "AOE tower that damages multiple fruits at once.",
+    "displayName": "Goat",
+    "description": "Unleashes a powerful charge, smashing multiple fruits in its path.",
     "type": "aoe",
     "class": "ImpactTower",
     "towerType": "impact",
@@ -334,7 +334,7 @@
   },
   "star": {
     "displayName": "Starfish",
-    "description": "Fires spikes at fruits.",
+    "description": "Launches sharp needles in all directions to hit nearby fruits.",
     "type": "projectile",
     "class": "StarTower",
     "towerType": "star",
@@ -558,7 +558,7 @@
   },
   "bomb": {
     "displayName": "Bomb Trap",
-    "description": "Place on the road. Explodes destroying all nearby fruits.",
+    "description": "Place on the road. Explodes destroying nearby fruits.",
     "type": "trap",
     "class": "BombTrap",
     "towerType": "bomb_trap",
