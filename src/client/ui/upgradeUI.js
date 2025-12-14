@@ -246,7 +246,6 @@ export function showUpgradeUI(scene, placedTower, towerConfig) {
         upgradeTooltip.setText(leftUpgrade.description);
         upgradeTooltip.setPosition(leftBtn.x, leftBtn.y - 60);
         upgradeTooltip.setVisible(true);
-        
         // Update tooltip background size and position
         const textBounds = upgradeTooltip.getBounds();
         tooltipBg.clear();
@@ -301,10 +300,26 @@ export function showUpgradeUI(scene, placedTower, towerConfig) {
     });
   } else {
     leftBtn.disableInteractive();
-    // Hide tooltip if hovering when button becomes MAX
-    if (scene.upgradeTooltip && scene.upgradeTooltip.setVisible) {
+    // Always hide and clear tooltip/background immediately when button is MAX
+    if (scene.upgradeTooltip) {
       scene.upgradeTooltip.setVisible(false);
+      scene.upgradeTooltip.setText('');
     }
+    if (tooltipBg) tooltipBg.setVisible(false);
+    leftBtn.on('pointerover', () => {
+      if (scene.upgradeTooltip) {
+        scene.upgradeTooltip.setVisible(false);
+        scene.upgradeTooltip.setText('');
+      }
+      if (tooltipBg) tooltipBg.setVisible(false);
+    });
+    leftBtn.on('pointerout', () => {
+      if (scene.upgradeTooltip) {
+        scene.upgradeTooltip.setVisible(false);
+        scene.upgradeTooltip.setText('');
+      }
+      if (tooltipBg) tooltipBg.setVisible(false);
+    });
   }
   scene.upgradeUI.add(leftBtn);
   scene.upgradeUI._leftBtn = leftBtn;
@@ -338,7 +353,6 @@ export function showUpgradeUI(scene, placedTower, towerConfig) {
         upgradeTooltip.setText(rightUpgrade.description);
         upgradeTooltip.setPosition(rightBtn.x, rightBtn.y - 60);
         upgradeTooltip.setVisible(true);
-        
         // Update tooltip background size and position
         const textBounds = upgradeTooltip.getBounds();
         tooltipBg.clear();
@@ -392,10 +406,26 @@ export function showUpgradeUI(scene, placedTower, towerConfig) {
     });
   } else {
     rightBtn.disableInteractive();
-    // Hide tooltip if hovering when button becomes MAX
-    if (scene.upgradeTooltip && scene.upgradeTooltip.setVisible) {
+    // Always hide and clear tooltip/background immediately when button is MAX
+    if (scene.upgradeTooltip) {
       scene.upgradeTooltip.setVisible(false);
+      scene.upgradeTooltip.setText('');
     }
+    if (tooltipBg) tooltipBg.setVisible(false);
+    rightBtn.on('pointerover', () => {
+      if (scene.upgradeTooltip) {
+        scene.upgradeTooltip.setVisible(false);
+        scene.upgradeTooltip.setText('');
+      }
+      if (tooltipBg) tooltipBg.setVisible(false);
+    });
+    rightBtn.on('pointerout', () => {
+      if (scene.upgradeTooltip) {
+        scene.upgradeTooltip.setVisible(false);
+        scene.upgradeTooltip.setText('');
+      }
+      if (tooltipBg) tooltipBg.setVisible(false);
+    });
   }
   scene.upgradeUI.add(rightBtn);
   scene.upgradeUI._rightBtn = rightBtn;

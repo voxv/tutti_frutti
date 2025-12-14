@@ -155,12 +155,8 @@ export class Baloune extends Game {
     // Update enemies
     for (const enemy of this.enemies) {
       if (!enemy) continue;
-      // Pass sceneRef to BossBloon for health bar management
-      if (enemy.constructor && enemy.constructor.name === 'BossBloon' && typeof window !== 'undefined' && window.sceneRef) {
-        enemy.update(deltaTime, window.sceneRef);
-      } else {
-        enemy.update(deltaTime);
-      }
+      // Always pass the current scene (window.sceneRef if available, else undefined)
+      enemy.update(deltaTime, (typeof window !== 'undefined' && window.sceneRef) ? window.sceneRef : undefined);
     }
 
     // Update towers

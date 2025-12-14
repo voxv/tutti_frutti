@@ -103,7 +103,7 @@ export class Bloon extends Enemy {
     }
   }
 
-  update(deltaTime) {
+  update(deltaTime, scene) {
     // --- Knockback logic ---
     if (this._knockbackTimer && this._knockbackTimer > 0) {
       this._knockbackTimer -= deltaTime;

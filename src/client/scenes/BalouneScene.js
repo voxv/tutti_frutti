@@ -33,9 +33,9 @@ import * as musicManager from "../utils/musicManager.js";
 
 
 // DEV: Set this to start from a specific wave for testing
-const DEV_START_WAVE = 1 // Set to 1 for normal, or e.g. 5 to start from wave 5
+const DEV_START_WAVE = 50 // Set to 1 for normal, or e.g. 5 to start from wave 5
 
-const SKIP_SURVIVE_50_POPUP = false;
+const SKIP_SURVIVE_50_POPUP = true;
 
 // DEV: Set this to control the overall size of all bloons (default 1)
 const BLOON_SIZE_MULTIPLIER = 1.1;
@@ -47,7 +47,7 @@ const PLACED_TOWER_SIZE_MULTIPLIER = 1.2;
 const BLOON_SPEED_MULTIPLIER = 1.0;
 
 // DEV: Set the starting gold amount for the player
-const STARTING_GOLD = 650;
+const STARTING_GOLD = 13650;
 
 // Ensure the global variables are set from here if not already set
 if (typeof window !== 'undefined') {
