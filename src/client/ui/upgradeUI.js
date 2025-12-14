@@ -134,6 +134,7 @@ export function showUpgradeUI(scene, placedTower, towerConfig) {
   
   // Create new UI container
   scene.upgradeUI = scene.add.container(0, 0);
+  scene.upgradeUI.setDepth(2000); // Ensure upgrade UI is above info bar and background
   
   // Create or reset tooltip
   if (!scene.upgradeTooltip || scene.upgradeTooltip._destroyed) {

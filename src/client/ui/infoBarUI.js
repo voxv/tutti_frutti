@@ -10,10 +10,12 @@
  * @param {number} infoBarHeight
  */
 export function drawInfoBarUI(scene, gameWidth, gameHeight, shopWidth, infoBarHeight) {
-  // Info bar (horizontal panel at bottom)
-  scene.infoBar = scene.add.graphics();
-  scene.infoBar.fillStyle(0x666622, 1);
-  scene.infoBar.fillRect(0, gameHeight - infoBarHeight, gameWidth, infoBarHeight);
+  // Info bar (horizontal panel at bottom) - use image background
+  if (scene.infoBar && scene.infoBar.destroy) scene.infoBar.destroy();
+  scene.infoBar = scene.add.image(gameWidth / 2, gameHeight - infoBarHeight / 2, 'bottom_window')
+    .setDisplaySize(gameWidth, infoBarHeight)
+    .setOrigin(0.5)
+    .setDepth(10);
 
   // Life bar UI (top right, inside main game area)
   if (typeof scene.playerLives !== 'number') scene.playerLives = 100;
