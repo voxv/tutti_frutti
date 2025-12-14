@@ -164,7 +164,7 @@ export function showUpgradeUI(scene, placedTower, towerConfig) {
   
   // Position UI elements in bottom screen
   const baseX = 650; // Left of center
-  const baseY = 845; // Bottom screen area (info bar)
+  const baseY = 849; // Bottom screen area (info bar)
   const offset = 90;
   const sellBtnOffset = 280;
   
