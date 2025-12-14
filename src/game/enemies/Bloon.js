@@ -142,8 +142,8 @@ export class Bloon extends Enemy {
       this._wasFrozen = false;
       this._frozenUntil = null;
     }
-    // If destroy animation is playing, keep moving
-    if (!this.isActive && this.animPlaying) {
+    // If destroy animation is playing, keep moving (but NOT if abducted)
+    if (!this.isActive && this.animPlaying && !this.isAbducted) {
       const speedMultiplier = (typeof window !== 'undefined' && window.BLOON_SPEED_MULTIPLIER) ? window.BLOON_SPEED_MULTIPLIER : 1;
       this.distanceTraveled += this.speed * speedMultiplier * deltaTime;
       let clampedDistance = Math.min(this.distanceTraveled, this.splineLength);
@@ -167,20 +167,23 @@ export class Bloon extends Enemy {
         return; // Don't move until delay has passed
       }
     }
-    // Move along the spline path at constant speed
-    const speedMultiplier = (typeof window !== 'undefined' && window.BLOON_SPEED_MULTIPLIER) ? window.BLOON_SPEED_MULTIPLIER : 1;
-    this.distanceTraveled += this.speed * speedMultiplier * deltaTime;
-    let clampedDistance = Math.min(this.distanceTraveled, this.splineLength);
-    this.progress = this._distanceToProgress(clampedDistance);
-    let pos = null;
-    if (this.path.spline && typeof this.path.spline.getPoint === 'function') {
-      pos = this.path.spline.getPoint(this.progress);
+    // Move along the spline path at constant speed, unless being abducted
+    let clampedDistance = null;
+    if (!this.isAbducted) {
+      const speedMultiplier = (typeof window !== 'undefined' && window.BLOON_SPEED_MULTIPLIER) ? window.BLOON_SPEED_MULTIPLIER : 1;
+      this.distanceTraveled += this.speed * speedMultiplier * deltaTime;
+      clampedDistance = Math.min(this.distanceTraveled, this.splineLength);
+      this.progress = this._distanceToProgress(clampedDistance);
+      let pos = null;
+      if (this.path.spline && typeof this.path.spline.getPoint === 'function') {
+        pos = this.path.spline.getPoint(this.progress);
+      }
+      if (pos) {
+        this.position.x = pos.x;
+        this.position.y = pos.y;
+      }
     }
-    if (pos) {
-      this.position.x = pos.x;
-      this.position.y = pos.y;
-    }
-    
+
     // Check if bloon has gone offscreen - mark as inactive immediately
     // Game area: 1600px wide (minus 220px shop), 900px tall (minus 100px info bar)
     const isOffscreen = this.position.x < 0 || this.position.x > 1380 || this.position.y < 0 || this.position.y > 800;
@@ -191,8 +194,8 @@ export class Bloon extends Enemy {
       this.isActive = false;
       return;
     }
-    
-    if (clampedDistance >= this.splineLength) {
+
+    if (clampedDistance !== null && clampedDistance >= this.splineLength) {
       this.progress = 1;
       this.isActive = false;
     }
@@ -215,6 +218,8 @@ export class Bloon extends Enemy {
 
   takeDamage(amount) {
     if (!this.isActive) return;
+    // Skip damage if fruit is being abducted
+    if (this.isAbducted) return;
     // Track if destroyed by sharper_blade logic
     let destroyedBySharperBlade = false;
     if (amount && typeof amount === 'object' && amount.sharperBlade) {

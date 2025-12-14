@@ -47,13 +47,13 @@ export class StarTower extends ProjectileTower {
     // Determine number of projectiles based on upgrades
     let numProjectiles = 6; // Base: 6 projectiles
     if (this.upgrades && this.upgrades.includes('double_spike')) {
-      numProjectiles = 7;
-    }
-    if (this.upgrades && this.upgrades.includes('triple_spike')) {
       numProjectiles = 8;
     }
-    if (this.upgrades && this.upgrades.includes('quadruple_spike')) {
+    if (this.upgrades && this.upgrades.includes('triple_spike')) {
       numProjectiles = 10;
+    }
+    if (this.upgrades && this.upgrades.includes('quadruple_spike')) {
+      numProjectiles = 12;
     }
     
     const projConfig = { speed: 200, hitRadius: 36, sprite: 'boulder' };

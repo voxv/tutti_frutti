@@ -10,6 +10,7 @@ import { GlueTower } from './GlueTower.js';
 import { BirdTower } from './BirdTower.js';
 import { SniperTower } from './SniperTower.js';
 import { DartMonkeyTower } from './DartMonkeyTower.js';
+import { OvniTower } from './OvniTower.js';
 
 /**
  * Static registry of all tower classes
@@ -26,7 +27,8 @@ const TOWER_REGISTRY = {
   GlueTower,
   BirdTower,
   SniperTower,
-  DartMonkeyTower
+  DartMonkeyTower,
+  OvniTower
 };
 
 /**

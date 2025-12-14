@@ -60,7 +60,8 @@
         "frameRate": 8,
         "repeat": -1
       },
-      "projectile": "/towers/boulder.png"
+      "projectile": "/towers/boulder.png",
+      "shopImageScale": 0.9
     },
     "upgrades": {
       "lower": [
@@ -275,7 +276,8 @@
     "homing": false,
     "assets": {
       "shopImage": "/towers/goat_shop.png",
-      "placedImage": "/towers/goat_shop.png"
+      "placedImage": "/towers/goat_shop.png",
+      "shopImageScale": 1.1
     },
     "upgrades": {
       "lower": [
@@ -355,15 +357,15 @@
     "upgrades": {
       "lower": [
         { "name": "Attack Speed 1", "key": "attack_speed_1", "cost": 320, "description": "Increases the attack speed." },
-        { "name": "7 Spikes", "key": "double_spike", "cost": 365, "description": "Shoots 7 spikes around it." }
+        { "name": "8 Spikes", "key": "double_spike", "cost": 365, "description": "Shoots 8 spikes around it." }
       ],
       "medium": [
         { "name": "Attack Speed 2", "key": "attack_speed_2", "cost": 450, "description": "Further increases the attack speed." },
-        { "name": "8 Spikes", "key": "triple_spike", "cost": 490, "description": "Shoots 8 spikes around it." }
+        { "name": "10 Spikes", "key": "triple_spike", "cost": 490, "description": "Shoots 10 spikes around it." }
       ],
       "high": [
         { "name": "Attack Speed 3", "key": "attack_speed_3", "cost": 525, "description": "Massively increases the attack speed." },
-        { "name": "10 Spikes", "key": "quadruple_spike", "cost": 520, "description": "Shoots 10 spikes around it." }
+        { "name": "12 Spikes", "key": "quadruple_spike", "cost": 520, "description": "Shoots 12 spikes around it." }
       ]
     }
   },
@@ -390,7 +392,8 @@
         "frameRate": 8,
         "repeat": -1
       },
-      "projectile": "/towers/projectiles/boomerang.png"
+      "projectile": "/towers/projectiles/boomerang.png",
+      "shopImageScale": 1.1
     },
     "upgrades": {
       "lower": [
@@ -457,7 +460,7 @@
     }
   },
   "fire": {
-    "displayName": "Fire Tower",
+    "displayName": "Fire Dragon",
     "description": "Shoots fireballs at fruits. Burns through multiple targets.",
     "type": "projectile",
     "class": "FireTower",
@@ -470,7 +473,7 @@
     "homing": false,
     "assets": {
       "shopImage": "/towers/dragon_shop.png",
-      "shopImageScale": 1.2,
+      "shopImageScale": 1.3,
       "placedImage": "/towers/dragon_anim.png",
       "projectile": "/towers/projectiles/fire_anim.png",
       "animation": {
@@ -494,6 +497,46 @@
       "high": [
         { "name": "Persistent Fire 3", "key": "persistent_fire_3", "cost": 515, "description": "Fireballs persist on the ground for an even longer duration." },
         { "name": "Rapid Fire 3", "key": "rapid_fire_3", "cost": 750, "description": "Increases the fire rate by 1." }
+      ]
+    }
+  },
+  "ovni": {
+    "displayName": "Ovni",
+    "description": "Abducts fruits with an alien beam",
+    "type": "aoe",
+    "class": "OvniTower",
+    "towerType": "ovni",
+    "cost": 750,
+    "range": 120,
+    "fireRate": 1.0,
+    "damage": 2,
+    "homing": false,
+    "assets": {
+      "shopImage": "/towers/ovni_shop.png",
+      "placedImage": "/towers/ovni_anim.png",
+      "shopImageScale": 1.3,
+      "animation": {
+        "key": "ovni_idle",
+        "frameWidth": 290,
+        "frameHeight": 212,
+        "frames": { "start": 0, "end": 3 },
+        "frameRate": 8,
+        "repeat": -1
+      },
+      "shopImageScale": 1.0
+    },
+    "upgrades": {
+      "lower": [
+        { "name": "Wider Beam 1", "key": "wider_beam_1", "cost": 350, "description": "Increases the beam radius." },
+        { "name": "Faster Abduction 1", "key": "faster_abduction_1", "cost": 310, "description": "Increases attack speed." }
+      ],
+      "medium": [
+        { "name": "Wider Beam 2", "key": "wider_beam_2", "cost": 660, "description": "Further increases the beam radius." },
+        { "name": "Faster Abduction 2", "key": "faster_abduction_2", "cost": 520, "description": "Further increases the attack speed." }
+      ],
+      "high": [
+        { "name": "Wider Beam 3", "key": "wider_beam_3", "cost": 840, "description": "Greatly increases the beam radius." },
+        { "name": "Faster Abduction 3", "key": "faster_abduction_3", "cost": 760, "description": "Massively increases attack speed." }
       ]
     }
   },

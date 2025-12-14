@@ -202,7 +202,7 @@ export class ElephantTower extends ProjectileTower {
     const cellWidth = 220 / 2;
     const cellHeight = 100;
     const placedSprite = scene.add.sprite(x, y, 'elephant_placed')
-      .setDisplaySize(cellWidth * 0.75, cellHeight * 0.75)
+      .setDisplaySize(cellWidth * 0.85, cellHeight * 0.85)
       .setDepth(8500)
       .setAlpha(1)
       .setInteractive({ useHandCursor: true });

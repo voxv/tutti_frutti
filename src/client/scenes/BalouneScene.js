@@ -466,6 +466,8 @@ class BalouneScene extends Phaser.Scene {
     }
     // Fallback: load cannon_projectile as boulder
     this.load.image('cannon_projectile', '/towers/projectiles/boulder.png');
+    // Preload beam_anim spritesheet for OvniTower beam (3 frames of 209x207)
+    this.load.spritesheet('beam_anim', '/towers/beam_anim.png', { frameWidth: 209, frameHeight: 207 });
   }
 
   create(data) {
