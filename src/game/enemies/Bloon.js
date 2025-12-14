@@ -260,6 +260,14 @@ export class Bloon extends Enemy {
     }
     if (this.health <= 0) {
       this.isActive = false;
+      // Play destruction sound
+      if (typeof window !== 'undefined' && window.sceneRef && window.sceneRef.sound) {
+        const now = Date.now();
+        if (!window.sceneRef._lastSquirtSoundTime || now - window.sceneRef._lastSquirtSoundTime > 30) {
+          window.sceneRef.sound.play('squirt', { volume: 1 });
+          window.sceneRef._lastSquirtSoundTime = now;
+        }
+      }
       // Award gold if not at end and not already rewarded
       if (
         typeof window !== 'undefined' &&

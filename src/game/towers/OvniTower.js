@@ -9,6 +9,7 @@ export class OvniTower extends AOETower {
     this.abductTimer = 0;
     this.pullSpeed = 300; // px/sec, can be tuned
     this.maxAbductions = 1; // Default abduct one at a time, upgrades increase this
+    this._lastOvniSoundTime = 0; // For sound throttling
   }
   static placeOnScene(scene, x, y) {
     // Get config from scene.towerConfig if available
@@ -129,6 +130,19 @@ export class OvniTower extends AOETower {
           hasFruitsInRange = true;
           fruitsY.push(enemy.position.y);
         }
+      }
+    }
+
+    // Play ovni sound if fruits in range and at least random interval (4-8 seconds) since last sound
+    if (hasFruitsInRange && this.scene && this.scene.sound) {
+      let now = currentTime;
+      if (!this._ovniSoundInterval) {
+        this._ovniSoundInterval = Math.random() * 4 + 4; // Random between 4-8
+      }
+      if (!this._lastOvniSoundTime || now - this._lastOvniSoundTime > this._ovniSoundInterval) {
+        this.scene.sound.play("ovni");
+        this._lastOvniSoundTime = now;
+        this._ovniSoundInterval = Math.random() * 4 + 4; // Generate new random interval
       }
     }
 

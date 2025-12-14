@@ -56,6 +56,7 @@ if (typeof window !== 'undefined') {
 }
 
 class BalouneScene extends Phaser.Scene {
+    _lastSquirtSoundTime = 0;
   /**
    * Deselect the currently selected tower and hide all related UI (public method for shopUI)
    */
@@ -138,12 +139,24 @@ class BalouneScene extends Phaser.Scene {
                 // If bloon is destroyed after taking damage
                 if (!bloon.isActive || (typeof bloon.health === 'number' && bloon.health <= 0) || (typeof bloon.damage === 'number' && bloon.damage <= 0)) {
                   destroyed = true;
+                  // Play squirt sound with minimal cooldown, allow overlap
+                  const now = Date.now();
+                  if (this.sound && this.sound.play && (!this._lastSquirtSoundTime || now - this._lastSquirtSoundTime > 30)) {
+                    this.sound.play('squirt', { volume: 1 });
+                    this._lastSquirtSoundTime = now;
+                  }
                 }
               } else if (typeof bloon.damage === 'number') {
                 bloon.damage -= spike.damage;
                 if (bloon.damage <= 0 && typeof bloon.destroy === 'function') {
                   bloon.destroy();
                   destroyed = true;
+                  // Play squirt sound with minimal cooldown, allow overlap
+                  const now = Date.now();
+                  if (this.sound && this.sound.play && (!this._lastSquirtSoundTime || now - this._lastSquirtSoundTime > 30)) {
+                    this.sound.play('squirt', { volume: 1 });
+                    this._lastSquirtSoundTime = now;
+                  }
                 }
               }
               // Only add to _hasHit if it's not a fat spike (fat spikes use remainingPops instead)
@@ -507,6 +520,8 @@ class BalouneScene extends Phaser.Scene {
     this.load.image('cannon_projectile', '/towers/projectiles/boulder.png');
     // Preload beam_anim spritesheet for OvniTower beam (3 frames of 209x207)
     this.load.spritesheet('beam_anim', '/towers/beam_anim.png', { frameWidth: 209, frameHeight: 207 });
+    // Preload ovni sound for OvniTower
+    this.load.audio('ovni', '/sounds/ovni.mp3');
   }
 
   create(data) {
@@ -730,6 +745,16 @@ class BalouneScene extends Phaser.Scene {
 
     // Setup game field click handler for tower deselection
     setupGameFieldClickHandler(this, gameWidth, shopWidth, gameHeight, infoBarHeight);
+
+    // Draw a global horizontal separator line at the bottom window
+    const bottomLineY = 845 - 45; // Position above the info bar
+    const bottomLineGraphics = this.add.graphics();
+    bottomLineGraphics.lineStyle(3, 0x000000, 1); // Black line, 3px thick
+    bottomLineGraphics.beginPath();
+    bottomLineGraphics.moveTo(0, bottomLineY);
+    bottomLineGraphics.lineTo(gameWidth, bottomLineY);
+    bottomLineGraphics.strokePath();
+    bottomLineGraphics.setDepth(100); // Lower than all tooltips and popups
 
     // Animations are now set up centrally in setupAnimations() call during create()
 
