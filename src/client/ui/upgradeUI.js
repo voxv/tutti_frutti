@@ -461,6 +461,8 @@ export function showUpgradeUI(scene, placedTower, towerConfig) {
       if (logicTower._spikes && Array.isArray(logicTower._spikes)) {
         for (const s of logicTower._spikes) if (s && s.destroy) s.destroy();
       }
+      // Remove ovni beam if present
+      if (logicTower._beamSprite && logicTower._beamSprite.destroy) logicTower._beamSprite.destroy();
     }
     // Remove range circle if present
     if (scene.activeTowerRangeCircle && scene.activeTowerRangeCircle.destroy) {

@@ -15,7 +15,7 @@ export function drawShopUI(scene, gameWidth, gameHeight, shopWidth, infoBarHeigh
   if (!scene.shopTooltipBg || scene.shopTooltipBg._destroyed) {
     // Background graphics for rounded rectangle and drop shadow
     scene.shopTooltipBg = scene.add.graphics();
-    scene.shopTooltipBg.setDepth(99999).setVisible(false);
+    scene.shopTooltipBg.setDepth(100001).setVisible(false);
     scene.shopTooltipBg._destroyed = false;
   }
   if (!scene.shopTooltip || scene.shopTooltip._destroyed) {
@@ -30,7 +30,7 @@ export function drawShopUI(scene, gameWidth, gameHeight, shopWidth, infoBarHeigh
       shadow: { offsetX: 0, offsetY: 3, color: '#000', blur: 8, fill: true },
       // BBCode/rich text supported
     })
-      .setDepth(100000)
+      .setDepth(100002) // Ensure text is above background
       .setVisible(false)
       .setScrollFactor(0)
       .setAlpha(0);
