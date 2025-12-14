@@ -27,7 +27,10 @@ export class FireProjectile extends Projectile {
   onHit(enemy) {
     // Only damage if we haven't hit the max number of fruits yet
     if (enemy && typeof enemy.takeDamage === 'function' && !this._hasHit.has(enemy) && this.fruitsHit < this.maxFruits) {
-      enemy.takeDamage(this.damage);
+      // Apply 3x damage to boss bloons
+      const isBoss = enemy.type === 'boss' || enemy.constructor?.name === 'BossBloon';
+      const damageToApply = isBoss ? this.damage * 20 : this.damage;
+      enemy.takeDamage(damageToApply);
       this._hasHit.add(enemy);
       
       // Count destroyed enemy + all children that will spawn

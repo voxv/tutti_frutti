@@ -153,7 +153,15 @@ export class Baloune extends Game {
     this.time += deltaTime;
 
     // Update enemies
-    for (const enemy of this.enemies) if (enemy) enemy.update(deltaTime);
+    for (const enemy of this.enemies) {
+      if (!enemy) continue;
+      // Pass sceneRef to BossBloon for health bar management
+      if (enemy.constructor && enemy.constructor.name === 'BossBloon' && typeof window !== 'undefined' && window.sceneRef) {
+        enemy.update(deltaTime, window.sceneRef);
+      } else {
+        enemy.update(deltaTime);
+      }
+    }
 
     // Update towers
     for (const tower of this.towers) if (tower) tower.update(deltaTime, this.enemies);
@@ -184,11 +192,17 @@ export class Baloune extends Game {
           // If clump was destroyed by this hit, stop further checks for this clump
           if (!clump.sprite) break;
           if (typeof enemy.takeDamage === 'function') {
-            enemy.takeDamage(enemy.health);
+            // Boss bloons only take 1 damage from clumps, others take full health
+            const isBoss = enemy.type === 'boss' || enemy.constructor?.name === 'BossBloon';
+            const damageToApply = isBoss ? 1 : enemy.health;
+            console.log(`Clump hit enemy. IsBoss: ${isBoss}, Enemy type: ${enemy.type}, Constructor: ${enemy.constructor?.name}, Health before: ${enemy.health}, Damage applying: ${damageToApply}`);
+            enemy.takeDamage(damageToApply);
+            console.log(`Health after: ${enemy.health}`);
           } else if (typeof enemy.destroy === 'function') {
             enemy.destroy();
           }
-          enemy.isActive = false;
+          // Note: Don't set enemy.isActive = false here - that was causing instant removal
+          // The clump should only deal damage, not remove the enemy
         }
       }
     }

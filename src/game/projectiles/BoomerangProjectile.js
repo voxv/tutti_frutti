@@ -63,7 +63,17 @@ export class BoomerangProjectile extends Projectile {
         const dy = this.position.y - fruit.position.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
         if (dist < hitRadius) {
-          if (typeof fruit.takeDamage === 'function') fruit.takeDamage(1);
+          if (typeof fruit.takeDamage === 'function') {
+            if (fruit.type === 'boss' || fruit.constructor?.name === 'BossBloon') {
+              // Only deal 1 damage every other hit
+              this._bossHitToggle = this._bossHitToggle === undefined ? true : !this._bossHitToggle;
+              if (this._bossHitToggle) {
+                fruit.takeDamage(1);
+              }
+            } else {
+              fruit.takeDamage(1);
+            }
+          }
         }
       }
     }

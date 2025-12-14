@@ -56,6 +56,15 @@ if (typeof window !== 'undefined') {
 }
 
 class BalouneScene extends Phaser.Scene {
+  /**
+   * Deselect the currently selected tower and hide all related UI (public method for shopUI)
+   */
+  deselectTower() {
+    // Always use the canonical inputHandlers.deselectTower
+    if (typeof window !== 'undefined' && window.inputHandlers && typeof window.inputHandlers.deselectTower === 'function') {
+      window.inputHandlers.deselectTower(this);
+    }
+  }
   previousGoldAmount = null;
   // Call this whenever gold changes to refresh upgrade UI
   refreshUpgradeUIIfVisible() {
@@ -107,7 +116,7 @@ class BalouneScene extends Phaser.Scene {
     // --- Spike projectile collision logic ---
     if (this.spikeProjectiles && this.gameLogic && Array.isArray(this.gameLogic.enemies)) {
       for (const spike of [...this.spikeProjectiles]) { // clone array in case of removal
-        if (!spike.active) continue;
+        if (!spike || !spike.active) continue;
         for (const bloon of this.gameLogic.enemies) {
           if (!bloon || !bloon.isActive) continue;
           // Use hitRadius for collision
@@ -115,12 +124,17 @@ class BalouneScene extends Phaser.Scene {
           const dy = spike.y - bloon.position.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
           if (dist < (spike.hitRadius || 24)) {
-            if (!spike._hasHit.has(bloon)) {
+            // For fat spikes, allow multiple hits on the same target; for regular spikes, only hit once per target
+            const isFatSpike = typeof spike.remainingPops === 'number';
+            if (isFatSpike || !spike._hasHit.has(bloon)) {
               // Apply damage (assume bloon has takeDamage method)
               let destroyed = false;
               if (typeof bloon.takeDamage === 'function') {
                 const prevHealth = bloon.health ?? bloon.damage;
-                bloon.takeDamage(spike.damage);
+                // Always do at least 1 damage to boss bloons, and spike damage is 3x against boss
+                const isBoss = bloon.type === 'boss' || bloon.constructor?.name === 'BossBloon';
+                const spikeDmg = isBoss ? Math.max(1, spike.damage * 3) : spike.damage;
+                bloon.takeDamage(spikeDmg);
                 // If bloon is destroyed after taking damage
                 if (!bloon.isActive || (typeof bloon.health === 'number' && bloon.health <= 0) || (typeof bloon.damage === 'number' && bloon.damage <= 0)) {
                   destroyed = true;
@@ -132,7 +146,10 @@ class BalouneScene extends Phaser.Scene {
                   destroyed = true;
                 }
               }
-              spike._hasHit.add(bloon);
+              // Only add to _hasHit if it's not a fat spike (fat spikes use remainingPops instead)
+              if (!isFatSpike) {
+                spike._hasHit.add(bloon);
+              }
               // Fat spike logic: decrement remainingPops if present
               if (typeof spike.remainingPops === 'number') {
                 spike.remainingPops--;
@@ -146,6 +163,17 @@ class BalouneScene extends Phaser.Scene {
                   break; // Stop checking other bloons for this spike
                 }
               } else if (destroyed) {
+                spike.active = false;
+                spike.destroy();
+                if (this.spikeProjectiles) {
+                  const idx = this.spikeProjectiles.indexOf(spike);
+                  if (idx !== -1) this.spikeProjectiles.splice(idx, 1);
+                }
+                break; // Stop checking other bloons for this spike
+              }
+              // If we hit a boss with a non-fat spike, destroy the spike
+              const isBoss = bloon.type === 'boss' || bloon.constructor?.name === 'BossBloon';
+              if (isBoss && !isFatSpike) {
                 spike.active = false;
                 spike.destroy();
                 if (this.spikeProjectiles) {
@@ -245,6 +273,17 @@ class BalouneScene extends Phaser.Scene {
             spike.destroy();
           }
           this.spikeProjectiles = [];
+        }
+
+        // Remove all clumpspike traps
+        if (this.gameLogic && Array.isArray(this.gameLogic.towers)) {
+          for (let i = this.gameLogic.towers.length - 1; i >= 0; i--) {
+            const tower = this.gameLogic.towers[i];
+            if (tower && (tower.towerType === 'clumpspike' || tower.towerType === 'clump_spike') && typeof tower.destroy === 'function') {
+              tower.destroy();
+              this.gameLogic.towers.splice(i, 1);
+            }
+          }
         }
         // Award 100 gold for completing the wave (only once)
         transitionGamePhase(this, GAME_PHASES.BUYING);
@@ -624,10 +663,7 @@ class BalouneScene extends Phaser.Scene {
             if (!isTrap) {
               sceneUtils.initializeTowerTargetingPriority(placedTower);
               sceneUtils.initializeTowerTargetingPriority(towerInst);
-              // Update targeting buttons immediately when tower is placed
-              if (updateTargetingButtons && this.targetingButtons) {
-                updateTargetingButtons(this.targetingButtons, placedTower, this.gameLogic, AOETower);
-              }
+              // Do NOT update targeting buttons here; only show on selection
               // Setup tower click handler
               setupTowerClickHandler(
                 placedTower,
@@ -714,11 +750,16 @@ class BalouneScene extends Phaser.Scene {
       // Hide any active range circle before showing game over
       if (typeof hideRangeCircle === 'function') hideRangeCircle(this);
       
-      // Disable all spike tower shooting
+      // Disable all spike tower shooting and destroy OvniTower beams
       if (this.gameLogic && Array.isArray(this.gameLogic.towers)) {
         for (const tower of this.gameLogic.towers) {
           if (tower && tower.constructor && tower.constructor.name === 'SpikeTower') {
             tower._spikeShootingDisabled = true;
+          }
+          // Destroy OvniTower beams
+          if (tower && tower.constructor && tower.constructor.name === 'OvniTower' && tower._beamSprite) {
+            tower._beamSprite.destroy();
+            tower._beamSprite = null;
           }
         }
       }

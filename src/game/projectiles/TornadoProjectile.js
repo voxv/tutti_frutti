@@ -60,8 +60,18 @@ export class TornadoProjectile extends Projectile {
   }
 
   onHit(enemy) {
-    // Only apply knockback if not already hit
+    // Only apply knockback if not already hit or if not a boss
     if (!enemy || this._hitEnemies.has(enemy) || this._collisionDisabled) return;
+    // If boss, immediately deactivate and destroy the tornado
+    if (enemy.type === 'boss' || enemy.constructor?.name === 'BossBloon') {
+      this.isActive = false;
+      if (this.sprite) {
+        this.sprite.destroy();
+        this.sprite = null;
+      }
+      this._collisionDisabled = true;
+      return;
+    }
     this._hitEnemies.add(enemy);
     if (enemy && typeof enemy.knockback === 'function') {
       enemy.knockback(0.6, 3); // 0.7s, 4x speed backward

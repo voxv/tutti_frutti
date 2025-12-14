@@ -105,6 +105,22 @@ export function drawShopUI(scene, gameWidth, gameHeight, shopWidth, infoBarHeigh
       if (!config) return;
       // Always check affordability at click time (not just at draw time)
       const currentGold = typeof scene.goldAmount === 'number' ? scene.goldAmount : 0;
+      // Deselect any selected tower before starting drag
+      // Robustly destroy upgrade UI if present
+      if (scene.upgradeUI && typeof scene.upgradeUI.destroy === 'function') {
+        scene.upgradeUI.destroy();
+        scene.upgradeUI = null;
+      } else if (scene.upgradeUI) {
+        scene.upgradeUI.setVisible(false);
+        scene.upgradeUI = null;
+      }
+      if (typeof window !== 'undefined' && window.inputHandlers && typeof window.inputHandlers.deselectTower === 'function') {
+        window.inputHandlers.deselectTower(scene);
+      } else if (typeof scene.deselectTower === 'function') {
+        scene.deselectTower();
+      } else {
+        scene.selectedTowerForUpgradeUI = null;
+      }
       if (scene.activeTowerRangeCircle) {
         scene.activeTowerRangeCircle.destroy();
         scene.activeTowerRangeCircle = null;

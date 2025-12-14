@@ -5,7 +5,6 @@ export class SpikeTower extends ProjectileTower {
 
 
     applyUpgrade(upgradeKey) {
-        console.log(`[SpikeTower] applyUpgrade called:`, { upgradeKey, pos: this.position, id: this._debugId, before: this._fatSpikes });
       // Behave the same as CannonTower and other towers
       if (upgradeKey === 'bigger_range') {
         this.range += 10;
@@ -29,7 +28,6 @@ export class SpikeTower extends ProjectileTower {
       // Add more spike-specific upgrades here if needed
       this.upgrades = this.upgrades || [];
       this.upgrades.push(upgradeKey);
-      console.log(`[SpikeTower] applyUpgrade finished:`, { upgradeKey, pos: this.position, id: this._debugId, after: this._fatSpikes });
     }
   fire(enemies, currentTime) {
     // No animation logic here; handled only when a spike is actually thrown

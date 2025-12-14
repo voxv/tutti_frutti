@@ -159,7 +159,8 @@ export async function createBloonInstance(path, bloonKey, bloonsConfig) {
     frameWidth: config.frameWidth,
     frameHeight: config.frameHeight,
     health: config.health,
-    damage: config.damage !== undefined ? config.damage : 1
+    damage: config.damage !== undefined ? config.damage : 1,
+    type: config.type
   });
 
   return bloonInstance;

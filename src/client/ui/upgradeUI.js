@@ -84,12 +84,24 @@ export function refreshUpgradeUIIfVisible(scene, towerConfig) {
 export function showUpgradeUI(scene, placedTower, towerConfig) {
   // Hide upgrade UI for clumpspike (must be first)
   if (placedTower && placedTower.towerType === 'clumpspike') {
-    if (scene.upgradeUI) scene.upgradeUI.setVisible(false);
+    if (scene.upgradeUI && typeof scene.upgradeUI.destroy === 'function') {
+      scene.upgradeUI.destroy();
+      scene.upgradeUI = null;
+    } else if (scene.upgradeUI) {
+      scene.upgradeUI.setVisible(false);
+      scene.upgradeUI = null;
+    }
     return;
   }
   // Hide upgrade UI for bomb_trap
   if (placedTower && placedTower.towerType === 'bomb_trap') {
-    if (scene.upgradeUI) scene.upgradeUI.setVisible(false);
+    if (scene.upgradeUI && typeof scene.upgradeUI.destroy === 'function') {
+      scene.upgradeUI.destroy();
+      scene.upgradeUI = null;
+    } else if (scene.upgradeUI) {
+      scene.upgradeUI.setVisible(false);
+      scene.upgradeUI = null;
+    }
     return;
   }
   
@@ -105,7 +117,13 @@ export function showUpgradeUI(scene, placedTower, towerConfig) {
   
   if (!upgrades || Object.keys(upgrades).length === 0) {
     // No upgrades for this tower, hide UI
-    if (scene.upgradeUI) scene.upgradeUI.setVisible(false);
+    if (scene.upgradeUI && typeof scene.upgradeUI.destroy === 'function') {
+      scene.upgradeUI.destroy();
+      scene.upgradeUI = null;
+    } else if (scene.upgradeUI) {
+      scene.upgradeUI.setVisible(false);
+      scene.upgradeUI = null;
+    }
     return;
   }
   

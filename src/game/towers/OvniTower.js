@@ -227,6 +227,10 @@ export class OvniTower extends AOETower {
     // xRange is always at least the tower's range (full beam width)
     const xRange = Math.max(this.range, 20 + 20 * (this.maxAbductions - 1));
     for (const enemy of enemies) {
+      // Do not abduct boss bloons
+      if (enemy && (enemy.type === 'boss' || enemy.constructor?.name === 'BossBloon')) {
+        continue;
+      }
       if (enemy && enemy.isActive && this.isInRange(enemy) && Math.abs(enemy.position.x - this.position.x) < xRange && !abductedSet.has(enemy)) {
         enemy.isAbducted = true;
         // Store the x position at the moment of abduction

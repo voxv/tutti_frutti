@@ -76,7 +76,11 @@ export class StarTower extends ProjectileTower {
       // Set onHit method to destroy projectile on hit
       projectile.onHit = function(enemy) {
         if (enemy && typeof enemy.takeDamage === 'function') {
-          enemy.takeDamage(this.damage);
+          let dmg = this.damage;
+          if (enemy.type === 'boss' || enemy.constructor?.name === 'BossBloon') {
+            dmg = Math.round(this.damage * 4); // 4x damage to boss
+          }
+          enemy.takeDamage(dmg);
         }
         this.isActive = false;
         if (this.sprite) {

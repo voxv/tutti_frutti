@@ -120,7 +120,7 @@ function handleGameFieldClick(scene, pointer) {
 export function deselectTower(scene) {
   hideRangeCircle(scene);
   scene.selectedTowerForUpgradeUI = null;
-  
+
   // Hide targeting buttons and label
   if (scene.targetingButtons) {
     scene.targetingButtons.forEach(btn => btn.setVisible(false));
@@ -128,10 +128,15 @@ export function deselectTower(scene) {
       scene.targetingButtons.targetingLabel.setVisible(false);
     }
   }
-  
-  // Hide upgrade UI
+
+  // Hide and destroy upgrade UI
   if (scene.upgradeUI) {
-    scene.upgradeUI.setVisible(false);
+    if (typeof scene.upgradeUI.destroy === 'function') {
+      scene.upgradeUI.destroy();
+    } else {
+      scene.upgradeUI.setVisible(false);
+    }
+    scene.upgradeUI = null;
   }
   // Hide upgrade tooltip if present
   if (scene.upgradeTooltip && scene.upgradeTooltip.setVisible) {

@@ -92,31 +92,5 @@ export function renderEnemies(scene) {
     }
   }
   
-  // Draw health bars for boss bloons AFTER all sprites are rendered
-  for (const e of scene.gameLogic.enemies) {
-    if (!e) continue;
-    // Robust boss detection: works even if minified
-    if ((
-      (e.constructor && typeof e.constructor.name === 'string' && e.constructor.name === 'BossBloon') ||
-      (e.type === 'boss') ||
-      (e.health >= 2000 && e.size >= 100 && e.reward >= 100 && e.isActive)
-    ) && e.isActive && e.health > 0) {
-      const multiplier = window.BLOON_SIZE_MULTIPLIER || 1;
-      const size = (e.size ?? 20) * multiplier;
-      const barWidth = size * 1.5;
-      const barHeight = 10;
-      const barX = e.position.x - barWidth / 2;
-      const barY = e.position.y - size + 5;
-      // Background (dark gray)
-      scene.enemyGraphics.fillStyle(0x333333, 1);
-      scene.enemyGraphics.fillRect(barX, barY, barWidth, barHeight);
-      // Health bar (green)
-      const healthPercent = Math.max(0, e.health / (e.maxHealth || 500)); // Use maxHealth from config
-      scene.enemyGraphics.fillStyle(0x00FF00, 1);
-      scene.enemyGraphics.fillRect(barX, barY, barWidth * healthPercent, barHeight);
-      // Border (white)
-      scene.enemyGraphics.lineStyle(2, 0xFFFFFF, 1);
-      scene.enemyGraphics.strokeRect(barX, barY, barWidth, barHeight);
-    }
-  }
+  // Boss health bar is now managed by BossBloon itself as a persistent graphics object.
 }

@@ -17,7 +17,8 @@ export class Bloon extends Enemy {
     frameWidth = null,
     frameHeight = null,
     health = 1,
-    damage = 1
+    damage = 1,
+    type = null
   } = {}) {
     super();
     this.path = path;
@@ -62,6 +63,7 @@ export class Bloon extends Enemy {
     this.frameHeight = frameHeight;
     this.health = health;
     this.maxHealth = health; // Store max health for health bar calculations
+    this.type = type;
     // Animation state
     this.animFrame = 0;
     this.animPlaying = false;
