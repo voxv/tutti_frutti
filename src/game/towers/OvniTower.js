@@ -72,6 +72,7 @@ export class OvniTower extends AOETower {
         const obj = this.abductedFruits[i];
         const fruit = obj.fruit;
         if (!fruit.isActive) {
+          fruit.isAbducted = false; // Clear abducted state if fruit becomes inactive
           this.abductedFruits.splice(i, 1);
           continue;
         }
@@ -107,9 +108,9 @@ export class OvniTower extends AOETower {
             fruit._sprite.x = targetX;
             fruit._sprite.y = targetY;
           }
-          // Mark as inactive (triggers destroy animation) but keep isAbducted true
-          // so the fruit doesn't move along the path during animation
+          // Mark as inactive (triggers destroy animation)
           fruit.isActive = false;
+          fruit.isAbducted = false; // Clear abducted state when abduction completes
           if (typeof window !== 'undefined' && window.sceneRef && typeof window.sceneRef.goldAmount === 'number' && !fruit._goldAwarded) {
             window.sceneRef.goldAmount += fruit.reward || 0;
             if (window.sceneRef.goldText) window.sceneRef.goldText.setText(String(window.sceneRef.goldAmount));
@@ -245,8 +246,12 @@ export class OvniTower extends AOETower {
       if (enemy && (enemy.type === 'boss' || enemy.constructor?.name === 'BossBloon')) {
         continue;
       }
+      // Do not abduct if being pushed by tornado (knockback)
+      if (enemy && enemy._knockbackTimer && enemy._knockbackTimer > 0) {
+        continue;
+      }
       if (enemy && enemy.isActive && this.isInRange(enemy) && Math.abs(enemy.position.x - this.position.x) < xRange && !abductedSet.has(enemy)) {
-        enemy.isAbducted = true;
+        enemy.isAbducted = true; // Set immediately
         // Store the x position at the moment of abduction
         this.abductedFruits.push({ fruit: enemy, abductedX: enemy.position.x });
         count++;

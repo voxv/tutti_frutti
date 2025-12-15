@@ -47,6 +47,7 @@ export class TornadoProjectile extends Projectile {
     const enemies = scene && scene.gameLogic && Array.isArray(scene.gameLogic.enemies) ? scene.gameLogic.enemies : [];
     for (const enemy of enemies) {
       if (!enemy || !enemy.isActive || !enemy.position) continue;
+      if (enemy.isAbducted) continue; // Do not affect fruits being abducted by OvniTowers
       if (this._hitEnemies.has(enemy)) continue;
       const dist = Math.hypot(enemy.position.x - this.sprite.x, enemy.position.y - this.sprite.y);
       if (dist <= (this.hitRadius || 60)) {
@@ -60,8 +61,9 @@ export class TornadoProjectile extends Projectile {
   }
 
   onHit(enemy) {
-    // Only apply knockback if not already hit or if not a boss
+    // Only apply knockback if not already hit, not a boss, and not abducted
     if (!enemy || this._hitEnemies.has(enemy) || this._collisionDisabled) return;
+    if (enemy.isAbducted) return;
     // If boss, immediately deactivate and destroy the tornado
     if (enemy.type === 'boss' || enemy.constructor?.name === 'BossBloon') {
       this.isActive = false;
