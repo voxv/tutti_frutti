@@ -63,6 +63,11 @@ export function renderEnemies(scene) {
         if (!e.isActive) {
           e._sprite.destroy();
           e._sprite = null;
+          // Destroy boss health bar if present
+          if (e._healthBar && typeof e._healthBar.destroy === 'function') {
+            e._healthBar.destroy();
+            e._healthBar = null;
+          }
         }
       }
       continue;

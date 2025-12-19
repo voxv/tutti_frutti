@@ -6,8 +6,8 @@ export class ClumpSpike {
     this.scene = scene;
     this.x = x;
     this.y = y;
-    this.maxLife = 5;
-    this.life = 5;
+    this.maxLife = 7;
+    this.life = 8;
     this.sprite = scene.add.sprite(x, y, 'clump_spike');
       this.sprite.setDisplaySize(50, 50); // Keep original sprite size
     this.sprite.setDepth(9000);
@@ -28,12 +28,15 @@ export class ClumpSpike {
 
   hit() {
     if (!this.active) return;
-    this.life--;
-    // Shrink sprite as life decreases
-    const scale = 0.16 + 0.08 * this.life;
-    this.sprite.setScale(scale, scale);
-    if (this.life <= 0) {
-      this.destroy();
+    // Only process hit if still has life
+    if (this.life > 0) {
+      // Shrink sprite as life decreases (less dramatic scaling)
+      const scale = 0.5 - 0.05 * (this.maxLife - this.life);
+      this.sprite.setScale(Math.max(0.15, scale), Math.max(0.15, scale));
+      this.life--;
+      if (this.life === 0) {
+        this.destroy();
+      }
     }
   }
 

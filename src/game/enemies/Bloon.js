@@ -349,6 +349,11 @@ export class Bloon extends Enemy {
             phaserSprite.destroy();
           }
           this._sprite = null;
+          // Destroy boss health bar if present
+          if (this._healthBar && typeof this._healthBar.destroy === 'function') {
+            this._healthBar.destroy();
+            this._healthBar = null;
+          }
           this.animPlaying = false;
           
           // Spawn child bloons after animation (supports multiple children)

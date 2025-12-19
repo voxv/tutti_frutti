@@ -55,13 +55,13 @@ export class ImpactTower extends AOETower {
 
   applyUpgrade(upgradeKey) {
     if (upgradeKey === 'bigger_impact') {
-      this.maxBloonsPerAttack = 2; // Destroy 2 fruits
+      this.maxBloonsPerAttack = 3; // Destroy 2 fruits
     } else if (upgradeKey === 'bigger_impact2') {
-      this.maxBloonsPerAttack = 3; // Destroy 3 fruits
+      this.maxBloonsPerAttack = 4; // Destroy 3 fruits
     } else if (upgradeKey === 'bigger_impact3') {
-      this.maxBloonsPerAttack = 4; // Destroy 4 fruits
+      this.maxBloonsPerAttack = 5; // Destroy 4 fruits
     } else if (upgradeKey === 'faster_impact' || upgradeKey === 'faster_impact2' || upgradeKey === 'faster_impact3') {
-      this.fireRate += 0.5;
+      this.fireRate += 0.9;
       if (this._placedSprite && this._placedSprite.towerFireRate !== undefined) {
         this._placedSprite.towerFireRate = this.fireRate;
       }

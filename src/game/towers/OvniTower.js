@@ -272,21 +272,17 @@ export class OvniTower extends AOETower {
       this.fireRate += 0.2;
       this.abductCooldown = 1 / this.fireRate;
       if (this._placedSprite) this._placedSprite.towerFireRate = this.fireRate;
-      console.log('[OvniTower] fireRate upgraded to', this.fireRate);
     }
 
     // Wider beam upgrades - increase max simultaneous abductions
     if (upgradeKey === 'wider_beam_1') {
       this.maxAbductions = 2;
-      console.log('[OvniTower] maxAbductions upgraded to 2');
     }
     if (upgradeKey === 'wider_beam_2') {
       this.maxAbductions = 3;
-      console.log('[OvniTower] maxAbductions upgraded to 3');
     }
     if (upgradeKey === 'wider_beam_3') {
       this.maxAbductions = 4;
-      console.log('[OvniTower] maxAbductions upgraded to 4');
     }
 
     // Alien tech upgrade - increase damage

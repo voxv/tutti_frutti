@@ -314,4 +314,8 @@ export function hideRangeCircle(scene) {
     scene.activeTowerRangeCircle.destroy();
     scene.activeTowerRangeCircle = null;
   }
+  if (scene._birdSelectCircle) {
+    scene._birdSelectCircle.destroy();
+    scene._birdSelectCircle = null;
+  }
 }

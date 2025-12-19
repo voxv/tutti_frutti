@@ -30,11 +30,11 @@
       ],
       "medium": [
         { "name": "Range Boost 2", "key": "even_bigger_range", "cost": 220, "description": "Further increases the attack range." },
-        { "name": "Fast Blades", "key": "faster_blades", "cost": 510, "description": "Increases the attack speed." }
+        { "name": "Fast Blades", "key": "faster_blades", "cost": 480, "description": "Increases the attack speed." }
       ],
       "high": [
         { "name": "Storm Spin", "key": "storm_spin", "cost": 670, "description": "Enables a spinning attack, hitting all nearby fruits." },
-        { "name": "Blade Master", "key": "blade_master", "cost": 820, "description": "Greatly increases damage and attack speed." }
+        { "name": "Blade Master", "key": "blade_master", "cost": 720, "description": "Greatly increases damage and attack speed." }
       ]
     }
   },
@@ -73,8 +73,8 @@
         { "name": "Destroy 3 fruits", "key": "pop_three_fruits", "cost": 370, "description": "Allows nuts to pop up to 3 fruits per shot." }
       ],
       "high": [
-        { "name": "WorldWide Range", "key": "world_wide_range", "cost": 430, "description": "Massively increases the attack range." },
-        { "name": "Rapid Barrage", "key": "rapid_barrage", "cost": 825, "description": "Greatly increases the fire rate." }
+        { "name": "WorldWide Range", "key": "world_wide_range", "cost": 400, "description": "Massively increases the attack range." },
+        { "name": "Rapid Barrage", "key": "rapid_barrage", "cost": 725, "description": "Greatly increases the fire rate." }
       ]
     }
   },
@@ -100,11 +100,11 @@
       ],
       "medium": [
         { "name": "Range Boost 2", "key": "even_bigger_range", "cost": 320, "description": "Further increases the attack range." },
-        { "name": "Deep freeze 2", "key": "deep_freeze_2", "cost": 560, "description": "Freezes fruits for an even longer duration." }
+        { "name": "Deep freeze 2", "key": "deep_freeze_2", "cost": 510, "description": "Freezes fruits for an even longer duration." }
       ],
       "high": [
-        { "name": "Attack Speed +", "key": "attack_speed", "cost": 610, "description": "Increases the attack speed." },
-        { "name": "Attack Speed +", "key": "attack_speed_2", "cost": 610, "description": "Greatly increases the attack speed." }
+        { "name": "Attack Speed +", "key": "attack_speed", "cost": 580, "description": "Increases the attack speed." },
+        { "name": "Attack Speed +", "key": "attack_speed_2", "cost": 580, "description": "Greatly increases the attack speed." }
       ]
     }
   },
@@ -177,11 +177,11 @@
       ],
       "medium": [
         { "name": "Range Boost 2", "key": "even_bigger_range", "cost": 280, "description": "Further increases the attack range." },
-        { "name": "Fast Spikes 1", "key": "faster_spikes", "cost": 475, "description": "Increases the spike throwing speed." }
+        { "name": "Fast Spikes 1", "key": "faster_spikes", "cost": 375, "description": "Increases the spike throwing speed." }
       ],
       "high": [
-        { "name": "Fat Spikes", "key": "fat_spikes", "cost": 720, "description": "Spikes can pop more fruits per hit." },
-        { "name": "Fast Spikes 2", "key": "super_fast_spikes", "cost": 690, "description": "Greatly increases the spike throwing speed." }
+        { "name": "Fat Spikes", "key": "fat_spikes", "cost": 520, "description": "Spikes can pop more fruits per hit." },
+        { "name": "Fast Spikes 2", "key": "super_fast_spikes", "cost": 590, "description": "Greatly increases the spike throwing speed." }
       ]
     }
   },
@@ -214,11 +214,11 @@
       ],
       "medium": [
         { "name": "Range Boost 2", "key": "even_bigger_range", "cost": 320, "description": "Further increases the attack range." },
-        { "name": "More Power 2", "key": "penetration", "cost": 570, "description": "Further increases the damage and penetration." }
+        { "name": "More Power 2", "key": "penetration", "cost": 490, "description": "Further increases the damage and penetration." }
       ],
       "high": [
         { "name": "Range Boost 3", "key": "world_wide_range", "cost": 390, "description": "Massively increases the attack range." },
-        { "name": "More Power 3", "key": "penetration_2", "cost": 750, "description": "Greatly increases the damage and penetration." }
+        { "name": "More Power 3", "key": "penetration_2", "cost": 650, "description": "Greatly increases the damage and penetration." }
       ]
     }
   },
@@ -259,7 +259,7 @@
       ],
       "high": [
         { "name": "WorldWide Range", "key": "world_wide_range", "cost": 480, "description": "Massively increases the attack range." },
-        { "name": "Strong Wind 3", "key": "storm_wind3", "cost": 600, "description": "Massive storm.", "maxHits": 5 }
+        { "name": "Strong Wind 3", "key": "storm_wind3", "cost": 500, "description": "Massive storm.", "maxHits": 5 }
       ]
     }
   },
@@ -269,9 +269,9 @@
     "type": "aoe",
     "class": "ImpactTower",
     "towerType": "impact",
-    "cost": 380,
+    "cost": 320,
     "range": 120,
-    "fireRate": 1.0,
+    "fireRate": 1.5,
     "damage": 2,
     "homing": false,
     "assets": {
@@ -286,11 +286,11 @@
       ],
       "medium": [
         { "name": "Bigger Impact 2", "key": "bigger_impact2", "cost": 320, "description": "Further increases the damage." },
-        { "name": "Faster Impact 2", "key": "faster_impact2", "cost": 400, "description": "Further increases the attack speed." }
+        { "name": "Faster Impact 2", "key": "faster_impact2", "cost": 320, "description": "Further increases the attack speed." }
       ],
       "high": [
-        { "name": "Massive Impact", "key": "bigger_impact3", "cost": 480, "description": "Greatly increases damage." },
-        { "name": "Faster Impact 3", "key": "massive_impact3", "cost": 500, "description": "Increases damage massively." }
+        { "name": "Massive Impact", "key": "bigger_impact3", "cost": 380, "description": "Greatly increases damage." },
+        { "name": "Faster Impact 3", "key": "massive_impact3", "cost": 410, "description": "Increases damage massively." }
       ]
     }
   },
@@ -356,16 +356,16 @@
     },
     "upgrades": {
       "lower": [
-        { "name": "Attack Speed 1", "key": "attack_speed_1", "cost": 320, "description": "Increases the attack speed." },
+        { "name": "Attack Speed 1", "key": "attack_speed_1", "cost": 310, "description": "Increases the attack speed." },
         { "name": "8 Spikes", "key": "double_spike", "cost": 365, "description": "Shoots 8 spikes around it." }
       ],
       "medium": [
-        { "name": "Attack Speed 2", "key": "attack_speed_2", "cost": 450, "description": "Further increases the attack speed." },
-        { "name": "10 Spikes", "key": "triple_spike", "cost": 490, "description": "Shoots 10 spikes around it." }
+        { "name": "Attack Speed 2", "key": "attack_speed_2", "cost": 420, "description": "Further increases the attack speed." },
+        { "name": "10 Spikes", "key": "triple_spike", "cost": 460, "description": "Shoots 10 spikes around it." }
       ],
       "high": [
         { "name": "Attack Speed 3", "key": "attack_speed_3", "cost": 525, "description": "Massively increases the attack speed." },
-        { "name": "12 Spikes", "key": "quadruple_spike", "cost": 520, "description": "Shoots 12 spikes around it." }
+        { "name": "12 Spikes", "key": "quadruple_spike", "cost": 500, "description": "Shoots 12 spikes around it." }
       ]
     }
   },
@@ -397,16 +397,16 @@
     },
     "upgrades": {
       "lower": [
-        { "name": "Attack Speed 1", "key": "attack_speed_1", "cost": 570, "description": "Increases the attack speed." },
-        { "name": "Double Boomerang", "key": "double_boomerang", "cost": 735, "description": "Throws two boomerangs per shot." }
+        { "name": "Attack Speed 1", "key": "attack_speed_1", "cost": 540, "description": "Increases the attack speed." },
+        { "name": "Double Boomerang", "key": "double_boomerang", "cost": 715, "description": "Throws two boomerangs per shot." }
       ],
       "medium": [
-        { "name": "Attack Speed 2", "key": "attack_speed_2", "cost": 650, "description": "Further increases the attack speed." },
-        { "name": "Triple Boomerang", "key": "triple_boomerang", "cost": 830, "description": "Throws three boomerangs per shot." }
+        { "name": "Attack Speed 2", "key": "attack_speed_2", "cost": 610, "description": "Further increases the attack speed." },
+        { "name": "Triple Boomerang", "key": "triple_boomerang", "cost": 740, "description": "Throws three boomerangs per shot." }
       ],
       "high": [
-        { "name": "Attack Speed 3", "key": "attack_speed_3", "cost": 825, "description": "Massively increases the attack speed." },
-        { "name": "Quad Boomerang", "key": "quadruple_boomerang", "cost": 950, "description": "Throws four boomerangs per shot." }
+        { "name": "Attack Speed 3", "key": "attack_speed_3", "cost": 725, "description": "Massively increases the attack speed." },
+        { "name": "Quad Boomerang", "key": "quadruple_boomerang", "cost": 850, "description": "Throws four boomerangs per shot." }
       ]
     }
   },
@@ -446,16 +446,16 @@
     },
     "upgrades": {
       "lower": [
-        { "name": "Devastation 1", "key": "devastation_1", "cost": 720, "description": "Explosions also destroy 1 nearby fruit." },
-        { "name": "Wide Patrol 1", "key": "wide_patrol_1", "cost": 520, "description": "Falcon flies a wider path and fires faster." }
+        { "name": "Devastation 1", "key": "devastation_1", "cost": 690, "description": "Explosions also destroy 1 nearby fruit." },
+        { "name": "Wide Patrol 1", "key": "wide_patrol_1", "cost": 450, "description": "Falcon flies a wider path and fires faster." }
       ],
       "medium": [
-        { "name": "Devastation 2", "key": "devastation_2", "cost": 820, "description": "Explosions also destroy 2 nearby fruits." },
-        { "name": "Wide Patrol 2", "key": "wide_patrol_2", "cost": 600, "description": "Falcon flies an even wider path and fires even faster." }
+        { "name": "Devastation 2", "key": "devastation_2", "cost": 750, "description": "Explosions also destroy 2 nearby fruits." },
+        { "name": "Wide Patrol 2", "key": "wide_patrol_2", "cost": 510, "description": "Falcon flies an even wider path and fires even faster." }
       ],
       "high": [
-        { "name": "Devastation 3", "key": "devastation_3", "cost": 1050, "description": "Explosions also destroy 3 nearby fruits." },
-        { "name": "Wide Patrol 3", "key": "wide_patrol_3", "cost": 680, "description": "Falcon flies the widest path and fires the fastest." }
+        { "name": "Devastation 3", "key": "devastation_3", "cost": 840, "description": "Explosions also destroy 3 nearby fruits." },
+        { "name": "Wide Patrol 3", "key": "wide_patrol_3", "cost": 590, "description": "Falcon flies the widest path and fires the fastest." }
       ]
     }
   },
@@ -531,11 +531,11 @@
         { "name": "Faster Abduction 1", "key": "faster_abduction_1", "cost": 410, "description": "Increases attack speed." }
       ],
       "medium": [
-        { "name": "Wider Beam 2", "key": "wider_beam_2", "cost": 660, "description": "Further increases the beam radius." },
-        { "name": "Faster Abduction 2", "key": "faster_abduction_2", "cost": 590, "description": "Further increases the attack speed." }
+        { "name": "Wider Beam 2", "key": "wider_beam_2", "cost": 610, "description": "Further increases the beam radius." },
+        { "name": "Faster Abduction 2", "key": "faster_abduction_2", "cost": 630, "description": "Further increases the attack speed." }
       ],
       "high": [
-        { "name": "Wider Beam 3", "key": "wider_beam_3", "cost": 720, "description": "Greatly increases the beam radius." },
+        { "name": "Wider Beam 3", "key": "wider_beam_3", "cost": 740, "description": "Greatly increases the beam radius." },
         { "name": "Faster Abduction 3", "key": "faster_abduction_3", "cost": 810, "description": "Massively increases attack speed." }
       ]
     }

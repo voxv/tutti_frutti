@@ -24,6 +24,15 @@ export function showWinGamePopup(scene, options = {}) {
   
   // Stop current wave and remove all bloons
   if (scene.gameLogic) {
+    // Destroy boss health bars BEFORE clearing enemies array
+    if (Array.isArray(scene.gameLogic.enemies)) {
+      for (const enemy of scene.gameLogic.enemies) {
+        if (enemy && enemy._healthBar && typeof enemy._healthBar.destroy === 'function') {
+          enemy._healthBar.destroy();
+          enemy._healthBar = null;
+        }
+      }
+    }
     scene.gameLogic.enemies = [];
     scene.gameLogic.waveSpawningComplete = true;
     scene.gameLogic.enemiesRemovedCount = 0;
@@ -51,6 +60,14 @@ export function showWinGamePopup(scene, options = {}) {
   if (scene.enemyGraphics) scene.enemyGraphics.clear();
   // Hide all bloons and placed towers
   if (scene.enemyGraphics) scene.enemyGraphics.setVisible(false);
+  // Destroy any remaining boss health bar graphics in the scene
+  if (scene.children && scene.children.list) {
+    scene.children.list.forEach(child => {
+      if (child && child.isBossHealthBar && typeof child.destroy === 'function') {
+        child.destroy();
+      }
+    });
+  }
   // Destroy all projectile sprites in the scene (e.g., lasers)
   if (scene.children && scene.children.list) {
     const projectileTextureKeys = [
