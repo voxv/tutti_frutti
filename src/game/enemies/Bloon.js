@@ -1,5 +1,6 @@
 import { Enemy } from "../../engine/entities/Enemy.js";
 import { Vector2 } from "../../engine/core/Vector2.js";
+import { GAME_SCALE, GAME_WIDTH, GAME_HEIGHT, SHOP_WIDTH, INFO_BAR_HEIGHT } from "../../client/utils/scaleConfig.js";
 
 export class Bloon extends Enemy {
   constructor(path, {
@@ -108,7 +109,7 @@ export class Bloon extends Enemy {
     if (this._knockbackTimer && this._knockbackTimer > 0) {
       this._knockbackTimer -= deltaTime;
       const speedMultiplier = (typeof window !== 'undefined' && window.BLOON_SPEED_MULTIPLIER) ? window.BLOON_SPEED_MULTIPLIER : 1;
-      this.distanceTraveled -= this._knockbackSpeed * speedMultiplier * deltaTime;
+      this.distanceTraveled -= this._knockbackSpeed * speedMultiplier * GAME_SCALE * deltaTime;
       if (this.distanceTraveled < 0) this.distanceTraveled = 0;
       this.progress = this._distanceToProgress(this.distanceTraveled);
       let pos = null;
@@ -147,7 +148,7 @@ export class Bloon extends Enemy {
     // If destroy animation is playing, keep moving (but NOT if abducted)
     if (!this.isActive && this.animPlaying && !this.isAbducted) {
       const speedMultiplier = (typeof window !== 'undefined' && window.BLOON_SPEED_MULTIPLIER) ? window.BLOON_SPEED_MULTIPLIER : 1;
-      this.distanceTraveled += this.speed * speedMultiplier * deltaTime;
+      this.distanceTraveled += this.speed * speedMultiplier * GAME_SCALE * deltaTime;
       let clampedDistance = Math.min(this.distanceTraveled, this.splineLength);
       this.progress = this._distanceToProgress(clampedDistance);
       let pos = null;
@@ -173,7 +174,7 @@ export class Bloon extends Enemy {
     let clampedDistance = null;
     if (!this.isAbducted) {
       const speedMultiplier = (typeof window !== 'undefined' && window.BLOON_SPEED_MULTIPLIER) ? window.BLOON_SPEED_MULTIPLIER : 1;
-      this.distanceTraveled += this.speed * speedMultiplier * deltaTime;
+      this.distanceTraveled += this.speed * speedMultiplier * GAME_SCALE * deltaTime;
       clampedDistance = Math.min(this.distanceTraveled, this.splineLength);
       this.progress = this._distanceToProgress(clampedDistance);
       let pos = null;
@@ -187,8 +188,10 @@ export class Bloon extends Enemy {
     }
 
     // Check if bloon has gone offscreen - mark as inactive immediately
-    // Game area: 1600px wide (minus 220px shop), 900px tall (minus 100px info bar)
-    const isOffscreen = this.position.x < 0 || this.position.x > 1380 || this.position.y < 0 || this.position.y > 800;
+    // Game area uses scaled dimensions (GAME_WIDTH minus SHOP_WIDTH, GAME_HEIGHT minus INFO_BAR_HEIGHT)
+    const gamePlayAreaWidth = GAME_WIDTH - SHOP_WIDTH;
+    const gamePlayAreaHeight = GAME_HEIGHT - INFO_BAR_HEIGHT;
+    const isOffscreen = this.position.x < 0 || this.position.x > gamePlayAreaWidth || this.position.y < 0 || this.position.y > gamePlayAreaHeight;
     if (isOffscreen) {
       if (!this._offscreenLogged) {
         this._offscreenLogged = true;
