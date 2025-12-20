@@ -717,7 +717,7 @@ class BalouneScene extends Phaser.Scene {
     // Wave text appears after targeting buttons
     // Place wave text to the left of Start Wave button
     const startWaveBtnX = gameWidth - shopWidth / 2;
-    const waveTextX = startWaveBtnX - 200; // 200px left of button for more spacing
+    const waveTextX = startWaveBtnX - 200 * GAME_SCALE; // 200px left of button for more spacing (scaled)
     this.waveText = createWaveText(this, waveTextX, gameHeight - infoBarHeight / 2, this.waveNumber);
     this.startWaveButton = createStartWaveButton(
       this,
