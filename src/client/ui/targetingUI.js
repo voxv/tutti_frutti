@@ -3,6 +3,8 @@
  * Handles the creation, styling, and event logic for targeting priority buttons (First, Last, Strong)
  */
 
+import { GAME_SCALE } from "../utils/scaleConfig.js";
+
 /**
  * Creates and manages targeting priority buttons
  * @param {Phaser.Scene} scene - The Phaser scene
@@ -15,10 +17,10 @@
 export function createTargetingButtons(scene, gameHeight, infoBarHeight, gameLogic, config = {}) {
   const buttons = [];
   const priorities = ["First", "Last", "Strong"];
-  const buttonWidth = 70;
-  const buttonHeight = 32;
-  const buttonSpacing = 10;
-  const startX = 30;
+  const buttonWidth = 70 * GAME_SCALE;
+  const buttonHeight = 32 * GAME_SCALE;
+  const buttonSpacing = 10 * GAME_SCALE;
+  const startX = 30 * GAME_SCALE;
   const startY = gameHeight - infoBarHeight / 2;
 
   // Add a cool "Targeting" label above the buttons
@@ -27,11 +29,11 @@ export function createTargetingButtons(scene, gameHeight, infoBarHeight, gameLog
     startY - buttonHeight - 12 + 23, // Lowered by 23 pixels total (27-4)
     "Targeting",
     {
-      font: "bold 19px Arial Black, Arial, sans-serif",
+      font: `bold ${Math.round(19 * GAME_SCALE)}px Arial Black, Arial, sans-serif`,
       fill: "#ffeb3b",
       stroke: "#222",
-      strokeThickness: 4,
-      shadow: { offsetX: 2, offsetY: 2, color: '#000', blur: 4, fill: true },
+      strokeThickness: Math.round(4 * GAME_SCALE),
+      shadow: { offsetX: 2 * GAME_SCALE, offsetY: 2 * GAME_SCALE, color: '#000', blur: 4 * GAME_SCALE, fill: true },
       align: "center"
     }
   ).setOrigin(0.5, 1).setDepth(1005);
@@ -44,11 +46,11 @@ export function createTargetingButtons(scene, gameHeight, infoBarHeight, gameLog
       startY,
       priority,
       {
-        font: "18px Arial",
+        font: `${Math.round(18 * GAME_SCALE)}px Arial`,
         fill: "#fff",
         backgroundColor: "#444",
-        padding: { x: 12, y: 6 },
-        borderRadius: 6
+        padding: { x: Math.round(12 * GAME_SCALE), y: Math.round(6 * GAME_SCALE) },
+        borderRadius: Math.round(6 * GAME_SCALE)
       }
     ).setOrigin(0, 0.5).setInteractive({ useHandCursor: true });
 
