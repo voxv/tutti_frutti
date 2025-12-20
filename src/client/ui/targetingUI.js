@@ -26,7 +26,7 @@ export function createTargetingButtons(scene, gameHeight, infoBarHeight, gameLog
   // Add a cool "Targeting" label above the buttons
   const targetingLabel = scene.add.text(
     startX + ((priorities.length * (buttonWidth + buttonSpacing) - buttonSpacing) / 2),
-    startY - buttonHeight - 12 + 23, // Lowered by 23 pixels total (27-4)
+    startY - buttonHeight - 12 + 23 - 4, // Lowered by 23 pixels total (27-4), then moved up 4px
     "Targeting",
     {
       font: `bold ${Math.round(19 * GAME_SCALE)}px Arial Black, Arial, sans-serif`,
