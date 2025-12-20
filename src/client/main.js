@@ -14,6 +14,7 @@ import { CoconutBloon } from "../game/enemies/CoconutBloon.js";
 import IntroScene from "./scenes/IntroScene.js";
 import MapSelectScene from "./scenes/MapSelectScene.js";
 import BalouneScene from "./scenes/BalouneScene.js";
+import { GAME_WIDTH, GAME_HEIGHT, GAME_SCALE } from "./utils/scaleConfig.js";
 // Expose bloon classes globally for dynamic spawning
 window.CherryBloon = CherryBloon;
 window.BananaBloon = BananaBloon;
@@ -27,10 +28,13 @@ window.CoconutBloon = CoconutBloon;
 // import { TestImageScene } from "./TestImageScene.js";
 var config = {
   type: Phaser.AUTO,
-  width: 1600,
-  height: 900,
+  width: GAME_WIDTH,
+  height: GAME_HEIGHT,
   backgroundColor: "#222222",
   scene: [IntroScene, MapSelectScene, BalouneScene],
 };
+
+// Expose GAME_SCALE globally for all modules to access
+window.GAME_SCALE = GAME_SCALE;
 
 new Phaser.Game(config);

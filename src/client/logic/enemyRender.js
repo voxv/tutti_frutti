@@ -1,6 +1,8 @@
 // Enemy rendering logic for bloons/enemies
 // Exports a function to render all enemies
 
+import { GAME_SCALE, GAME_WIDTH, GAME_HEIGHT, SCALED_SHOP_WIDTH, SCALED_INFO_BAR_HEIGHT } from "../utils/scaleConfig.js";
+
 export function renderEnemies(scene) {
   // Draw all active bloons/enemies
   if (!scene.gameLogic || !scene.gameLogic.enemies) return;
@@ -19,7 +21,7 @@ export function renderEnemies(scene) {
   }
   for (const e of scene.gameLogic.enemies) {
     if (!e) continue;
-    const outOfBounds = e.position.x < 0 || e.position.x > 1200 - 220 || e.position.y < 0 || e.position.y > 900 - 100;
+    const outOfBounds = e.position.x < 0 || e.position.x > GAME_WIDTH - SCALED_SHOP_WIDTH || e.position.y < 0 || e.position.y > GAME_HEIGHT - SCALED_INFO_BAR_HEIGHT;
     // Always call updateAnimation if sprite exists and bloon uses spritesheet
     if (e.spritesheet && scene.textures.exists(e.spritesheet) && e.frameCount > 1) {
       const multiplier = window.BLOON_SIZE_MULTIPLIER || 1;

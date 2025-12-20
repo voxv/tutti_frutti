@@ -1,4 +1,5 @@
 import { showRangeCircle } from "../logic/towerPlacement.js";
+import { GAME_SCALE } from "../utils/scaleConfig.js";
 
 /**
  * Update only the visual state of upgrade buttons (affordability, color)
@@ -140,15 +141,15 @@ export function showUpgradeUI(scene, placedTower, towerConfig) {
   if (!scene.upgradeTooltip || scene.upgradeTooltip._destroyed) {
     scene.upgradeTooltip = scene.add.text(0, 0, '', {
       fontFamily: 'Montserrat, Segoe UI, Arial',
-      fontSize: '13px',
+      fontSize: `${Math.round(13 * GAME_SCALE)}px`,
       fontStyle: 'bold',
       color: '#fff',
       align: 'center',
-      padding: { left: 12, right: 12, top: 10, bottom: 10 },
-      wordWrap: { width: 200 },
+      padding: { left: Math.round(12 * GAME_SCALE), right: Math.round(12 * GAME_SCALE), top: Math.round(10 * GAME_SCALE), bottom: Math.round(10 * GAME_SCALE) },
+      wordWrap: { width: Math.round(200 * GAME_SCALE) },
       stroke: '#000',
-      strokeThickness: 3,
-      shadow: { offsetX: 0, offsetY: 3, color: '#000', blur: 8, fill: true }
+      strokeThickness: Math.round(3 * GAME_SCALE),
+      shadow: { offsetX: 0, offsetY: Math.round(3 * GAME_SCALE), color: '#000', blur: Math.round(8 * GAME_SCALE), fill: true }
     }).setOrigin(0.5).setVisible(false).setDepth(5000);
     scene.upgradeTooltip._destroyed = false;
   }
@@ -162,11 +163,11 @@ export function showUpgradeUI(scene, placedTower, towerConfig) {
   }
   const tooltipBg = scene.upgradeTooltipBg;
   
-  // Position UI elements in bottom screen
-  const baseX = 650; // Left of center
-  const baseY = 849; // Bottom screen area (info bar)
-  const offset = 90;
-  const sellBtnOffset = 280;
+  // Position UI elements in bottom screen - scaled to game scale
+  const baseX = 650 * GAME_SCALE; // Left of center
+  const baseY = 849 * GAME_SCALE; // Bottom screen area (info bar)
+  const offset = 90 * GAME_SCALE;
+  const sellBtnOffset = 280 * GAME_SCALE;
   
   // Initialize unlockedUpgrades if missing
   if (!placedTower.unlockedUpgrades) placedTower.unlockedUpgrades = { left: 0, right: 0 };
@@ -221,17 +222,17 @@ export function showUpgradeUI(scene, placedTower, towerConfig) {
   const leftAffordable = leftUpgrade ? scene.goldAmount >= leftUpgrade.cost : false;
   const leftBtn = scene.add.text(baseX - offset, baseY, leftText,
     {
-      font: leftText === 'MAX' ? 'bold 18px Arial' : 'bold 16px Arial',
+      font: leftText === 'MAX' ? `bold ${Math.round(18 * GAME_SCALE)}px Arial` : `bold ${Math.round(16 * GAME_SCALE)}px Arial`,
       fill: leftText === 'MAX' ? '#999999' : (leftAffordable ? '#f5f5f5' : '#888888'),
       backgroundColor: leftText === 'MAX' ? '#0a0a0a' : (leftAffordable ? '#111111' : '#0f0f0f'),
-      padding: { x: 20, y: 12 },
+      padding: { x: Math.round(20 * GAME_SCALE), y: Math.round(12 * GAME_SCALE) },
       stroke: leftText === 'MAX' ? '#555555' : (leftAffordable ? '#222222' : '#444444'),
-      strokeThickness: leftText === 'MAX' ? 2 : 3,
+      strokeThickness: leftText === 'MAX' ? Math.round(2 * GAME_SCALE) : Math.round(3 * GAME_SCALE),
       shadow: {
         offsetX: 0,
         offsetY: 0,
         color: leftText === 'MAX' ? '#333333' : (leftAffordable ? '#ffb700' : '#ff3333'),
-        blur: 18,
+        blur: Math.round(18 * GAME_SCALE),
         fill: true
       }
     })
@@ -245,15 +246,15 @@ export function showUpgradeUI(scene, placedTower, towerConfig) {
     leftBtn.on('pointerover', (pointer) => {
       if (leftUpgrade && leftUpgrade.description) {
         upgradeTooltip.setText(leftUpgrade.description);
-        upgradeTooltip.setPosition(leftBtn.x, leftBtn.y - 60);
+        upgradeTooltip.setPosition(leftBtn.x, leftBtn.y - 60 * GAME_SCALE);
         upgradeTooltip.setVisible(true);
         // Update tooltip background size and position
         const textBounds = upgradeTooltip.getBounds();
         tooltipBg.clear();
         tooltipBg.fillStyle(0x22232a, 1); // Opaque background
-        tooltipBg.lineStyle(2, 0x444455, 1); // Subtle border
-        tooltipBg.fillRoundedRect(textBounds.x - 10, textBounds.y - 10, textBounds.width + 20, textBounds.height + 20, 10);
-        tooltipBg.strokeRoundedRect(textBounds.x - 10, textBounds.y - 10, textBounds.width + 20, textBounds.height + 20, 10);
+        tooltipBg.lineStyle(2 * GAME_SCALE, 0x444455, 1); // Subtle border
+        tooltipBg.fillRoundedRect(textBounds.x - 10 * GAME_SCALE, textBounds.y - 10 * GAME_SCALE, textBounds.width + 20 * GAME_SCALE, textBounds.height + 20 * GAME_SCALE, Math.round(10 * GAME_SCALE));
+        tooltipBg.strokeRoundedRect(textBounds.x - 10 * GAME_SCALE, textBounds.y - 10 * GAME_SCALE, textBounds.width + 20 * GAME_SCALE, textBounds.height + 20 * GAME_SCALE, Math.round(10 * GAME_SCALE));
         tooltipBg.setVisible(true);
       }
     });
@@ -328,17 +329,17 @@ export function showUpgradeUI(scene, placedTower, towerConfig) {
   const rightAffordable = rightUpgrade ? scene.goldAmount >= rightUpgrade.cost : false;
   const rightBtn = scene.add.text(baseX + offset, baseY, rightText,
     {
-      font: rightText === 'MAX' ? 'bold 18px Arial' : 'bold 16px Arial',
+      font: rightText === 'MAX' ? `bold ${Math.round(18 * GAME_SCALE)}px Arial` : `bold ${Math.round(16 * GAME_SCALE)}px Arial`,
       fill: rightText === 'MAX' ? '#999999' : (rightAffordable ? '#f5f5f5' : '#888888'),
       backgroundColor: rightText === 'MAX' ? '#0a0a0a' : (rightAffordable ? '#111111' : '#0f0f0f'),
-      padding: { x: 20, y: 12 },
+      padding: { x: Math.round(20 * GAME_SCALE), y: Math.round(12 * GAME_SCALE) },
       stroke: rightText === 'MAX' ? '#555555' : (rightAffordable ? '#222222' : '#444444'),
-      strokeThickness: rightText === 'MAX' ? 2 : 3,
+      strokeThickness: rightText === 'MAX' ? Math.round(2 * GAME_SCALE) : Math.round(3 * GAME_SCALE),
       shadow: {
         offsetX: 0,
         offsetY: 0,
         color: rightText === 'MAX' ? '#333333' : (rightAffordable ? '#ffb700' : '#ff3333'),
-        blur: 18,
+        blur: Math.round(18 * GAME_SCALE),
         fill: true
       }
     })
@@ -352,7 +353,7 @@ export function showUpgradeUI(scene, placedTower, towerConfig) {
     rightBtn.on('pointerover', (pointer) => {
       if (rightUpgrade && rightUpgrade.description) {
         upgradeTooltip.setText(rightUpgrade.description);
-        upgradeTooltip.setPosition(rightBtn.x, rightBtn.y - 60);
+        upgradeTooltip.setPosition(rightBtn.x, rightBtn.y - 60 * GAME_SCALE);
         upgradeTooltip.setVisible(true);
         // Update tooltip background size and position
         const textBounds = upgradeTooltip.getBounds();
@@ -459,19 +460,19 @@ export function showUpgradeUI(scene, placedTower, towerConfig) {
   const sellValue = Math.floor(0.8 * (baseCost + upgradesTotal));
   const sellBtn = scene.add.text(baseX + sellBtnOffset, baseY, `Sell\n+$${sellValue}`,
     {
-      font: 'bold 16px Arial',
+      font: `bold ${Math.round(16 * GAME_SCALE)}px Arial`,
       fill: '#f5f5f5',
       backgroundColor: '#4a2020',
-      padding: { left: 10, right: 20, y: 12 },
+      padding: { left: Math.round(10 * GAME_SCALE), right: Math.round(20 * GAME_SCALE), y: Math.round(12 * GAME_SCALE) },
       stroke: '#222222',
-      strokeThickness: 3,
+      strokeThickness: Math.round(3 * GAME_SCALE),
       align: 'center',
-      fixedWidth: 80,
+      fixedWidth: Math.round(80 * GAME_SCALE),
       shadow: {
         offsetX: 0,
         offsetY: 0,
         color: '#4CAF50',
-        blur: 18,
+        blur: Math.round(18 * GAME_SCALE),
         fill: true
       }
     })

@@ -1,20 +1,17 @@
 
 import { pointInPolygon } from "./noBuildUtils.js";
 import { GAME_PHASES } from "../state/gameStateManager.js";
+import { GAME_SCALE, GAME_WIDTH, SCALED_SHOP_WIDTH, SCALED_INFO_BAR_HEIGHT, GAME_HEIGHT } from "../utils/scaleConfig.js";
 /**
  * Tower Placement and Drag/Drop Logic Module
  * Handles tower placement, drag-and-drop UI, and range circle display
  */
 
-const GAME_WIDTH = 1600;
-const SHOP_WIDTH = 220;
-const INFO_BAR_HEIGHT = 100;
-const GAME_HEIGHT = 900;
-const SHOP_CELL_WIDTH = SHOP_WIDTH / 2;
-const SHOP_CELL_HEIGHT = 100;
+const SHOP_CELL_WIDTH = SCALED_SHOP_WIDTH / 2;
+const SHOP_CELL_HEIGHT = 100 * GAME_SCALE;
 
 // Minimum distance between towers (exclusion zone radius)
-const EXCLUSION_RADIUS = 60;
+const EXCLUSION_RADIUS = 60 * GAME_SCALE;
 
 /**
  * Initialize tower placement handlers for the scene
@@ -112,8 +109,8 @@ export function updateDragPosition(scene, pointer) {
   let inNoBuildZone = false;
   // Out of bounds: shop or info bar
   const inShopOrInfoBar =
-    pointer.x < 0 || pointer.x >= GAME_WIDTH - SHOP_WIDTH ||
-    pointer.y < 0 || pointer.y >= GAME_HEIGHT - INFO_BAR_HEIGHT;
+    pointer.x < 0 || pointer.x >= GAME_WIDTH - SCALED_SHOP_WIDTH ||
+    pointer.y < 0 || pointer.y >= GAME_HEIGHT - SCALED_INFO_BAR_HEIGHT;
 
   if (scene.gameLogic && scene.gameLogic.map && Array.isArray(scene.gameLogic.map.noBuildZones)) {
     for (const zone of scene.gameLogic.map.noBuildZones) {
@@ -173,8 +170,8 @@ export function dropTower(scene, pointer, options = {}) {
 
   // Check if dropped inside valid game area (not shop/info bar)
   const isValidDropZone =
-    pointer.x >= 0 && pointer.x < GAME_WIDTH - SHOP_WIDTH &&
-    pointer.y >= 0 && pointer.y < GAME_HEIGHT - INFO_BAR_HEIGHT;
+    pointer.x >= 0 && pointer.x < GAME_WIDTH - SCALED_SHOP_WIDTH &&
+    pointer.y >= 0 && pointer.y < GAME_HEIGHT - SCALED_INFO_BAR_HEIGHT;
 
   // Check for no-build polygons
   let inNoBuildZone = false;

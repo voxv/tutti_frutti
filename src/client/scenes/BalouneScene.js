@@ -30,6 +30,7 @@ import { setupTowerClickHandler, setupStartWaveButtonHandler, setupGameFieldClic
 import { setupGameStateMachine, GAME_PHASES, transitionGamePhase } from "../state/gameStateManager.js";
 import { setupAnimations, ANIMATION_KEYS, isPlayingAnimation } from "../animations/animationDefinitions.js";
 import * as musicManager from "../utils/musicManager.js";
+import { GAME_SCALE, GAME_WIDTH, GAME_HEIGHT, SCALED_SHOP_WIDTH, SCALED_INFO_BAR_HEIGHT } from "../utils/scaleConfig.js";
 
 
 // DEV: Set this to start from a specific wave for testing
@@ -53,6 +54,7 @@ const STARTING_GOLD = 650;
 if (typeof window !== 'undefined') {
   window.BLOON_SIZE_MULTIPLIER = BLOON_SIZE_MULTIPLIER;
   window.BLOON_SPEED_MULTIPLIER = BLOON_SPEED_MULTIPLIER;
+  window.GAME_SCALE = GAME_SCALE;
 }
 
 class BalouneScene extends Phaser.Scene {
@@ -318,18 +320,15 @@ class BalouneScene extends Phaser.Scene {
         if (this.startWaveButton) {
           this.startWaveButton.destroy();
         }
-        const gameWidth = 1600;
-        const shopWidth = 220;
-        const infoBarHeight = 100;
         this.startWaveButton = this.add.text(
-          gameWidth - shopWidth / 2,
-          this.sys.game.config.height - infoBarHeight / 2,
+          GAME_WIDTH - SCALED_SHOP_WIDTH / 2,
+          this.sys.game.config.height - SCALED_INFO_BAR_HEIGHT / 2,
           "Start Wave",
           {
-            font: "28px Arial",
+            font: `${Math.round(28 * GAME_SCALE)}px Arial`,
             fill: "#00ff00",
             backgroundColor: "#222",
-            padding: { x: 20, y: 10 }
+            padding: { x: Math.round(20 * GAME_SCALE), y: Math.round(10 * GAME_SCALE) }
           }
         ).setOrigin(0.5).setInteractive({ useHandCursor: true });
         this.startWaveButton.setDepth(5000);
@@ -534,8 +533,8 @@ class BalouneScene extends Phaser.Scene {
         // Use dynamic placement and very high depth
         const gameWidth = this.scale.width;
         const gameHeight = this.scale.height;
-        const shopWidth = 220;
-        const infoBarHeight = 100;
+        const shopWidth = SCALED_SHOP_WIDTH;
+        const infoBarHeight = SCALED_INFO_BAR_HEIGHT;
         // Set soundOn from previous scene if passed
         this.soundOn = (data && typeof data.soundOn !== 'undefined') ? data.soundOn : true;
         // Ensure images are loaded before creating the button
@@ -649,12 +648,12 @@ class BalouneScene extends Phaser.Scene {
 
             // Place the tower on scene
             const towerInst = TowerClass.placeOnScene(this, x, y);
-            // Apply global placed tower size multiplier
+            // Apply global placed tower size multiplier combined with game scale
             if (towerInst && towerInst._placedSprite && typeof towerInst._placedSprite.setScale === 'function') {
-              // Keep relative scale, but multiply by global multiplier
+              // Keep relative scale, but multiply by global multiplier and game scale
               const currentScaleX = towerInst._placedSprite.scaleX || 1;
               const currentScaleY = towerInst._placedSprite.scaleY || 1;
-              towerInst._placedSprite.setScale(currentScaleX * PLACED_TOWER_SIZE_MULTIPLIER, currentScaleY * PLACED_TOWER_SIZE_MULTIPLIER);
+              towerInst._placedSprite.setScale(currentScaleX * PLACED_TOWER_SIZE_MULTIPLIER * GAME_SCALE, currentScaleY * PLACED_TOWER_SIZE_MULTIPLIER * GAME_SCALE);
             }
             // Ensure BirdTower has correct towerType and _pathCenter
             if (towerType === 'bird') {

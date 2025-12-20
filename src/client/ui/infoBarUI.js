@@ -14,7 +14,7 @@ export function drawInfoBarUI(scene, gameWidth, gameHeight, shopWidth, infoBarHe
   if (scene.infoBar && scene.infoBar.destroy) scene.infoBar.destroy();
   scene.infoBar = scene.add.image(gameWidth / 2, gameHeight - infoBarHeight / 2, 'bottom_window')
     .setDisplaySize(gameWidth, infoBarHeight)
-    .setOrigin(0.5)
+    .setOrigin(0.5, 0.5)
     .setDepth(10);
 
   // Life bar UI (top right, inside main game area)

@@ -1,11 +1,12 @@
 // Scene setup utility for BalouneScene
 import Phaser from "phaser";
 import { Baloune } from "../../game/Baloune.js";
+import { GAME_SCALE } from "./scaleConfig.js";
 
 export function setupMapAndGameLogic(scene, mapConfig) {
   if (!mapConfig) {
     console.error('Map config missing in setupMapAndGameLogic');
-    scene.add.text(600, 400, "Map config missing!", { font: "32px Arial", fill: "#f00" }).setOrigin(0.5);
+    scene.add.text(600 * GAME_SCALE, 400 * GAME_SCALE, "Map config missing!", { font: `${Math.round(32 * GAME_SCALE)}px Arial`, fill: "#f00" }).setOrigin(0.5);
     return null;
   }
   // Convert controlPoints to Phaser.Vector2 if needed

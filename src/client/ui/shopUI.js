@@ -3,6 +3,7 @@
 
 import * as towerPlacement from "../logic/towerPlacement.js";
 import { GAME_PHASES } from "../state/gameStateManager.js";
+import { GAME_SCALE } from "../utils/scaleConfig.js";
 
 export function drawShopUI(scene, gameWidth, gameHeight, shopWidth, infoBarHeight, towerConfig) {
   // Draw tower shop (vertical panel on right)
@@ -21,13 +22,13 @@ export function drawShopUI(scene, gameWidth, gameHeight, shopWidth, infoBarHeigh
   if (!scene.shopTooltip || scene.shopTooltip._destroyed) {
     scene.shopTooltip = scene.add.text(0, 0, '', {
       fontFamily: 'Montserrat, Segoe UI, Arial',
-      fontSize: '18px',
+      fontSize: `${Math.round(18 * GAME_SCALE)}px`,
       fontStyle: 'bold',
       color: '#fff',
       align: 'center',
-      padding: { left: 18, right: 18, top: 14, bottom: 14 },
-      wordWrap: { width: 300 },
-      shadow: { offsetX: 0, offsetY: 3, color: '#000', blur: 8, fill: true },
+      padding: { left: Math.round(18 * GAME_SCALE), right: Math.round(18 * GAME_SCALE), top: Math.round(14 * GAME_SCALE), bottom: Math.round(14 * GAME_SCALE) },
+      wordWrap: { width: Math.round(300 * GAME_SCALE) },
+      shadow: { offsetX: 0, offsetY: Math.round(3 * GAME_SCALE), color: '#000', blur: Math.round(8 * GAME_SCALE), fill: true },
       // BBCode/rich text supported
     })
       .setDepth(100002) // Ensure text is above background
@@ -49,7 +50,7 @@ export function drawShopUI(scene, gameWidth, gameHeight, shopWidth, infoBarHeigh
   const towerKeys = Object.keys(towerConfig);
   const cols = 2;
   const cellWidth = shopWidth / cols;
-  const cellHeight = 100;
+  const cellHeight = 100 * GAME_SCALE;
   const rows = Math.floor((gameHeight - infoBarHeight) / cellHeight);
   
   // Always create a new shopGrid graphics object to avoid issues after replay
@@ -58,7 +59,7 @@ export function drawShopUI(scene, gameWidth, gameHeight, shopWidth, infoBarHeigh
   }
   scene.shopGrid = scene.add.graphics();
   scene.shopGrid.setDepth(3001); // Ensure grid is above background (22) and above all towers
-  scene.shopGrid.lineStyle(3, 0x000000, 1);
+  scene.shopGrid.lineStyle(Math.round(3 * GAME_SCALE), 0x000000, 1);
 
   // Destroy old shop images and price texts before redrawing
   if (scene.shopTowerItems && Array.isArray(scene.shopTowerItems)) {
@@ -148,39 +149,39 @@ export function drawShopUI(scene, gameWidth, gameHeight, shopWidth, infoBarHeigh
         const name = config.displayName || key;
         const desc = config.description;
         // Modern BBCode style: gold title, blue desc, larger, bold, with shadow
-        let richText = `[color=#ffe066][b][size=26]${name}[/size][/b][/color]\n[color=#7ecfff][size=18]${desc}[/size][/color]`;
+        let richText = `[color=#ffe066][b][size=${Math.round(26 * GAME_SCALE)}]${name}[/size][/b][/color]\n[color=#7ecfff][size=${Math.round(18 * GAME_SCALE)}]${desc}[/size][/color]`;
         if (!scene.shopTooltip.style.richText) {
           richText = name.toUpperCase() + '\n' + desc;
         }
         scene.shopTooltip.setText(richText);
         // Calculate tooltip position
         let tooltipX = towerImage.x - scene.shopTooltip.width / 2;
-        const maxX = scene.sys.game.config.width - scene.shopTooltip.width - 16;
+        const maxX = scene.sys.game.config.width - scene.shopTooltip.width - 16 * GAME_SCALE;
         if (tooltipX + scene.shopTooltip.width > scene.sys.game.config.width) {
           tooltipX = maxX;
         }
-        if (tooltipX < 16) tooltipX = 16;
-        const tooltipY = towerImage.y + cellHeight / 2 + 12;
+        if (tooltipX < 16 * GAME_SCALE) tooltipX = 16 * GAME_SCALE;
+        const tooltipY = towerImage.y + cellHeight / 2 + 12 * GAME_SCALE;
         scene.shopTooltip.setPosition(tooltipX, tooltipY);
         // Draw background with rounded corners and drop shadow
         if (scene.shopTooltipBg) {
           scene.shopTooltipBg.clear();
           scene.shopTooltipBg.fillStyle(0x232946, 0.96);
           scene.shopTooltipBg.fillRoundedRect(
-            tooltipX - 12,
-            tooltipY - 10,
-            scene.shopTooltip.width + 24,
-            scene.shopTooltip.height + 20,
-            18
+            tooltipX - 12 * GAME_SCALE,
+            tooltipY - 10 * GAME_SCALE,
+            scene.shopTooltip.width + 24 * GAME_SCALE,
+            scene.shopTooltip.height + 20 * GAME_SCALE,
+            Math.round(18 * GAME_SCALE)
           );
           // Border glow
-          scene.shopTooltipBg.lineStyle(4, 0x7ecfff, 0.7);
+          scene.shopTooltipBg.lineStyle(4 * GAME_SCALE, 0x7ecfff, 0.7);
           scene.shopTooltipBg.strokeRoundedRect(
-            tooltipX - 12,
-            tooltipY - 10,
-            scene.shopTooltip.width + 24,
-            scene.shopTooltip.height + 20,
-            18
+            tooltipX - 12 * GAME_SCALE,
+            tooltipY - 10 * GAME_SCALE,
+            scene.shopTooltip.width + 24 * GAME_SCALE,
+            scene.shopTooltip.height + 20 * GAME_SCALE,
+            Math.round(18 * GAME_SCALE)
           );
           scene.shopTooltipBg.setVisible(true);
         }
@@ -201,9 +202,9 @@ export function drawShopUI(scene, gameWidth, gameHeight, shopWidth, infoBarHeigh
       });
     }
     // Always display price below tower (or blank for placeholder)
-    const priceText = scene.add.text(x + cellWidth / 2, y + cellHeight / 2 + 40, config ? `$${price}` : '',
+    const priceText = scene.add.text(x + cellWidth / 2, y + cellHeight / 2 + 40 * GAME_SCALE, config ? `$${price}` : '',
       {
-        font: config && canAfford ? "bold 14px Arial" : "14px Arial",
+        font: config && canAfford ? `bold ${Math.round(14 * GAME_SCALE)}px Arial` : `${Math.round(14 * GAME_SCALE)}px Arial`,
         fill: config && canAfford ? "#008000" : "#888"
       }
     ).setOrigin(0.5);
@@ -244,7 +245,6 @@ export function refreshShopAvailability(scene) {
     item.image.setInteractive({ useHandCursor: isAvailable });
     item.priceText.setStyle({
       fill: isAvailable ? '#008000' : '#888',
-      font: isAvailable ? 'bold 14px Arial' : '14px Arial'
-    });
+      font: isAvailable ? `bold ${Math.round(14 * GAME_SCALE)}px Arial` : `${Math.round(14 * GAME_SCALE)}px Arial`    });
   });
 }
