@@ -63,7 +63,7 @@ export function startTowerDrag(scene, pointer, towerType, price, range) {
     scene.dragRangeCircle = scene.add.graphics();
     scene.dragRangeCircle.setDepth(1999);
     scene.dragRangeCircle.fillStyle(0x00ff00, 0.18);
-    scene.dragRangeCircle.fillCircle(pointer.x, pointer.y, range * GAME_SCALE);
+    scene.dragRangeCircle.fillCircle(pointer.x, pointer.y, range);
   } else {
     scene.dragRangeCircle = null;
   }
@@ -155,7 +155,7 @@ export function updateDragPosition(scene, pointer) {
     } else {
       scene.dragRangeCircle.fillStyle(0xff3333, 0.25); // reddish
     }
-    scene.dragRangeCircle.fillCircle(pointer.x, pointer.y, scene.dragTowerRange * GAME_SCALE);
+    scene.dragRangeCircle.fillCircle(pointer.x, pointer.y, scene.dragTowerRange);
   }
 }
 
@@ -295,7 +295,7 @@ export function showRangeCircle(scene, x, y, range) {
 
   const circle = scene.add.graphics();
   circle.fillStyle(0x00ff00, 0.18); // Green fill, semi-transparent (matches drag color)
-  circle.fillCircle(x, y, range * GAME_SCALE);
+  circle.fillCircle(x, y, range);
   circle.setDepth(20000); // Very high depth to appear above other elements
 
   scene.activeTowerRangeCircle = circle;

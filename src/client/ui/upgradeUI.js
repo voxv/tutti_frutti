@@ -285,8 +285,8 @@ export function showUpgradeUI(scene, placedTower, towerConfig) {
               if (logicTower && logicTower.range && logicTower.towerType !== 'bird') {
                 // Extra guard: never show range circle for BirdTower, even if towerType is missing or misnamed
                 if (!logicTower.towerType || String(logicTower.towerType).toLowerCase() !== 'bird') {
-                  let circleX = placedTower.x;
-                  let circleY = placedTower.y;
+                  let circleX = placedTower.towerX !== undefined ? placedTower.towerX : placedTower.x;
+                  let circleY = placedTower.towerY !== undefined ? placedTower.towerY : placedTower.y;
                   showRangeCircle(scene, circleX, circleY, logicTower.range);
                 }
             }
@@ -391,8 +391,8 @@ export function showUpgradeUI(scene, placedTower, towerConfig) {
             if (logicTower && logicTower.range) {
               // Do not display range circle for BirdTower
               if (logicTower.towerType !== 'bird') {
-                let circleX = placedTower.x;
-                let circleY = placedTower.y;
+                let circleX = placedTower.towerX;
+                let circleY = placedTower.towerY;
                 showRangeCircle(scene, circleX, circleY, logicTower.range);
               }
             }
@@ -535,7 +535,7 @@ export function showUpgradeUI(scene, placedTower, towerConfig) {
         }
       } else {
         // Other towers: show range circle
-        showRangeCircle(scene, placedTower.x, placedTower.y, logicTower.range);
+        showRangeCircle(scene, placedTower.towerX !== undefined ? placedTower.towerX : placedTower.x, placedTower.towerY !== undefined ? placedTower.towerY : placedTower.y, logicTower.range);
       }
     }
   }

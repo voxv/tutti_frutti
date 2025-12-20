@@ -190,7 +190,9 @@ export function setupTowerClickHandler(
       if (!isBirdTower) {
         // Use logicTower.range if available, else fallback to placedTower.towerRange
         const range = logicTower.range || placedTower.towerRange;
-        showRangeCircle(scene, placedTower.x, placedTower.y, range);
+        const circleX = placedTower.towerX !== undefined ? placedTower.towerX : placedTower.x;
+        const circleY = placedTower.towerY !== undefined ? placedTower.towerY : placedTower.y;
+        showRangeCircle(scene, circleX, circleY, range);
       }
       // Draw the clickable area circle for BirdTower selection (filled, green, like other range circles)
       if (isBirdTower) {
