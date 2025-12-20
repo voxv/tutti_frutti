@@ -9,18 +9,48 @@ export function setupMapAndGameLogic(scene, mapConfig) {
     scene.add.text(600 * GAME_SCALE, 400 * GAME_SCALE, "Map config missing!", { font: `${Math.round(32 * GAME_SCALE)}px Arial`, fill: "#f00" }).setOrigin(0.5);
     return null;
   }
-  // Convert controlPoints to Phaser.Vector2 if needed
-  const controlPoints = mapConfig.controlPoints.map(pt =>
-    pt instanceof Phaser.Math.Vector2 ? pt : new Phaser.Math.Vector2(pt.x, pt.y)
-  );
+  // Convert controlPoints to Phaser.Vector2 if needed, and scale them
+  const controlPoints = mapConfig.controlPoints.map(pt => {
+    const scaledPt = pt instanceof Phaser.Math.Vector2 
+      ? new Phaser.Math.Vector2(pt.x * GAME_SCALE, pt.y * GAME_SCALE)
+      : new Phaser.Math.Vector2(pt.x * GAME_SCALE, pt.y * GAME_SCALE);
+    return scaledPt;
+  });
   scene.spline = new Phaser.Curves.Spline(controlPoints);
   scene.pathPoints = controlPoints.map(pt => ({ x: pt.x, y: pt.y }));
+  
+  // Scale towerSpots
+  const scaledTowerSpots = (mapConfig.towerSpots || []).map(spot => ({
+    ...spot,
+    x: spot.x * GAME_SCALE,
+    y: spot.y * GAME_SCALE,
+    radius: (spot.radius || 0) * GAME_SCALE
+  }));
+  
+  // Scale noBuildZones
+  const scaledNoBuildZones = (mapConfig.noBuildZones || []).map(zone => {
+    if (zone.type === 'polygon' && Array.isArray(zone.points)) {
+      return {
+        ...zone,
+        points: zone.points.map(pt => [pt[0] * GAME_SCALE, pt[1] * GAME_SCALE])
+      };
+    } else if (zone.type === 'circle') {
+      return {
+        ...zone,
+        x: zone.x * GAME_SCALE,
+        y: zone.y * GAME_SCALE,
+        radius: zone.radius * GAME_SCALE
+      };
+    }
+    return zone;
+  });
+  
   const testMap = {
     paths: [
       { spline: scene.spline, waypoints: controlPoints }
     ],
-    towerSpots: mapConfig.towerSpots || [],
-    noBuildZones: mapConfig.noBuildZones || []
+    towerSpots: scaledTowerSpots,
+    noBuildZones: scaledNoBuildZones
   };
   // Create the logical game (engine-side)
   scene.gameLogic = new Baloune(testMap);
