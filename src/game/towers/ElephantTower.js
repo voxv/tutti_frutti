@@ -99,10 +99,15 @@ export class ElephantTower extends ProjectileTower {
   }
 
   isInRange(enemy) {
+    let GAME_SCALE = 1.0;
+    if (typeof window !== 'undefined' && window.GAME_SCALE) {
+      GAME_SCALE = window.GAME_SCALE;
+    }
     const dx = enemy.position.x - this.position.x;
     const dy = enemy.position.y - this.position.y;
     const dist = Math.sqrt(dx * dx + dy * dy);
-    const inRange = dist <= this.range;
+    const scaledRange = this.range * GAME_SCALE;
+    const inRange = dist <= scaledRange;
     
     return inRange;
   }

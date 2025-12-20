@@ -40,8 +40,13 @@ export class Tower {
   }
 
   isInRange(enemy) {
+    let GAME_SCALE = 1.0;
+    if (typeof window !== 'undefined' && window.GAME_SCALE) {
+      GAME_SCALE = window.GAME_SCALE;
+    }
     const dx = enemy.position.x - this.position.x;
     const dy = enemy.position.y - this.position.y;
-    return Math.sqrt(dx * dx + dy * dy) <= this.range;
+    const scaledRange = this.range * GAME_SCALE;
+    return Math.sqrt(dx * dx + dy * dy) <= scaledRange;
   }
 }
