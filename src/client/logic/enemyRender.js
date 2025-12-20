@@ -24,7 +24,7 @@ export function renderEnemies(scene) {
     const outOfBounds = e.position.x < 0 || e.position.x > GAME_WIDTH - SCALED_SHOP_WIDTH || e.position.y < 0 || e.position.y > GAME_HEIGHT - SCALED_INFO_BAR_HEIGHT;
     // Always call updateAnimation if sprite exists and bloon uses spritesheet
     if (e.spritesheet && scene.textures.exists(e.spritesheet) && e.frameCount > 1) {
-      const multiplier = window.BLOON_SIZE_MULTIPLIER || 1;
+      const multiplier = (window.BLOON_SIZE_MULTIPLIER || 1) * GAME_SCALE;
       if (!e._sprite) {
         e._sprite = scene.add.sprite(e.position.x, e.position.y, e.spritesheet, 0)
           .setDisplaySize((e.size ?? 60) * multiplier, (e.size ?? 60) * multiplier)
@@ -45,7 +45,7 @@ export function renderEnemies(scene) {
     }
     // Static image bloons
     if (e.image && scene.textures.exists(e.image)) {
-      const multiplier = window.BLOON_SIZE_MULTIPLIER || 1;
+      const multiplier = (window.BLOON_SIZE_MULTIPLIER || 1) * GAME_SCALE;
       if (!e._sprite && e.isActive) {
         e._sprite = scene.add.image(e.position.x, e.position.y, e.image)
           .setDisplaySize((e.size ?? 20) * multiplier, (e.size ?? 20) * multiplier)
@@ -64,7 +64,7 @@ export function renderEnemies(scene) {
     }
     // Fallback to colored circle
     if (e.isActive) {
-      const multiplier = window.BLOON_SIZE_MULTIPLIER || 1;
+      const multiplier = (window.BLOON_SIZE_MULTIPLIER || 1) * GAME_SCALE;
       scene.enemyGraphics.fillStyle(e.color ?? 0xff0000, 1);
       scene.enemyGraphics.fillCircle(e.position.x, e.position.y, (e.size ?? 20) * multiplier);
       // Lower depth for outOfBounds circles (not strictly needed for graphics, but for consistency)
