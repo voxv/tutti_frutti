@@ -15,9 +15,9 @@ class IntroScene extends Phaser.Scene {
   create() {
     const maps = this.cache.json.get('maps')?.maps || [];
 
-    // Add splash background (centered, scaled)
+    // Add splash background (centered, no stretching)
     this.add.image(GAME_WIDTH / 2, GAME_HEIGHT / 2, 'splash')
-      .setDisplaySize(GAME_WIDTH, GAME_HEIGHT);
+      .setOrigin(0.5, 0.5);
 
     this.add.text(GAME_WIDTH / 2, GAME_HEIGHT * 0.15, "Tutti Frutti Tower Defense", {
       font: `bold ${Math.round(48 * GAME_SCALE)}px Arial Black`,
