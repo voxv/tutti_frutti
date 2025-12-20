@@ -1,6 +1,6 @@
 import { Enemy } from "../../engine/entities/Enemy.js";
 import { Vector2 } from "../../engine/core/Vector2.js";
-import { GAME_SCALE, GAME_WIDTH, GAME_HEIGHT, SHOP_WIDTH, INFO_BAR_HEIGHT } from "../../client/utils/scaleConfig.js";
+import { GAME_SCALE, BASE_WIDTH, BASE_HEIGHT, SHOP_WIDTH, INFO_BAR_HEIGHT } from "../../client/utils/scaleConfig.js";
 
 export class Bloon extends Enemy {
   constructor(path, {
@@ -188,10 +188,11 @@ export class Bloon extends Enemy {
     }
 
     // Check if bloon has gone offscreen - mark as inactive immediately
-    // Game area uses scaled dimensions (GAME_WIDTH minus SHOP_WIDTH, GAME_HEIGHT minus INFO_BAR_HEIGHT)
-    const gamePlayAreaWidth = GAME_WIDTH - SHOP_WIDTH;
-    const gamePlayAreaHeight = GAME_HEIGHT - INFO_BAR_HEIGHT;
-    const isOffscreen = this.position.x < 0 || this.position.x > gamePlayAreaWidth || this.position.y < 0 || this.position.y > gamePlayAreaHeight;
+    // Enemy positions are in unscaled coordinate space (BASE dimensions), not scaled
+    // Base game area: 1600px wide (minus 220px shop), 900px tall (minus 100px info bar)
+    const baseGamePlayAreaWidth = BASE_WIDTH - SHOP_WIDTH;
+    const baseGamePlayAreaHeight = BASE_HEIGHT - INFO_BAR_HEIGHT;
+    const isOffscreen = this.position.x < 0 || this.position.x > baseGamePlayAreaWidth || this.position.y < 0 || this.position.y > baseGamePlayAreaHeight;
     if (isOffscreen) {
       if (!this._offscreenLogged) {
         this._offscreenLogged = true;
