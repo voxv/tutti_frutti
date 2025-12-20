@@ -1,5 +1,6 @@
 import { ProjectileTower } from "./ProjectileTower.js";
 import { TornadoProjectile } from "../projectiles/TornadoProjectile.js";
+import { GAME_SCALE } from "../../client/utils/scaleConfig.js";
 
 export class ElephantTower extends ProjectileTower {
   constructor(config = {}) {
@@ -164,7 +165,7 @@ export class ElephantTower extends ProjectileTower {
     });
     // Create sprite with animation
     const sprite = window.sceneRef.add.sprite(startPos.x, startPos.y, projConfig.sprite);
-    sprite.setDisplaySize(135*0.5, 134*0.5);
+    sprite.setDisplaySize(135*0.5 * GAME_SCALE, 134*0.5 * GAME_SCALE);
     sprite.setDepth(3000);
     sprite.setVisible(true);
     projectile.sprite = sprite;

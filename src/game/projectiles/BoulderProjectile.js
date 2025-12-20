@@ -1,5 +1,6 @@
 import { Projectile } from "./Projectile.js";
 import { ExplosionProjectile } from "./ExplosionProjectile.js";
+import { GAME_SCALE } from "../../client/utils/scaleConfig.js";
 
 export class BoulderProjectile extends Projectile {
   constructor({ position, direction, speed, damage, texture = 'boulder', target, hitRadius = 36, homing = false, maxHits = 1, showExplosion = false }) {
@@ -16,7 +17,7 @@ export class BoulderProjectile extends Projectile {
     if (!this.showExplosion) return;
     if (scene && scene.add && scene.anims) {
       const explosion = scene.add.sprite(x, y, 'explode_anim', 0)
-        .setDisplaySize(100, 100)
+        .setDisplaySize(100 * GAME_SCALE, 100 * GAME_SCALE)
         .setDepth(4000);
       if (scene.anims.exists('explode_anim')) {
         try {

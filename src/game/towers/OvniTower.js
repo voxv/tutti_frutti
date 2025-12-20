@@ -1,4 +1,5 @@
 import { AOETower } from "./AOETower.js";
+import { GAME_SCALE } from "../../client/utils/scaleConfig.js";
 
 export class OvniTower extends AOETower {
   constructor(config = {}) {
@@ -26,7 +27,7 @@ export class OvniTower extends AOETower {
     tower.scene = scene; // Store scene reference for update method
     // Placed sprite uses ovni_anim.png (4 frames, 290x212)
     const sprite = scene.add.sprite(x, y, "ovni_anim");
-    sprite.setDisplaySize(106*0.06, 106*0.06); // 50% scale, adjust as needed
+    sprite.setDisplaySize(106*0.06 * GAME_SCALE, 106*0.06 * GAME_SCALE); // 50% scale, adjust as needed
     sprite.setDepth(9000);
     sprite.setOrigin(0.5, 0.5);
     sprite.towerType = "ovni";
@@ -37,7 +38,7 @@ export class OvniTower extends AOETower {
 
     // Add beam sprite (hidden by default)
     const beam = scene.add.sprite(x, y + 25, "beam_anim");
-      beam.setDisplaySize(45, 45); // reduced size
+      beam.setDisplaySize(45 * GAME_SCALE, 45 * GAME_SCALE); // reduced size
       beam.setAlpha(0.3); // semi-transparent beam
     beam.setDepth(8999);
     beam.setOrigin(0.5, 0);

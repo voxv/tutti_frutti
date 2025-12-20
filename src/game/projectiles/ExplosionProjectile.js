@@ -1,4 +1,5 @@
 import { Projectile } from "./Projectile.js";
+import { GAME_SCALE } from "../../client/utils/scaleConfig.js";
 
 export class ExplosionProjectile extends Projectile {
   constructor({ position, damage = 0, sourceTower = null }) {
@@ -9,7 +10,7 @@ export class ExplosionProjectile extends Projectile {
   playExplosion(scene) {
     if (scene && scene.add && scene.anims) {
       const explosion = scene.add.sprite(this.position.x, this.position.y, 'explode_anim', 0)
-        .setDisplaySize(100, 100)
+        .setDisplaySize(100 * GAME_SCALE, 100 * GAME_SCALE)
         .setDepth(4000);
       if (scene.anims.exists('explode_anim')) {
         try {

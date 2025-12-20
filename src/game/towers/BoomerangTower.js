@@ -1,5 +1,6 @@
 import { BoomerangProjectile } from "../projectiles/BoomerangProjectile.js";
 import { ProjectileTower } from "./ProjectileTower.js";
+import { GAME_SCALE } from "../../client/utils/scaleConfig.js";
 
 class BoomerangTower extends ProjectileTower {
   applyUpgrade(upgradeKey) {
@@ -108,7 +109,7 @@ class BoomerangTower extends ProjectileTower {
         flipArc
       });
       const sprite = window.sceneRef.add.sprite(startOffset.x, startOffset.y, projConfig.sprite);
-      sprite.setDisplaySize(24, 24);
+      sprite.setDisplaySize(24 * GAME_SCALE, 24 * GAME_SCALE);
       sprite.setScale(0.4);
       sprite.setDepth(3001);
       projectile.sprite = sprite;
@@ -132,7 +133,7 @@ class BoomerangTower extends ProjectileTower {
               verticalScale: this.doubleBoomerangArc.verticalScale
             });
             const doubleSprite = window.sceneRef.add.sprite(startOffset.x, startOffset.y, projConfig.sprite);
-            doubleSprite.setDisplaySize(24, 24);
+            doubleSprite.setDisplaySize(24 * GAME_SCALE, 24 * GAME_SCALE);
             doubleSprite.setScale(0.4);
             doubleSprite.setDepth(3001);
             doubleProjectile.sprite = doubleSprite;
@@ -159,7 +160,7 @@ class BoomerangTower extends ProjectileTower {
               destroyOnReturn: true // ensure destruction
             });
             const tripleSprite = window.sceneRef.add.sprite(startOffset.x, startOffset.y, projConfig.sprite);
-            tripleSprite.setDisplaySize(24, 24);
+            tripleSprite.setDisplaySize(24 * GAME_SCALE, 24 * GAME_SCALE);
             tripleSprite.setScale(0.4);
             tripleSprite.setDepth(3001);
             tripleProjectile.sprite = tripleSprite;
@@ -186,7 +187,7 @@ class BoomerangTower extends ProjectileTower {
               destroyOnReturn: true
             });
             const quadrupleSprite = window.sceneRef.add.sprite(startOffset.x, startOffset.y, projConfig.sprite);
-            quadrupleSprite.setDisplaySize(24, 24);
+            quadrupleSprite.setDisplaySize(24 * GAME_SCALE, 24 * GAME_SCALE);
             quadrupleSprite.setScale(0.4);
             quadrupleSprite.setDepth(3001);
             quadrupleProjectile.sprite = quadrupleSprite;

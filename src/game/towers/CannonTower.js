@@ -2,6 +2,7 @@ import { ProjectileTower } from "./ProjectileTower.js";
 import towerDefaults from "./tower.json";
 import projectileDefaults from "../projectiles.json";
 import { BoulderProjectile } from "../projectiles/BoulderProjectile.js";
+import { GAME_SCALE } from "../../client/utils/scaleConfig.js";
 
 export class CannonTower extends ProjectileTower {
   constructor(config = {}) {
@@ -117,7 +118,7 @@ export class CannonTower extends ProjectileTower {
       });
       // No custom onHit override; BoulderProjectile handles multi-hit and gold logic
       const sprite = window.sceneRef.add.sprite(startOffset.x, startOffset.y, projConfig.sprite);
-      sprite.setDisplaySize(24, 24); // Force consistent visible size for all cannon projectiles
+      sprite.setDisplaySize(24 * GAME_SCALE, 24 * GAME_SCALE); // Force consistent visible size for all cannon projectiles
       sprite.setScale(0.7); // Reset scale to default
       sprite.setDepth(3001);
       projectile.sprite = sprite;

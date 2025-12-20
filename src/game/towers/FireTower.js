@@ -1,5 +1,6 @@
 import { ProjectileTower } from "./ProjectileTower.js";
 import { FireProjectile } from "../projectiles/FireProjectile.js";
+import { GAME_SCALE } from "../../client/utils/scaleConfig.js";
 
 export class FireTower extends ProjectileTower {
   static placeOnScene(scene, x, y) {
@@ -24,7 +25,7 @@ export class FireTower extends ProjectileTower {
     this.scene = scene;
     this.towerType = config.towerType || "fire";
     this.sprite = scene.add.sprite(x, y, "fire");
-    this.sprite.setDisplaySize(80, 80);
+    this.sprite.setDisplaySize(80 * GAME_SCALE, 80 * GAME_SCALE);
     this.sprite.setDepth(9000);
     this.sprite.setOrigin(0.5, 0.5);
     this.sprite.towerType = this.towerType; // Copy towerType to sprite for upgrade UI

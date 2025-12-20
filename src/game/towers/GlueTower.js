@@ -3,6 +3,7 @@ import towerDefaults from "./tower.json";
 
 import projectileDefaults from "../projectiles.json";
 import { GlueProjectile } from "../projectiles/GlueProjectile.js";
+import { GAME_SCALE } from "../../client/utils/scaleConfig.js";
 
 export class GlueTower extends ProjectileTower {
   constructor(config = {}) {
@@ -145,7 +146,7 @@ export class GlueTower extends ProjectileTower {
       });
       // Create the projectile sprite
       const sprite = window.sceneRef.add.sprite(startOffset.x, startOffset.y, projConfig.sprite);
-      sprite.setDisplaySize(24, 24);
+      sprite.setDisplaySize(24 * GAME_SCALE, 24 * GAME_SCALE);
       sprite.setScale(0.7);
       sprite.setDepth(3001);
       projectile.sprite = sprite;

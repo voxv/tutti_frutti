@@ -1,4 +1,5 @@
 import { Projectile } from "./Projectile.js";
+import { GAME_SCALE } from "../../client/utils/scaleConfig.js";
 
 export class FireProjectile extends Projectile {
   constructor({ scene, x, y, target, damage, speed = 420, direction = { x: 1, y: 0 }, maxFruits = 10 }) {
@@ -11,7 +12,7 @@ export class FireProjectile extends Projectile {
       hitRadius: 48
     });
     this.sprite = scene.add.sprite(x, y, "fire_anim");
-    this.sprite.setDisplaySize(70, 95);
+    this.sprite.setDisplaySize(70 * GAME_SCALE, 95 * GAME_SCALE);
     this.sprite.setOrigin(0.5, 0.5);
     this.sprite.setDepth(2000);
     if (scene.anims && scene.anims.exists("fire_anim")) {

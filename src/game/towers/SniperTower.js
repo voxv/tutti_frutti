@@ -2,6 +2,7 @@ import { ProjectileTower } from "./ProjectileTower.js";
 import towerDefaults from "./tower.json";
 import projectileDefaults from "../projectiles.json";
 import { BoulderProjectile } from "../projectiles/BoulderProjectile.js";
+import { GAME_SCALE } from "../../client/utils/scaleConfig.js";
 
 export class SniperTower extends ProjectileTower {
   constructor(config = {}) {
@@ -119,7 +120,7 @@ export class SniperTower extends ProjectileTower {
       });
       
       const sprite = window.sceneRef.add.sprite(startOffset.x, startOffset.y, 'sniper_projectile');
-      sprite.setDisplaySize(13, 13);
+      sprite.setDisplaySize(13 * GAME_SCALE, 13 * GAME_SCALE);
       sprite.setScale(0.3);
       sprite.setFlipY(true); // Flip vertically for upward trajectory
       sprite.setDepth(3001);
@@ -199,7 +200,7 @@ export class SniperTower extends ProjectileTower {
             dropProjectile.piercingShot = this._piercingShot || false; // Explicitly set piercing shot flag
             
             const dropSprite = window.sceneRef.add.sprite(dropX, -100, 'sniper_projectile');
-            dropSprite.setDisplaySize(13, 13);
+            dropSprite.setDisplaySize(13 * GAME_SCALE, 13 * GAME_SCALE);
             dropSprite.setScale(0.3);
             // Don't flip for downward trajectory - keep normal orientation
             dropSprite.setDepth(3001);

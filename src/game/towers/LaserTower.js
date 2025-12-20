@@ -2,6 +2,7 @@
 import { AOETower } from "./AOETower.js";
 import towerDefaults from "./tower.json";
 import projectileDefaults from "../projectiles.json";
+import { GAME_SCALE } from "../../client/utils/scaleConfig.js";
 
 
 export class LaserTower extends AOETower {
@@ -227,7 +228,7 @@ export class LaserTower extends AOETower {
     const laserOffsetX = 10; // Default offset, change as needed
     const laserOffsetY = -10;
     const laserSprite = scene.add.sprite(x + laserOffsetX, y + laserOffsetY, 'laser_anim');
-    laserSprite.setDisplaySize(120, 120);
+    laserSprite.setDisplaySize(120 * GAME_SCALE, 120 * GAME_SCALE);
     laserSprite.setDepth(3001);
     laserSprite.setRotation(Math.PI);
     laserSprite.play('laser_shooter_anim', true);
