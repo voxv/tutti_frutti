@@ -58,8 +58,10 @@ function calculateResponsiveScale(mode = 'auto') {
     const scale = Math.min(scaleW, scaleH);
     
     // Snap to friendly values for better appearance
-    if (scale < 0.6) return 0.5;
-    if (scale < 0.8) return 0.75;
+    // Smaller screens get slightly smaller scale values
+    if (scale < 0.55) return 0.4;
+    if (scale < 0.7) return 0.6;
+    if (scale < 1.0) return 0.8;
     if (scale < 1.2) return 1.0;
     if (scale < 1.5) return 1.25;
     if (scale < 1.8) return 1.5;
