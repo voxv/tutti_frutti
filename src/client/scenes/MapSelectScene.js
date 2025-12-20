@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import { GAME_SCALE, GAME_WIDTH, GAME_HEIGHT } from "../utils/scaleConfig.js";
 
 class MapSelectScene extends Phaser.Scene {
   constructor() {
@@ -72,12 +73,12 @@ class MapSelectScene extends Phaser.Scene {
   create() {
     // No background image for menu select screen
 
-    this.add.text(600, 100, "Select a Map", {
-      font: "bold 60px Arial Black",
+    this.add.text(GAME_WIDTH / 2, GAME_HEIGHT * 0.1, "Select a Map", {
+      font: `bold ${Math.round(60 * GAME_SCALE)}px Arial Black`,
       fill: "#FF6B9D",
       stroke: "#FFD700",
-      strokeThickness: 4,
-      shadow: { offsetX: 3, offsetY: 3, color: '#000000', blur: 8, fill: true }
+      strokeThickness: Math.round(4 * GAME_SCALE),
+      shadow: { offsetX: 3 * GAME_SCALE, offsetY: 3 * GAME_SCALE, color: '#000000', blur: 8 * GAME_SCALE, fill: true }
     }).setOrigin(0.5);
 
     this.mapsData = this.cache.json.get('maps');
@@ -85,12 +86,12 @@ class MapSelectScene extends Phaser.Scene {
 
     // Grid settings
     const gridCols = 2;
-    const cellWidth = 180;
-    const cellHeight = 180;
-    // Center the grid horizontally (game width assumed 1200)
-    const gridStartX = (1200 - (gridCols * cellWidth)) / 2 + cellWidth / 2;
-    const gridStartY = 260;
-    const previewSize = 110;
+    const cellWidth = 180 * GAME_SCALE;
+    const cellHeight = 180 * GAME_SCALE;
+    // Center the grid horizontally
+    const gridStartX = (GAME_WIDTH - (gridCols * cellWidth)) / 2 + cellWidth / 2;
+    const gridStartY = GAME_HEIGHT * 0.3;
+    const previewSize = 110 * GAME_SCALE;
 
     maps.forEach((map, idx) => {
       const col = idx % gridCols;
@@ -105,11 +106,11 @@ class MapSelectScene extends Phaser.Scene {
         .setInteractive({ useHandCursor: true });
 
       // Map name below preview
-      const label = this.add.text(x, y + previewSize / 2 + 14, map.name || `Map ${map.id}`, {
-        font: "20px Arial",
+      const label = this.add.text(x, y + previewSize / 2 + 14 * GAME_SCALE, map.name || `Map ${map.id}`, {
+        font: `${Math.round(20 * GAME_SCALE)}px Arial`,
         fill: "#fff",
         backgroundColor: "#222",
-        padding: { x: 8, y: 3 }
+        padding: { x: Math.round(8 * GAME_SCALE), y: Math.round(3 * GAME_SCALE) }
       }).setOrigin(0.5);
 
       // Make both preview and label clickable

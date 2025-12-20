@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import { GAME_SCALE, GAME_WIDTH, GAME_HEIGHT } from "../utils/scaleConfig.js";
 
 class IntroScene extends Phaser.Scene {
   constructor() {
@@ -14,15 +15,16 @@ class IntroScene extends Phaser.Scene {
   create() {
     const maps = this.cache.json.get('maps')?.maps || [];
 
-    // Add splash background (centered at 600, 300, no stretching)
-    this.add.image(600, 300, 'splash');
+    // Add splash background (centered, scaled)
+    this.add.image(GAME_WIDTH / 2, GAME_HEIGHT / 2, 'splash')
+      .setDisplaySize(GAME_WIDTH, GAME_HEIGHT);
 
-    this.add.text(600, 150, "Tutti Frutti Tower Defense", {
-      font: "bold 48px Arial Black",
+    this.add.text(GAME_WIDTH / 2, GAME_HEIGHT * 0.15, "Tutti Frutti Tower Defense", {
+      font: `bold ${Math.round(48 * GAME_SCALE)}px Arial Black`,
       fill: "#FF6B9D",
       stroke: "#FFD700",
-      strokeThickness: 4,
-      shadow: { offsetX: 3, offsetY: 3, color: '#000000', blur: 8, fill: true }
+      strokeThickness: Math.round(4 * GAME_SCALE),
+      shadow: { offsetX: 3 * GAME_SCALE, offsetY: 3 * GAME_SCALE, color: '#000000', blur: 8 * GAME_SCALE, fill: true }
     }).setOrigin(0.5);
 
 
@@ -48,11 +50,11 @@ class IntroScene extends Phaser.Scene {
     };
     this.input.on('pointerdown', startMusic);
 
-    const startButton = this.add.text(600, 350, "Start Game", {
-      font: "32px Arial",
+    const startButton = this.add.text(GAME_WIDTH / 2, GAME_HEIGHT * 0.4, "Start Game", {
+      font: `${Math.round(32 * GAME_SCALE)}px Arial`,
       fill: "#00ff00",
       backgroundColor: "#222",
-      padding: { x: 20, y: 10 }
+      padding: { x: Math.round(20 * GAME_SCALE), y: Math.round(10 * GAME_SCALE) }
     }).setOrigin(0.5).setInteractive({ useHandCursor: true });
 
     startButton.on("pointerdown", () => {
