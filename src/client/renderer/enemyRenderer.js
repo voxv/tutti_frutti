@@ -1,6 +1,8 @@
 // src/client/renderer/enemyRenderer.js
 // Handles rendering of enemies (bloons) for the game scene
 
+import { GAME_SCALE } from "../utils/scaleConfig.js";
+
 export function renderEnemies(scene) {
   // Draw all active bloons/enemies
   if (!scene.gameLogic || !scene.gameLogic.enemies) return;
@@ -32,7 +34,7 @@ export function renderEnemies(scene) {
       const multiplier = window.BLOON_SIZE_MULTIPLIER || 1;
       if (!e._sprite) {
         e._sprite = scene.add.sprite(e.position.x, e.position.y, e.spritesheet, 0)
-          .setDisplaySize((e.size ?? 60) * multiplier, (e.size ?? 60) * multiplier)
+          .setDisplaySize((e.size ?? 60) * multiplier * GAME_SCALE, (e.size ?? 60) * multiplier * GAME_SCALE)
           .setDepth(outOfBounds ? 5 : 21);
       } else {
         e._sprite.setPosition(e.position.x, e.position.y);
@@ -53,7 +55,7 @@ export function renderEnemies(scene) {
       const multiplier = window.BLOON_SIZE_MULTIPLIER || 1;
       if (!e._sprite && e.isActive) {
         e._sprite = scene.add.image(e.position.x, e.position.y, e.image)
-          .setDisplaySize((e.size ?? 20) * multiplier, (e.size ?? 20) * multiplier)
+          .setDisplaySize((e.size ?? 20) * multiplier * GAME_SCALE, (e.size ?? 20) * multiplier * GAME_SCALE)
           .setDepth(outOfBounds ? 5 : 21);
       } else if (e._sprite) {
         e._sprite.setPosition(e.position.x, e.position.y);
@@ -83,7 +85,7 @@ export function renderEnemies(scene) {
     if (e.isActive) {
       const multiplier = window.BLOON_SIZE_MULTIPLIER || 1;
       scene.enemyGraphics.fillStyle(e.color ?? 0xff0000, 1);
-      scene.enemyGraphics.fillCircle(e.position.x, e.position.y, (e.size ?? 20) * multiplier);
+      scene.enemyGraphics.fillCircle(e.position.x, e.position.y, (e.size ?? 20) * multiplier * GAME_SCALE);
       // Lower depth for outOfBounds circles (not strictly needed for graphics, but for consistency)
       if (outOfBounds && e._sprite) {
         e._sprite.setDepth(2);
