@@ -9,7 +9,7 @@ let currentNoBuildPolygon = [];
 // Bloons Map Editor
 // Loads and edits f:/bloons/maps.json
 
-const MAPS_PATH = '../maps.json';
+const MAPS_PATH = '../public/maps.json';
 let mapsData = null;
 let selectedMapIdx = 0;
 
