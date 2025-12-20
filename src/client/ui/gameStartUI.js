@@ -1,14 +1,16 @@
 // src/client/ui/gameStartUI.js
 // Handles the Game Start popup UI for Bloons game
 
+import { GAME_SCALE } from "../utils/scaleConfig.js";
+
 /**
  * Shows the Game Start popup UI with "Survive 50 Waves!" message.
  * Auto-closes after 4 seconds.
  * @param {Phaser.Scene} scene - The Phaser scene to display the popup in.
  */
 export function showGameStartPopup(scene) {
-  // Smaller popup box
-  const boxX = 350, boxY = 300, boxW = 500, boxH = 150;
+  // Smaller popup box - scaled
+  const boxX = 350 * GAME_SCALE, boxY = 300 * GAME_SCALE, boxW = 500 * GAME_SCALE, boxH = 150 * GAME_SCALE;
   // Create a fullscreen transparent input zone to block all input
   const inputBlocker = scene.add.zone(0, 0, scene.sys.game.config.width, scene.sys.game.config.height)
     .setOrigin(0)
@@ -24,7 +26,7 @@ export function showGameStartPopup(scene) {
   const textX = boxX + boxW / 2;
   const textY = boxY + boxH / 2;
   const gameStartText = scene.add.text(textX, textY, "Survive 50 Waves!", {
-    font: "40px Arial",
+    font: `${Math.round(40 * GAME_SCALE)}px Arial`,
     fill: "#44aa44"
   }).setOrigin(0.5).setDepth(5001);
 

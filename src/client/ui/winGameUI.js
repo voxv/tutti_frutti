@@ -2,6 +2,7 @@
 // Handles the Win Game popup UI for Bloons game
 
 import { hideRangeCircle } from "../logic/towerPlacement.js";
+import { GAME_SCALE } from "../utils/scaleConfig.js";
 
 /**
  * Shows the Win Game popup UI.
@@ -92,35 +93,36 @@ export function showWinGamePopup(scene, options = {}) {
     }
   });
   // Create a transparent input zone over the popup to block all other input
-  const inputBlocker = scene.add.zone(200, 200, 800, 400)
+  const popupX = 200 * GAME_SCALE, popupY = 200 * GAME_SCALE, popupW = 800 * GAME_SCALE, popupH = 400 * GAME_SCALE;
+  const inputBlocker = scene.add.zone(popupX, popupY, popupW, popupH)
     .setOrigin(0)
     .setInteractive()
     .setDepth(4999);
   const popupBg = scene.add.graphics();
   popupBg.fillStyle(0x1a1a1a, 0.95);
-  popupBg.fillRect(200, 200, 800, 400);
+  popupBg.fillRect(popupX, popupY, popupW, popupH);
   popupBg.setDepth(5000);
-  const winText = scene.add.text(600, 280, "You Win!", {
-    font: "64px Arial",
+  const winText = scene.add.text(600 * GAME_SCALE, 280 * GAME_SCALE, "You Win!", {
+    font: `${Math.round(64 * GAME_SCALE)}px Arial`,
     fill: "#00ff00"
   }).setOrigin(0.5).setDepth(5001);
   
-  const congratsText = scene.add.text(600, 350, "All 50 waves completed!", {
-    font: "24px Arial",
+  const congratsText = scene.add.text(600 * GAME_SCALE, 350 * GAME_SCALE, "All 50 waves completed!", {
+    font: `${Math.round(24 * GAME_SCALE)}px Arial`,
     fill: "#ffff00"
   }).setOrigin(0.5).setDepth(5001);
   
-  const replayBtn = scene.add.text(450, 450, "Replay", {
-    font: "40px Arial",
+  const replayBtn = scene.add.text(450 * GAME_SCALE, 450 * GAME_SCALE, "Replay", {
+    font: `${Math.round(40 * GAME_SCALE)}px Arial`,
     fill: "#00ff00",
     backgroundColor: "#222",
-    padding: { x: 40, y: 20 }
+    padding: { x: Math.round(40 * GAME_SCALE), y: Math.round(20 * GAME_SCALE) }
   }).setOrigin(0.5).setInteractive({ useHandCursor: true }).setDepth(5002);
-  const quitBtn = scene.add.text(750, 450, "Quit", {
-    font: "40px Arial",
+  const quitBtn = scene.add.text(750 * GAME_SCALE, 450 * GAME_SCALE, "Quit", {
+    font: `${Math.round(40 * GAME_SCALE)}px Arial`,
     fill: "#ff4444",
     backgroundColor: "#222",
-    padding: { x: 40, y: 20 }
+    padding: { x: Math.round(40 * GAME_SCALE), y: Math.round(20 * GAME_SCALE) }
   }).setOrigin(0.5).setInteractive({ useHandCursor: true }).setDepth(5002);
   // Only allow clicks on replay/quit
   replayBtn.on('pointerdown', () => {
